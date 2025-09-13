@@ -215,9 +215,9 @@ void TVector<T>::push_front(const T& value) {
 
 template <class T>
 void TVector<T>::insert(const T* pos, const T& value) {
+    int right_pos = count_right_pos(pos);
     if (_size + 1 >= _capacity)
         _vec = reset_memory(_size + 1);
-    int right_pos = count_right_pos(pos);
     int i = _size + count_deleted();
     for (i; i > right_pos; i--) {
         _vec[i] = _vec[i - 1];
