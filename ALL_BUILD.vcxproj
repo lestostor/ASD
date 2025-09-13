@@ -202,6 +202,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{BD3A4CAB-EC65-3C6A-AE22-C368790CF827}</Project>
       <Name>Sphere</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\user\ASD\lib_TVector\TVector.vcxproj">
+      <Project>{9F6E4849-3534-3AF2-A0EC-A50CC1297072}</Project>
+      <Name>TVector</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

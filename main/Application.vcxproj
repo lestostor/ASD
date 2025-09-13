@@ -86,7 +86,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -110,10 +110,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -121,7 +121,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>..\lib_easy_example\Debug\EasyExample.lib;..\lib_point\Debug\Point.lib;..\lib_circle\Debug\Circle.lib;..\lib_point3D\Debug\Point3D.lib;..\lib_sphere\Debug\Sphere.lib;..\lib_point3D\Debug\Point3D.lib;..\lib_point\Debug\Point.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\lib_easy_example\Debug\EasyExample.lib;..\lib_point\Debug\Point.lib;..\lib_circle\Debug\Circle.lib;..\lib_point3D\Debug\Point3D.lib;..\lib_sphere\Debug\Sphere.lib;..\lib_TVector\Debug\TVector.lib;..\lib_point3D\Debug\Point3D.lib;..\lib_point\Debug\Point.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
@@ -140,7 +140,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -165,10 +165,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -176,7 +176,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>..\lib_easy_example\Release\EasyExample.lib;..\lib_point\Release\Point.lib;..\lib_circle\Release\Circle.lib;..\lib_point3D\Release\Point3D.lib;..\lib_sphere\Release\Sphere.lib;..\lib_point3D\Release\Point3D.lib;..\lib_point\Release\Point.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\lib_easy_example\Release\EasyExample.lib;..\lib_point\Release\Point.lib;..\lib_circle\Release\Circle.lib;..\lib_point3D\Release\Point3D.lib;..\lib_sphere\Release\Sphere.lib;..\lib_TVector\Release\TVector.lib;..\lib_point3D\Release\Point3D.lib;..\lib_point\Release\Point.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
@@ -195,7 +195,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -220,10 +220,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -231,7 +231,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>..\lib_easy_example\MinSizeRel\EasyExample.lib;..\lib_point\MinSizeRel\Point.lib;..\lib_circle\MinSizeRel\Circle.lib;..\lib_point3D\MinSizeRel\Point3D.lib;..\lib_sphere\MinSizeRel\Sphere.lib;..\lib_point3D\MinSizeRel\Point3D.lib;..\lib_point\MinSizeRel\Point.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\lib_easy_example\MinSizeRel\EasyExample.lib;..\lib_point\MinSizeRel\Point.lib;..\lib_circle\MinSizeRel\Circle.lib;..\lib_point3D\MinSizeRel\Point3D.lib;..\lib_sphere\MinSizeRel\Sphere.lib;..\lib_TVector\MinSizeRel\TVector.lib;..\lib_point3D\MinSizeRel\Point3D.lib;..\lib_point\MinSizeRel\Point.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
@@ -250,7 +250,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -274,10 +274,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\ASD\lib_easy_example;C:\Users\user\ASD\lib_point;C:\Users\user\ASD\lib_circle;C:\Users\user\ASD\lib_point3D;C:\Users\user\ASD\lib_sphere;C:\Users\user\ASD\lib_TVector;C:\Users\user\ASD\lib_circle\lib_point;C:\Users\user\ASD\lib_point3D\lib_point;C:\Users\user\ASD\lib_sphere\lib_point3D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -285,7 +285,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
-      <AdditionalDependencies>..\lib_easy_example\RelWithDebInfo\EasyExample.lib;..\lib_point\RelWithDebInfo\Point.lib;..\lib_circle\RelWithDebInfo\Circle.lib;..\lib_point3D\RelWithDebInfo\Point3D.lib;..\lib_sphere\RelWithDebInfo\Sphere.lib;..\lib_point3D\RelWithDebInfo\Point3D.lib;..\lib_point\RelWithDebInfo\Point.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\lib_easy_example\RelWithDebInfo\EasyExample.lib;..\lib_point\RelWithDebInfo\Point.lib;..\lib_circle\RelWithDebInfo\Circle.lib;..\lib_point3D\RelWithDebInfo\Point3D.lib;..\lib_sphere\RelWithDebInfo\Sphere.lib;..\lib_TVector\RelWithDebInfo\TVector.lib;..\lib_point3D\RelWithDebInfo\Point3D.lib;..\lib_point\RelWithDebInfo\Point.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <DataExecutionPrevention></DataExecutionPrevention>
@@ -391,6 +391,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ProjectReference Include="C:\Users\user\ASD\lib_sphere\Sphere.vcxproj">
       <Project>{BD3A4CAB-EC65-3C6A-AE22-C368790CF827}</Project>
       <Name>Sphere</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\user\ASD\lib_TVector\TVector.vcxproj">
+      <Project>{9F6E4849-3534-3AF2-A0EC-A50CC1297072}</Project>
+      <Name>TVector</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
