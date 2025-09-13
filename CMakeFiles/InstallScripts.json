@@ -1,0 +1,17 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/user/ASD/cmake_install.cmake",
+		"C:/Users/user/ASD/lib_easy_example/cmake_install.cmake",
+		"C:/Users/user/ASD/lib_point/cmake_install.cmake",
+		"C:/Users/user/ASD/lib_circle/cmake_install.cmake",
+		"C:/Users/user/ASD/lib_point3D/cmake_install.cmake",
+		"C:/Users/user/ASD/lib_sphere/cmake_install.cmake",
+		"C:/Users/user/ASD/main/cmake_install.cmake",
+		"C:/Users/user/ASD/third_party/gtest/cmake_install.cmake",
+		"C:/Users/user/ASD/third_party/gtest/googlemock/cmake_install.cmake",
+		"C:/Users/user/ASD/third_party/gtest/googletest/cmake_install.cmake",
+		"C:/Users/user/ASD/tests/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
