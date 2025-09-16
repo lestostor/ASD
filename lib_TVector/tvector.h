@@ -24,7 +24,7 @@ class TVector {
 public:
     //  constructors
     TVector();
-    explicit TVector(int);  //  empty vector
+    TVector(int);  //  empty vector
     TVector(std::initializer_list<T>);  //  convert list to vector
     TVector(const TVector<T>&);  //  copy
     ~TVector();  //  destructor
