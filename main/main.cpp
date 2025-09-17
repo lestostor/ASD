@@ -1,7 +1,8 @@
 // Copyright 2024 Marina Usova
 
 //#define EASY_EXAMPLE
-#define CHECK_CIRCLES
+//#define CHECK_CIRCLES
+#define MATRIX_APP
 #ifdef EASY_EXAMPLE
 
 #include <iostream>
@@ -91,3 +92,103 @@ int main() {
 }
 
 #endif
+
+#ifdef MATRIX_APP
+
+#include "matrix.h"
+#include <cstdlib>
+
+void print_main_menu() {
+    std::cout << "                                          Matrix application                                          " << std::endl;
+    std::cout << "1) Create matrix" << std::endl;
+    std::cout << "2) Matrix operation" << std::endl;
+    std::cout << "3) Exit" << std::endl;
+}
+
+template <class T>
+void print_matrix(Matrix<T> matrix, char matrix_name) {
+
+    std::cout << "Matrix " << matrix_name << std::endl;
+    //std::cout << matrix;
+}
+
+
+template <class T>
+Matrix<T> create_matrix() {
+    int m, n;
+
+    std::cout << "Enter quantity of lines: ";
+    std::cin >> m;
+
+    std::cout << "Enter quantity of columns: ";
+    std::cin >> n;
+
+    Matrix<T> matrix(m, n);
+
+    return matrix;
+}
+
+int choose_action(int count) {
+
+    while (true) {
+        int action;
+        std::cout << "Choose action: ";
+        std::cin >> action;
+
+        if (action >= 1 && action <= count) return action;
+        else std::cout << "Uncorrect enter" << std::endl;
+    }
+}
+
+enum Type {Standart, Triangle};
+int main() {
+    int count = 0;
+    Type type;
+    Matrix<int> matrix_a, matrix_b;
+    while (true) {
+        system("cls");
+        if (count >= 1) {
+            print_matrix(matrix_a, 'A');
+            if (count > 1)
+                print_matrix(matrix_b, 'B');
+        }
+        
+        print_main_menu();
+        int action = choose_action(3);
+        system("cls");
+
+        switch(action) {
+        case 1:
+            if (count == 0) {
+                std::cout << "1) Standart" << std::endl;
+                std::cout << "2) Triangle" << std::endl;
+
+                while (true) {
+                    int type_matrix;
+                    std::cout << "Choose type of matrix: ";
+                    std::cin >> type_matrix;
+
+                    if (type_matrix == 1) {
+                        type = Type::Standart;
+                        break;
+                    }
+                    else if (type_matrix == 2) {
+                        type = Type::Triangle;
+                        break;
+                    }
+                    else std::cout << "Uncorrect enter" << std::endl;
+                }
+            }
+                matrix_a = create_matrix<int>();
+            count++;
+            break;
+        case 2:
+
+            break;
+        }
+    }
+
+    return 0;
+}
+
+#endif // !MATRIX_APP
