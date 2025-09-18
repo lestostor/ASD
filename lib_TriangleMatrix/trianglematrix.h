@@ -10,13 +10,47 @@ public:
     TriangleMatrix(const int) {};
     TriangleMatrix(const TriangleMatrix&) {};
 
-    friend TriangleMatrix<T> operator +(const TriangleMatrix<T>&, const TriangleMatrix<T>&);
-    friend TriangleMatrix<T> operator -(const TriangleMatrix<T>&, const TriangleMatrix<T>&);
-    friend TriangleMatrix<T> operator *(const TriangleMatrix<T>&, const TriangleMatrix<T>&);
+    TriangleMatrix<T> transpose();
+
+    TriangleMatrix<T> operator +(const TriangleMatrix<T>&);
+    TriangleMatrix<T> operator -(const TriangleMatrix<T>&);
+    TriangleMatrix<T> operator *(const TriangleMatrix<T>&);
+    TriangleMatrix<T> operator * (const T&);
+    friend std::ostream& operator << (std::ostream& out, const TriangleMatrix<T>& matrix) {
+        return out;
+    }
+    friend std::istream& operator >>(std::istream& in, const TriangleMatrix<T>& matrix) {
+        return in;
+    }
 
     TriangleMatrix<T>& operator = (const TriangleMatrix<T>&);
     MathVector<T>& operator [] (const int&);
 };
+
+template <class T>
+TriangleMatrix<T> TriangleMatrix<T>::transpose() {
+    return TriangleMatrix<T>();
+}
+
+template <class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator +(const TriangleMatrix<T>& second) {
+    return TriangleMatrix<T>();
+}
+
+template <class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator -(const TriangleMatrix<T>& second) {
+    return TriangleMatrix<T>();
+}
+
+template <class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator *(const TriangleMatrix<T>& second) {
+    return TriangleMatrix<T>();
+}
+
+template <class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator *(const T& number) {
+    return TriangleMatrix<T>();
+}
 
 template <class T>
 TriangleMatrix<T>& TriangleMatrix<T>::operator = (const TriangleMatrix<T>& other) {

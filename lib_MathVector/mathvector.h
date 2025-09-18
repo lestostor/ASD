@@ -15,6 +15,7 @@ public:
     MathVector(const MathVector&) {};
 
     T& operator[](const int&);
+
 };
 
 template <class T>

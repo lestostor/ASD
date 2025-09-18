@@ -103,17 +103,23 @@ int main() {
 void print_main_menu() {
     std::cout << "                                          Matrix application                                          " << std::endl;
     std::cout << "1) Create matrix" << std::endl;
-    std::cout << "2) Matrix operation" << std::endl;
-    std::cout << "3) Exit" << std::endl;
+    std::cout << "2) Matrix operations" << std::endl;
+    std::cout << "3) Output" << std::endl;
+    std::cout << "4) Exit" << std::endl;
 }
 
 void print_matrix_operation_menu() {
     std::cout << "1) Add" << std::endl;
-    std::cout << "2) Sub" << std::endl;
-    std::cout << "3) Mul" << std::endl;
-    std::cout << "4) Div" << std::endl;
-    std::cout << "5) transpose" << std::endl;
-    std::cout << "6) Back" << std::endl;
+    std::cout << "2) Subtract" << std::endl;
+    std::cout << "3) Multiply" << std::endl;
+    std::cout << "4) Transpose" << std::endl;
+    std::cout << "5) Back" << std::endl;
+}
+
+void print_matrix_mul_menu() {
+    std::cout << "1) A matrix by a matrix" << std::endl;
+    std::cout << "2) A matrix by a number" << std::endl;
+    std::cout << "3) Back" << std::endl;
 }
 
 template <class T>
@@ -154,7 +160,7 @@ Matrix<T> create_matrix() {
 }
 
 template <class T>
-Matrix<T> create_triangle_matrix() {
+TriangleMatrix<T> create_triangle_matrix() {
     int  n;
 
     while (true) {
@@ -171,7 +177,7 @@ Matrix<T> create_triangle_matrix() {
 #ifdef DEBUG
     for (int i = 0; i < n; i++)
         for (int j = i; j < n; j++)
-            std::cin >> matrix[i][j];  // ввод без нулей
+            std::cin >> matrix[i][j];  // enter without 0
 #endif // DEBUG
     return matrix;
 }
@@ -187,42 +193,54 @@ int choose_action(int count, std::string text) {
     }
 }
 
+char choose_matrix(int count) {
+    char name = 'A';
+    if (count >= 2)
+        while (true) {
+            std::cout << "Enter name of matrix: ";
+            std::cin >> name;
+            if (name == 'B' && count >= 2 || name == 'C' && count == 3)
+                break;
+            std::cout << "No matrix with this name" << std::endl;
+        }
+    return name;
+}
+
 int main() {
     Matrix<int> matrix_a, matrix_b, matrix_c;
-    int count = 0, type_matrix, operation;
+    TriangleMatrix<int> tmatrix_a, tmatrix_b, tmatrix_c;
+    int count = 0, type_matrix = 0, operation;
+    char name;
     while (true) {
-        //system("cls");
-        if (count >= 1) {
-            print_matrix(matrix_a, 'A');
-            if (count > 1)
-                print_matrix(matrix_b, 'B');
-        }
 
         print_main_menu();
-        int action = choose_action(3, "Choose action: ");
+        int action = choose_action(4, "Choose action: ");
         system("cls");
 
         switch (action) {
         case 1:
-            std::cout << "1) Standart" << std::endl;
-            std::cout << "2) Triangle" << std::endl;
-            std::cout << "3) Back" << std::endl;
-            type_matrix = choose_action(3, "Choose type of matrix: ");
+            if (type_matrix == 0) {
+                std::cout << "1) Standart" << std::endl;
+                std::cout << "2) Triangle" << std::endl;
+                std::cout << "3) Back" << std::endl;
+                type_matrix = choose_action(3, "Choose type of matrix: ");
+            }
 
             if (type_matrix == 1 && count == 0)
                 matrix_a = create_matrix<int>();
             else if (type_matrix == 1 && count == 1)
                 matrix_b = create_matrix<int>();
             if (type_matrix == 2 && count == 0)
-                matrix_a = create_triangle_matrix<int>();
+                tmatrix_a = create_triangle_matrix<int>();
             else if (type_matrix == 2 && count == 1)
-                matrix_b = create_triangle_matrix<int>();
+                tmatrix_b = create_triangle_matrix<int>();
             else if (type_matrix == 3) {
                 system("cls");
                 break;
             }
 
             system("cls");
+            std::cout << "Matrix created" << std::endl;
             count++;
             break;
         case 2:
@@ -230,32 +248,129 @@ int main() {
                 std::cout << "No matrix" << std::endl;
                 break;
             }
-            print_matrix_operation_menu();
 
-            operation = choose_action(6, "Choose operation: ");
-            if (operation >= 1 && operation <= 4) {  //operations +, -, *, /
+            print_matrix_operation_menu();
+            operation = choose_action(5, "Choose operation: ");
+            system("cls");
+
+            if (operation == 1 || operation == 2) {  //operations +, -
                 if (count == 1) {
                     system("cls");
                     std::cout << "Needs 2 matrixes. You have 1 matrix" << std::endl;
                     break;
                 }
+
                 switch (operation) {
                 case 1:
+                    if (type_matrix == 1)
+                        matrix_c = matrix_a + matrix_b;
+                    else tmatrix_c = tmatrix_a + tmatrix_b;
+                    system("cls");
+                    std::cout << "Matrixes was added" << std::endl;
                     break;
                 case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
+                    std::cout << "1) A-B" << std::endl;
+                    std::cout << "2) B-A" << std::endl;
+                    std::cout << "3) Back" << std::endl;
+                    operation = choose_action(3, "Choose operation: ");
+
+                    if (type_matrix == 1 && operation == 1)
+                        matrix_c = matrix_a - matrix_b;
+                    else if (type_matrix == 2 && operation == 1)
+                        tmatrix_c = tmatrix_a - tmatrix_b;
+                    else if (type_matrix == 1 && operation == 2)
+                        matrix_c = matrix_b - matrix_a;
+                    else if (type_matrix == 2 && operation == 2)
+                        tmatrix_c = tmatrix_b - tmatrix_a;
+                    else {
+                        system("cls");
+                        break;
+                    }
+                    system("cls");
+                    std::cout << "Matrixes was subtracted" << std::endl;
                     break;
                 }
-            }
-            else if (operation == 5) {  // transpose
-                system("cls");
+                count++;
                 break;
+            }
+            else if (operation == 3) {  // operation *
+                print_matrix_mul_menu();
+                operation = choose_action(3, "Choose operation: ");
+                system("cls");
+
+                if (operation == 1 && count == 2) {
+                    if (type_matrix == 1) {
+                        std::cout << "1) A*B" << std::endl;
+                        std::cout << "2) B*A" << std::endl;
+                        std::cout << "3) Back" << std::endl;
+                        operation = choose_action(3, "Choose operation: ");
+
+                        if (operation == 1)
+                            matrix_c = matrix_a * matrix_b;
+                        else if (operation == 2)
+                            matrix_c = matrix_b * matrix_a;
+                    }
+                    else tmatrix_c = tmatrix_a * tmatrix_b;
+                    count++;
+                    system("cls");
+                    std::cout << "Matrixes was multiplied" << std::endl;
+                }
+                else if (operation == 1 && count == 1) {
+                    system("cls");
+                    std::cout << "Needs 2 matrixes. You have 1 matrix" << std::endl;
+                    break;
+                }
+                else if (operation == 2) {  // mul matrix by a number
+                    system("cls");
+                    int num;
+                    std::cout << "Enter number: ";
+                    std::cin >> num;
+
+                    name = choose_matrix(count);
+                    if (name == 'A' && type_matrix == 1) matrix_a = matrix_a * num;
+                    else if (name == 'A' && type_matrix == 2) tmatrix_a = tmatrix_a * num;
+                    else if (name == 'B' && type_matrix == 1) matrix_b = matrix_b * num;
+                    else if (name == 'B' && type_matrix == 2) tmatrix_b = tmatrix_b * num;
+                    else if (name == 'C' && type_matrix == 1) matrix_c = matrix_c * num;
+                    else if (name == 'C' && type_matrix == 2) tmatrix_c = tmatrix_c * num;
+                    system("cls");
+                    std::cout << "Matrix was multiplied" << std::endl;
+                }
+            }
+            else if (operation == 4) {
+                name = choose_matrix(count);
+                if (name == 'A' && type_matrix == 1) matrix_a.transpose();
+                else if (name == 'A' && type_matrix == 2) tmatrix_a.transpose();
+                else if (name == 'B' && type_matrix == 1) matrix_b.transpose();
+                else if (name == 'B' && type_matrix == 2) tmatrix_b.transpose();
+                else if (name == 'C' && type_matrix == 1) matrix_c.transpose();
+                else if (name == 'C' && type_matrix == 2) tmatrix_c.transpose();
+                system("cls");
+                std::cout << "Matrix was transposted" << std::endl;
             }
             break;
         case 3:
+            if (count == 0) {
+                system("cls");
+                std::cout << "No matrix" << std::endl;
+                break;
+            }
+
+            name = choose_matrix(count);
+            if (name == 'A' && type_matrix == 1)
+                print_matrix(matrix_a, name);
+            else if (name == 'A' && type_matrix == 2)
+                print_matrix(tmatrix_a, name);
+            else if (name == 'B' && type_matrix == 1)
+                print_matrix(matrix_b, name);
+            else if (name == 'B' && type_matrix == 2)
+                print_matrix(tmatrix_b, name);
+            else if (name == 'C' && type_matrix == 1)
+                print_matrix(matrix_c, name);
+            else if (name == 'C' && type_matrix == 2)
+                print_matrix(tmatrix_c, name);
+            break;
+        case 4:
             return 0;
         }
     }
