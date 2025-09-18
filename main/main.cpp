@@ -95,8 +95,10 @@ int main() {
 
 #ifdef MATRIX_APP
 
-#include "matrix.h"
+#include "trianglematrix.h"
 #include <cstdlib>
+
+#define DEBUG
 
 void print_main_menu() {
     std::cout << "                                          Matrix application                                          " << std::endl;
@@ -105,34 +107,79 @@ void print_main_menu() {
     std::cout << "3) Exit" << std::endl;
 }
 
-template <class T>
-void print_matrix(Matrix<T> matrix, char matrix_name) {
-
-    std::cout << "Matrix " << matrix_name << std::endl;
-    //std::cout << matrix;
+void print_matrix_operation_menu() {
+    std::cout << "1) Add" << std::endl;
+    std::cout << "2) Sub" << std::endl;
+    std::cout << "3) Mul" << std::endl;
+    std::cout << "4) Div" << std::endl;
+    std::cout << "5) transpose" << std::endl;
+    std::cout << "6) Back" << std::endl;
 }
 
+template <class T>
+void print_matrix(T matrix, char matrix_name) {
+    std::cout << "Matrix " << matrix_name << std::endl;
+    std::cout << matrix;
+}
 
 template <class T>
 Matrix<T> create_matrix() {
     int m, n;
 
-    std::cout << "Enter quantity of lines: ";
-    std::cin >> m;
+    while (true) {
+        std::cout << "Enter quantity of lines: ";
+        std::cin >> m;
+        if (m <= 1)
+            std::cout << "Enter number >= 2: " << std::endl;
+        else break;
+    }
 
-    std::cout << "Enter quantity of columns: ";
-    std::cin >> n;
+    while (true) {
+        std::cout << "Enter quantity of columns: ";
+        std::cin >> n;
+        if (n <= 1)
+            std::cout << "Enter number >= 2: " << std::endl;
+        else break;
+    }
 
     Matrix<T> matrix(m, n);
-
+    std::cout << "Enter matrix " << m << "x" << n << ":" << std::endl;
+    std::cin >> matrix;
+#ifdef DEBUG
+    for (int i = 0; i < m; i++)
+        for (int j = 0; j < n; j++)
+            std::cin >> matrix[i][j];
+#endif // DEBUG
     return matrix;
 }
 
-int choose_action(int count) {
+template <class T>
+Matrix<T> create_triangle_matrix() {
+    int  n;
 
     while (true) {
+        std::cout << "Enter size of matrix: ";
+        std::cin >> n;
+        if (n <= 1)
+            std::cout << "Enter number >= 2: " << std::endl;
+        else break;
+    }
+
+    TriangleMatrix<T> matrix(n);
+    std::cout << "Enter matrix " << n << "x" << n << ":" << std::endl;
+    std::cin >> matrix;
+#ifdef DEBUG
+    for (int i = 0; i < n; i++)
+        for (int j = i; j < n; j++)
+            std::cin >> matrix[i][j];  // ввод без нулей
+#endif // DEBUG
+    return matrix;
+}
+
+int choose_action(int count, std::string text) {
+    while (true) {
         int action;
-        std::cout << "Choose action: ";
+        std::cout << text;
         std::cin >> action;
 
         if (action >= 1 && action <= count) return action;
@@ -140,55 +187,78 @@ int choose_action(int count) {
     }
 }
 
-enum Type {Standart, Triangle};
 int main() {
-    int count = 0;
-    Type type;
-    Matrix<int> matrix_a, matrix_b;
+    Matrix<int> matrix_a, matrix_b, matrix_c;
+    int count = 0, type_matrix, operation;
     while (true) {
-        system("cls");
+        //system("cls");
         if (count >= 1) {
             print_matrix(matrix_a, 'A');
             if (count > 1)
                 print_matrix(matrix_b, 'B');
         }
-        
+
         print_main_menu();
-        int action = choose_action(3);
+        int action = choose_action(3, "Choose action: ");
         system("cls");
 
-        switch(action) {
+        switch (action) {
         case 1:
-            if (count == 0) {
-                std::cout << "1) Standart" << std::endl;
-                std::cout << "2) Triangle" << std::endl;
+            std::cout << "1) Standart" << std::endl;
+            std::cout << "2) Triangle" << std::endl;
+            std::cout << "3) Back" << std::endl;
+            type_matrix = choose_action(3, "Choose type of matrix: ");
 
-                while (true) {
-                    int type_matrix;
-                    std::cout << "Choose type of matrix: ";
-                    std::cin >> type_matrix;
-
-                    if (type_matrix == 1) {
-                        type = Type::Standart;
-                        break;
-                    }
-                    else if (type_matrix == 2) {
-                        type = Type::Triangle;
-                        break;
-                    }
-                    else std::cout << "Uncorrect enter" << std::endl;
-                }
-            }
+            if (type_matrix == 1 && count == 0)
                 matrix_a = create_matrix<int>();
+            else if (type_matrix == 1 && count == 1)
+                matrix_b = create_matrix<int>();
+            if (type_matrix == 2 && count == 0)
+                matrix_a = create_triangle_matrix<int>();
+            else if (type_matrix == 2 && count == 1)
+                matrix_b = create_triangle_matrix<int>();
+            else if (type_matrix == 3) {
+                system("cls");
+                break;
+            }
+
+            system("cls");
             count++;
             break;
         case 2:
+            if (count == 0) {
+                std::cout << "No matrix" << std::endl;
+                break;
+            }
+            print_matrix_operation_menu();
 
+            operation = choose_action(6, "Choose operation: ");
+            if (operation >= 1 && operation <= 4) {  //operations +, -, *, /
+                if (count == 1) {
+                    system("cls");
+                    std::cout << "Needs 2 matrixes. You have 1 matrix" << std::endl;
+                    break;
+                }
+                switch (operation) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                }
+            }
+            else if (operation == 5) {  // transpose
+                system("cls");
+                break;
+            }
             break;
+        case 3:
+            return 0;
         }
     }
-
-    return 0;
 }
 
 #endif // !MATRIX_APP

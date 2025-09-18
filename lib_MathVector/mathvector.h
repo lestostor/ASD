@@ -13,6 +13,14 @@ public:
     MathVector(const int) {};
     MathVector(std::initializer_list<T>) {};
     MathVector(const MathVector&) {};
+
+    T& operator[](const int&);
 };
+
+template <class T>
+T& MathVector<T>::operator[](const int&) {
+    T coord;
+    return coord;
+}
 
 #endif // !MATHVECTOR_MATHVECTOR_H
