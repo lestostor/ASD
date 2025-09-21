@@ -16,6 +16,7 @@ template <class T> class TVector;
 
 template <class T>
 class TVector {
+protected:
     T* _vec;
     Status* _status;
     size_t _size;
