@@ -14,7 +14,20 @@ public:
     MathVector(std::initializer_list<T>, const int start_index = 0);
     MathVector(const MathVector&);
 
-    T& operator[](const int&);
+    void clear() = delete;
+    void push_back(const T&) = delete;
+    void push_front(const T&) = delete;
+    void insert(const T*, const T&) = delete;
+    void pop_back() = delete;
+    void pop_front() = delete;
+    void erase(const T*) = delete;
+    void emplace(const T&, const T&) = delete;
+    void emplace(const T*, const T&) = delete;
+
+    MathVector<T> operator+(const MathVector<T>);
+
+    T& operator[](const int);
+    T& operator[](const int) const;
 
 };
 
@@ -51,9 +64,26 @@ MathVector<T>::MathVector(const MathVector<T>& other_vector) {
 }
 
 template <class T>
-T& MathVector<T>::operator[](const int&) {
-    T coord;
-    return coord;
+T& MathVector<T>::operator[](const int index) {
+    return TVector<T>::operator[](index - _start_index);
+}
+
+template <class T>
+T& MathVector<T>::operator[](const int index) const {
+    return TVector<T>::operator[](index - _start_index);
+}
+
+template <class T>
+MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) {
+    if (this->_size != other_vector._size)
+        throw std::invalid_argument("Vectors have different sizes");
+
+    MathVector<T> result(_size);
+    for (int i = 0; i < _size; i++) {
+        result[i] = this->_vec[i] + other_vector[i];
+    }
+
+    return result;
 }
 
 #endif // !MATHVECTOR_MATHVECTOR_H

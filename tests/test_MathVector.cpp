@@ -44,6 +44,51 @@ TEST(TestMathVectorLib, test_initialize_constructor_with_initialize_list_with_st
 }
 
 TEST(TestMathVectorLib, test_copy_constructor) {
-    MathVector vector1({ 1, 2, 3, 4, 5 }, 1);
+    MathVector<int> vector1({ 1, 2, 3, 4, 5 }, 1);
     ASSERT_NO_THROW(MathVector<int> vector2(vector1));
+}
+
+TEST(TestMathVectorLib, test_index_operator) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 });
+    ASSERT_EQ(vector[2], 3);
+}
+
+TEST(TestMathVectorLib, test_index_operator_out_of_range) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 });
+    ASSERT_NE(vector[6], 6);
+}
+
+TEST(TestMathVectorLib, test_index_operator_with_negative_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 });
+    ASSERT_NE(vector[-3], 3);
+}
+
+TEST(TestMathVectorLib, test_index_operator_with_start_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 }, 1);
+    ASSERT_EQ(vector[2], 2);
+}
+
+TEST(TestMathVectorLib, test_index_operator_out_of_range_with_start_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 }, 1);
+    ASSERT_NE(vector[6], 6);
+}
+
+TEST(TestMathVectorLib, test_index_operator_with_negative_index_with_start_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 }, 1);
+    ASSERT_NE(vector[-1], 3);
+}
+
+TEST(TestMathVectorLib, test_index_operator_add) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6 });
+    MathVector<int> result;
+    result = vector1 + vector2;
+
+    MathVector<int> expected({ 5, 7, 9 });
+    for (int i = 0; i < 3; i++)
+        ASSERT_EQ(result[i], expected[i]);
+}
+
+TEST(TestMathVectorLib, test_index_operator_add_if_different_sizes) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6, 7 });
+    ASSERT_ANY_THROW(vector1 + vector2);
 }
