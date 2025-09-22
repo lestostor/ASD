@@ -25,6 +25,9 @@ public:
     void emplace(const T*, const T&) = delete;
 
     MathVector<T> operator+(const MathVector<T>);
+    MathVector<T> operator-(const MathVector<T>);
+    MathVector<T> operator*(const T&);
+    T operator*(const MathVector<T>);
 
     T& operator[](const int);
     T& operator[](const int) const;
@@ -82,6 +85,40 @@ MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) {
     for (int i = 0; i < _size; i++) {
         result[i] = this->_vec[i] + other_vector[i];
     }
+
+    return result;
+}
+
+template <class T>
+MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) {
+    if (this->_size != other_vector._size)
+        throw std::invalid_argument("Vectors have different sizes");
+
+    MathVector<T> result(_size);
+    for (int i = 0; i < _size; i++) {
+        result[i] = this->_vec[i] - other_vector[i];
+    }
+
+    return result;
+}
+
+template <class T>
+MathVector<T> MathVector<T>::operator*(const T& number) {
+    MathVector<T> result(_size);
+    for (int i = 0; i < _size; i++)
+        result[i] = _vec[i] * number;
+
+    return result;
+}
+
+template <class T>
+T MathVector<T>::operator*(const MathVector<T> other_vector) {
+    if (this->_size != other_vector._size)
+        throw std::invalid_argument("Vectors have different sizes");
+
+    T result = T();
+    for (int i = 0; i < _size; i++)
+        result += this->_vec[i] * other_vector[i];
 
     return result;
 }

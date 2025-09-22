@@ -78,7 +78,7 @@ TEST(TestMathVectorLib, test_index_operator_with_negative_index_with_start_index
     ASSERT_NE(vector[-1], 3);
 }
 
-TEST(TestMathVectorLib, test_index_operator_add) {
+TEST(TestMathVectorLib, test_operator_add) {
     MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6 });
     MathVector<int> result;
     result = vector1 + vector2;
@@ -88,7 +88,45 @@ TEST(TestMathVectorLib, test_index_operator_add) {
         ASSERT_EQ(result[i], expected[i]);
 }
 
-TEST(TestMathVectorLib, test_index_operator_add_if_different_sizes) {
+TEST(TestMathVectorLib, test_operator_add_if_different_sizes) {
     MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6, 7 });
     ASSERT_ANY_THROW(vector1 + vector2);
+}
+
+TEST(TestMathVectorLib, test_operator_sub) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6 });
+    MathVector<int> result;
+    result = vector2 - vector1;
+
+    MathVector<int> expected({ 3, 3, 3 });
+    for (int i = 0; i < 3; i++)
+        ASSERT_EQ(result[i], expected[i]);
+}
+
+TEST(TestMathVectorLib, test_operator_sub_if_different_sizes) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6, 7 });
+    ASSERT_ANY_THROW(vector1 - vector2);
+}
+
+TEST(TestMathVectorLib, test_operator_mul_by_number) {
+    MathVector<int> vector({ 1, 2, 3 });
+    MathVector<int> result;
+    result = vector * 3;
+
+    MathVector<int> expected({ 3, 6, 9 });
+    for (int i = 0; i < 3; i++)
+        ASSERT_EQ(result[i], expected[i]);
+}
+
+TEST(TestMathVectorLib, test_operator_mul_by_vector) {
+    MathVector<int> vector1({ 1, 1, 2 }), vector2({ 2, 0, 1 });
+    int result;
+    result = vector1 * vector2;
+
+    ASSERT_EQ(result, 4);
+}
+
+TEST(TestMathVectorLib, test_operator_mul_if_different_sizes) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6, 7 });
+    ASSERT_ANY_THROW(vector1 * vector2);
 }
