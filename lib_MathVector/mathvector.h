@@ -35,17 +35,17 @@ public:
 };
 
 template <class T>
-MathVector<T>::MathVector() : TVector(), _start_index(0) {}
+MathVector<T>::MathVector() : TVector<T>(), _start_index(0) {}
 
 template <class T>
-MathVector<T>::MathVector(const int size, const int start_index) : TVector(size) {
+MathVector<T>::MathVector(const int size, const int start_index) : TVector<T>(size) {
     if (start_index < 0 || start_index >= size)
         throw std::invalid_argument("Invalid start_index");
     _start_index = start_index;
 }
 
 template <class T>
-MathVector<T>::MathVector(std::initializer_list<T> vector, const int start_index) : TVector(vector) {
+MathVector<T>::MathVector(std::initializer_list<T> vector, const int start_index) : TVector<T>(vector) {
     if (start_index < 0 || start_index >= vector.size())
         throw std::invalid_argument("Invalid start_index");
     _start_index = start_index;

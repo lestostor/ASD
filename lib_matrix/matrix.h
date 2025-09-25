@@ -8,12 +8,10 @@ template <class T> class Matrix;
 
 template <class T>
 class Matrix : public MathVector<MathVector<T>> {
-    int _m;  // lines
-    int _n;  // columns
 public:
-    Matrix() {};
-    Matrix(const int, const int) {};
-    Matrix(const Matrix&) {};
+    Matrix();
+    Matrix(const int, const int);
+    Matrix(const Matrix&);
 
     Matrix<T> transpose();
 
@@ -31,6 +29,27 @@ public:
     Matrix<T>& operator = (const Matrix<T>&);
     MathVector<T>& operator [] (const int&);
 };
+
+template <class T>
+Matrix<T>::Matrix() : MathVector<MathVector<T>>() {}
+
+template <class T>
+Matrix<T>::Matrix(const int m, const int n) : MathVector<MathVector<T>>(m) {
+    for (int i = 0; i < m; i++)
+        _vec[i] = MathVector<T>(n);
+}
+
+template <class T>
+Matrix<T>::Matrix(const Matrix<T>& other_matrix) : MathVector<MathVector<T>>(other_matrix._size) {
+    for (int i = 0; i < other_matrix._size; i++) {
+        if (i < other_matrix._size) {
+            this->_vec[i] = MathVector<T>(other_matrix._vec[i]);
+            this->_status[i] = Status::Busy;
+        }
+        else
+            this->_status[i] = Status::Busy;
+    }
+}
 
 template <class T>
 Matrix<T> Matrix<T>::transpose() {
