@@ -98,7 +98,7 @@ int main() {
 #include "trianglematrix.h"
 #include <cstdlib>
 
-#define DEBUG
+//#define DEBUG
 
 void print_main_menu() {
     std::cout << "                                          Matrix application                                          " << std::endl;

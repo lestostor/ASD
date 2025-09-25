@@ -130,3 +130,11 @@ TEST(TestMathVectorLib, test_operator_mul_if_different_sizes) {
     MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6, 7 });
     ASSERT_ANY_THROW(vector1 * vector2);
 }
+
+TEST(TestMathVectorLib, test_operator_assign) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2;
+    vector2 = vector1;
+
+    for (int i = 0; i < 3; i++)
+        ASSERT_EQ(vector2[i], vector1[i]);
+}
