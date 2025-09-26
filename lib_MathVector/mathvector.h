@@ -28,9 +28,9 @@ public:
     MathVector<T> operator+(const MathVector<T>);
     MathVector<T> operator-(const MathVector<T>);
     MathVector<T> operator*(const T&);
-    MathVector<T> operator=(const MathVector<T>);
     T operator*(const MathVector<T>);
-
+    MathVector<T> operator=(const MathVector<T>);
+    bool operator==(const MathVector<T>);
     T& operator[](const int);
     T& operator[](const int) const;
 
@@ -146,6 +146,11 @@ MathVector<T> MathVector<T>::operator=(const MathVector<T> other_vector) {
     }
 
     return *this;
+}
+
+template <class T>
+bool MathVector<T>::operator==(const MathVector<T> other_vector) {
+    return this->TVector::operator==(other_vector);
 }
 
 #endif // !MATHVECTOR_MATHVECTOR_H

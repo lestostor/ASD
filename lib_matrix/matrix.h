@@ -15,7 +15,7 @@ public:
     Matrix(const int, const int);
     Matrix(const Matrix&);
 
-    Matrix<T> transpose();
+    void transpose();
 
     Matrix<T> operator +(const Matrix<T>&);
     Matrix<T> operator -(const Matrix<T>&);
@@ -60,23 +60,37 @@ Matrix<T>::Matrix(const Matrix<T>& other_matrix) : MathVector<MathVector<T>>(oth
 }
 
 template <class T>
-Matrix<T> Matrix<T>::transpose() {
+void Matrix<T>::transpose() {
     Matrix<T> result(_n, _m);
     for (int i = 0; i < _n; i++) {
         for (int j = 0; j < _m; j++)
             result[i][j] = this->_vec[j][i];
     }
-    return result;
+    *this = result;
 }
 
 template <class T>
 Matrix<T> Matrix<T>::operator +(const Matrix<T>& second) {
-    return Matrix<T>();
+    if (this->_m != second._m || this->_n != second._n)
+        throw std::logic_error("Matrixes have different sizes");
+
+    Matrix<T> result(_m, _n);
+    for (int i = 0; i < _m; i++)
+        result[i] = this->_vec[i] + second._vec[i];
+
+    return result;
 }
 
 template <class T>
 Matrix<T> Matrix<T>::operator -(const Matrix<T>& second) {
-    return Matrix<T>();
+    if (this->_m != second._m || this->_n != second._n)
+        throw std::logic_error("Matrixes have different sizes");
+
+    Matrix<T> result(_m, _n);
+    for (int i = 0; i < _m; i++)
+        result[i] = this->_vec[i] - second._vec[i];
+
+    return result;
 }
 
 template <class T>
@@ -85,8 +99,12 @@ Matrix<T> Matrix<T>::operator *(const Matrix<T>& second) {
 }
 
 template <class T>
-Matrix<T> Matrix<T>::operator *(const T& second) {
-    return Matrix<T>();
+Matrix<T> Matrix<T>::operator *(const T& value) {
+    Matrix<T> result(_m, _n);
+    for (int i = 0; i < _m; i++)
+        result[i] = (*this)[i] * value;
+
+    return result;
 }
 
 template <class T>

@@ -138,3 +138,13 @@ TEST(TestMathVectorLib, test_operator_assign) {
     for (int i = 0; i < 3; i++)
         ASSERT_EQ(vector2[i], vector1[i]);
 }
+
+TEST(TestMathVectorLib, test_operator_compare_if_equal) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2(vector1);
+    ASSERT_TRUE(vector1 == vector2);
+}
+
+TEST(TestMathVectorLib, test_operator_compare_if_different) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({1, 2, 2});
+    ASSERT_FALSE(vector1 == vector2);
+}
