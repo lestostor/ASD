@@ -66,7 +66,7 @@ public:
 
     //  operators
     TVector<T>& operator = (const TVector<T>&);
-    bool operator == (const TVector<T>&);
+    bool operator == (const TVector<T>&) const;
     bool operator != (const TVector<T>&);
     T& operator[](const int) const;
     T& operator[](const int);
@@ -307,7 +307,7 @@ TVector<T>& TVector<T>::operator = (const TVector<T>& other_vector) {
 }
 
 template <class T>
-bool TVector<T>::operator == (const TVector<T>& other_vector) {
+bool TVector<T>::operator == (const TVector<T>& other_vector) const{
     if (this->_size != other_vector._size) return false;
     for (int i = 0, j = 0; i + j < other_vector._size; i++) {
         if (this->_vec[i + j] != other_vector._vec[i] &&

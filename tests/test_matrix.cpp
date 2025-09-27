@@ -22,11 +22,7 @@ TEST(TestMatrixLib, test_operator_assign) {
 
 TEST(TestMatrixLib, test_operator_index) {
     Matrix<int> matrix(2, 2);
-    for (int i = 0; i < 2; i++)
-        for (int j = 0; j < 2; j++)
-            matrix[i][j] = j + 1;
-
-    
+    ASSERT_EQ(matrix[0], MathVector<int>(2));
 }
 
 TEST(TestMatrixLib, test_transpose) {
@@ -81,7 +77,7 @@ TEST(TestMatrixLib, test_operator_sub_if_different_sizes) {
     ASSERT_ANY_THROW(result = matrix1 - matrix2);
 }
 
-TEST(TestMatrixLib, test_operator_mul) {
+TEST(TestMatrixLib, test_operator_mul_by_number) {
     Matrix<int> matrix(2, 2), result;
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < 2; j++) 
@@ -91,4 +87,30 @@ TEST(TestMatrixLib, test_operator_mul) {
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < 2; j++)
             ASSERT_EQ(result[i][j], 8);
+}
+
+TEST(TestMatrixLib, test_operator_mul_by_vector) {
+    Matrix<int> matrix(2, 2);
+    MathVector<int> vector({ 1, 2 }), result, expected({ 5, 11 });
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            matrix[i][j] = i * 2 + j + 1;
+    result = matrix * vector;
+
+    for (int i = 0; i < 2; i++)
+        ASSERT_EQ(result[i], expected[i]);
+}
+
+TEST(TestMatrixLib, test_operator_mul_by_matrix) {
+    Matrix<int> matrix1(2, 2), matrix2(2, 3), result, expected(2, 3);
+    matrix1[0] = MathVector<int>({ 1, 2 });
+    matrix1[1] = MathVector<int>({ 2, 1 });
+    matrix2[0] = MathVector<int>({ 1, 1, 2 });
+    matrix2[1] = MathVector<int>({ 2, 1, 1 });
+    expected[0] = MathVector<int>({ 5, 3, 4 });
+    expected[1] = MathVector<int>({ 4, 3, 5 });
+
+    result = matrix1 * matrix2;
+    for (int i = 0; i < 2; i++)
+        ASSERT_EQ(result[i], expected[i]);
 }

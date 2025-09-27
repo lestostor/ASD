@@ -31,6 +31,9 @@ public:
     T operator*(const MathVector<T>);
     MathVector<T> operator=(const MathVector<T>);
     bool operator==(const MathVector<T>);
+    friend bool operator==(const MathVector<T>& first, const MathVector<T>& second) {
+        return first.TVector<T>::operator==(second);
+    }
     T& operator[](const int);
     T& operator[](const int) const;
 

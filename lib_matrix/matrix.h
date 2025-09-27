@@ -16,10 +16,12 @@ public:
     Matrix(const Matrix&);
 
     void transpose();
+    Matrix<T> transposed() const;
 
     Matrix<T> operator +(const Matrix<T>&);
     Matrix<T> operator -(const Matrix<T>&);
     Matrix<T> operator *(const Matrix<T>&);
+    MathVector<T> operator*(const MathVector<T>&);
     Matrix<T> operator *(const T&);
     friend std::ostream& operator << (std::ostream& out, const Matrix<T>& matrix) {
         for (int i = 0; i < matrix._size; i++) {
@@ -38,6 +40,7 @@ public:
 
     Matrix<T>& operator = (const Matrix<T>&);
     MathVector<T>& operator [] (const int&);
+    MathVector<T>& operator [] (const int&) const;
 };
 
 template <class T>
@@ -70,6 +73,16 @@ void Matrix<T>::transpose() {
 }
 
 template <class T>
+Matrix<T> Matrix<T>::transposed() const{
+    Matrix<T> result(_n, _m);
+    for (int i = 0; i < _n; i++) {
+        for (int j = 0; j < _m; j++)
+            result[i][j] = this->_vec[j][i];
+    }
+    return result;
+}
+
+template <class T>
 Matrix<T> Matrix<T>::operator +(const Matrix<T>& second) {
     if (this->_m != second._m || this->_n != second._n)
         throw std::logic_error("Matrixes have different sizes");
@@ -95,7 +108,27 @@ Matrix<T> Matrix<T>::operator -(const Matrix<T>& second) {
 
 template <class T>
 Matrix<T> Matrix<T>::operator *(const Matrix<T>& second) {
-    return Matrix<T>();
+    if (_n != second._m)
+        throw std::logic_error("Wrong sizes");
+    Matrix<T> result(_m, second._n);
+    Matrix<T> second_t = second.transposed();
+    for (int i = 0; i < _m; i++)
+        for (int j = 0; j < second_t._m; j++)
+            result[i][j] = (*this)[i] * second_t[j];
+
+    return result;
+}
+
+template <class T>
+MathVector<T> Matrix<T>::operator*(const MathVector<T>& vector) {
+    if (vector.size() != _n)
+        throw std::logic_error("Wrong sizes");
+    MathVector<T> result(_m);
+    for (int i = 0; i < _m; i++) {
+        result[i] = (*this)[i] * vector;
+    }
+
+    return result;
 }
 
 template <class T>
@@ -130,6 +163,11 @@ Matrix<T>& Matrix<T>::operator = (const Matrix<T>& other_matrix) {
 
 template <class T>
 MathVector<T>& Matrix<T>::operator [] (const int& index) {
+    return _vec[index];
+}
+
+template <class T>
+MathVector<T>& Matrix<T>::operator[](const int& index) const {
     return _vec[index];
 }
 
