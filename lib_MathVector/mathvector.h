@@ -44,7 +44,7 @@ MathVector<T>::MathVector() : TVector<T>(), _start_index(0) {}
 
 template <class T>
 MathVector<T>::MathVector(const int size, const int start_index) : TVector<T>(size) {
-    if (start_index < 0 || start_index >= size)
+    if (start_index < 0)
         throw std::invalid_argument("Invalid start_index");
     _start_index = start_index;
     this->shrink_to_fit();
@@ -52,7 +52,7 @@ MathVector<T>::MathVector(const int size, const int start_index) : TVector<T>(si
 
 template <class T>
 MathVector<T>::MathVector(std::initializer_list<T> vector, const int start_index) : TVector<T>(vector) {
-    if (start_index < 0 || start_index >= vector.size())
+    if (start_index < 0)
         throw std::invalid_argument("Invalid start_index");
     _start_index = start_index;
     this->shrink_to_fit();
@@ -74,12 +74,16 @@ MathVector<T>::MathVector(const MathVector<T>& other_vector) {
 
 template <class T>
 T& MathVector<T>::operator[](const int index) {
-    return TVector<T>::operator[](index - _start_index);
+    T element = T();
+    if (index >= 0 && index - _start_index < 0) return element;
+    return at(index - _start_index);
 }
 
 template <class T>
 T& MathVector<T>::operator[](const int index) const {
-    return TVector<T>::operator[](index - _start_index);
+    T element = T();
+    if (index >= 0 && index - _start_index < 0) return element;
+    return at(index - _start_index);
 }
 
 template <class T>

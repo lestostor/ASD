@@ -8,9 +8,10 @@ template <class T> class Matrix;
 
 template <class T>
 class Matrix : public MathVector<MathVector<T>> {
-public:
+protected:
     int _m;  // lines
     int _n;  // columns
+public:
     Matrix();
     Matrix(const int, const int);
     Matrix(const Matrix&);
@@ -24,16 +25,16 @@ public:
     MathVector<T> operator*(const MathVector<T>&);
     Matrix<T> operator *(const T&);
     friend std::ostream& operator << (std::ostream& out, const Matrix<T>& matrix) {
-        for (int i = 0; i < matrix._size; i++) {
-            for (int j = 0; j < matrix._vec[0].size(); j++)
+        for (int i = 0; i < matrix._m; i++) {
+            for (int j = 0; j < matrix._n; j++)
                 out << matrix._vec[i][j] << " ";
             out << std::endl;
         }
         return out;
     }
     friend std::istream& operator >> (std::istream& in, Matrix<T>& matrix) {
-        for (int i = 0; i < matrix._size; i++)
-            for (int j = 0; j < matrix._vec[i].size(); j++)
+        for (int i = 0; i < matrix._m; i++)
+            for (int j = 0; j < matrix._n; j++)
                 in >> matrix._vec[i][j];
         return in;
     }
