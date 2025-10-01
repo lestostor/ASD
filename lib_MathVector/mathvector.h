@@ -91,9 +91,9 @@ MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) {
     if (this->_size != other_vector._size)
         throw std::invalid_argument("Vectors have different sizes");
 
-    MathVector<T> result(_size);
+    MathVector<T> result(_size, _start_index);
     for (int i = 0; i < _size; i++) {
-        result[i] = this->_vec[i] + other_vector[i];
+        result._vec[i] = this->_vec[i] + other_vector._vec[i];
     }
 
     return result;
@@ -104,9 +104,9 @@ MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) {
     if (this->_size != other_vector._size)
         throw std::invalid_argument("Vectors have different sizes");
 
-    MathVector<T> result(_size);
+    MathVector<T> result(_size, _start_index);
     for (int i = 0; i < _size; i++) {
-        result[i] = this->_vec[i] - other_vector[i];
+        result._vec[i] = this->_vec[i] - other_vector._vec[i];
     }
 
     return result;
@@ -114,9 +114,9 @@ MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) {
 
 template <class T>
 MathVector<T> MathVector<T>::operator*(const T& number) {
-    MathVector<T> result(_size);
+    MathVector<T> result(_size, _start_index);
     for (int i = 0; i < _size; i++)
-        result[i] = _vec[i] * number;
+        result._vec[i] = _vec[i] * number;
 
     return result;
 }
@@ -128,7 +128,7 @@ T MathVector<T>::operator*(const MathVector<T> other_vector) {
 
     T result = T();
     for (int i = 0; i < _size; i++)
-        result += this->_vec[i] * other_vector[i];
+        result += this->_vec[i] * other_vector._vec[i];
 
     return result;
 }

@@ -10,8 +10,6 @@ public:
     TriangleMatrix(const int);
     TriangleMatrix(const TriangleMatrix&);
 
-    TriangleMatrix<T> transpose();
-
     TriangleMatrix<T> operator +(const TriangleMatrix<T>&);
     TriangleMatrix<T> operator -(const TriangleMatrix<T>&);
     TriangleMatrix<T> operator *(const TriangleMatrix<T>&);
@@ -54,28 +52,56 @@ TriangleMatrix<T>::TriangleMatrix(const TriangleMatrix<T>& other_matrix) : MathV
 }
 
 template <class T>
-TriangleMatrix<T> TriangleMatrix<T>::transpose() {
-    return TriangleMatrix<T>();
-}
-
-template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator +(const TriangleMatrix<T>& second) {
-    return TriangleMatrix<T>();
+    if (this->_size != second._size)
+        throw std::logic_error("Matrixes have different sizes");
+
+    TriangleMatrix<T> result(this->_size);
+    for (int i = 0; i < _size; i++)
+        result._vec[i] = this->_vec[i] + second._vec[i];
+
+    return result;
 }
 
 template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator -(const TriangleMatrix<T>& second) {
-    return TriangleMatrix<T>();
+    if (this->_size != second._size)
+        throw std::logic_error("Matrixes have different sizes");
+
+    TriangleMatrix<T> result(this->_size);
+    for (int i = 0; i < _size; i++)
+        result._vec[i] = this->_vec[i] - second._vec[i];
+
+    return result;
 }
 
 template <class T>
 TriangleMatrix<T> TriangleMatrix<T>::operator *(const TriangleMatrix<T>& second) {
-    return TriangleMatrix<T>();
+    if (this->_size != second._size)
+        throw std::logic_error("Matrixes have different sizes");
+    
+    TriangleMatrix<T> result(_size);
+    for (int i = 0; i < _size; i++) {
+        result[i][i] = (*this)[i][i] * second[i][i];
+
+        for (int j = i + 1; j < _size; j++) {
+            T sum = T();
+            for (int k = i; k <= j; k++)
+                sum += (*this)[i][j] * second[i][j];
+            result[i][j] = sum;
+        }
+    }
+
+    return result;
 }
 
 template <class T>
-TriangleMatrix<T> TriangleMatrix<T>::operator *(const T& number) {
-    return TriangleMatrix<T>();
+TriangleMatrix<T> TriangleMatrix<T>::operator *(const T& value) {
+    TriangleMatrix<T> result(_size);
+    for (int i = 0; i < _size; i++)
+        result[i] = (*this)[i] * value;
+
+    return result;
 }
 
 template <class T>

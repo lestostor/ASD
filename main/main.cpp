@@ -108,12 +108,15 @@ void print_main_menu() {
     std::cout << "4) Exit" << std::endl;
 }
 
-void print_matrix_operation_menu() {
+void print_matrix_operation_menu(int type) {
     std::cout << "1) Add" << std::endl;
     std::cout << "2) Subtract" << std::endl;
     std::cout << "3) Multiply" << std::endl;
-    std::cout << "4) Transpose" << std::endl;
-    std::cout << "5) Back" << std::endl;
+    if (type == 1) {
+        std::cout << "4) Transpose" << std::endl;
+        std::cout << "5) Back" << std::endl;
+    }
+    else std::cout << "4) Back" << std::endl;
 }
 
 void print_matrix_mul_menu() {
@@ -199,7 +202,7 @@ char choose_matrix(int count) {
         while (true) {
             std::cout << "Enter name of matrix: ";
             std::cin >> name;
-            if (name == 'B' && count >= 2 || name == 'C' && count == 3)
+            if (name =='A' || name == 'B' && count >= 2 || name == 'C' && count == 3)
                 break;
             std::cout << "No matrix with this name" << std::endl;
         }
@@ -249,8 +252,8 @@ int main() {
                 break;
             }
 
-            print_matrix_operation_menu();
-            operation = choose_action(5, "Choose operation: ");
+            print_matrix_operation_menu(type_matrix);
+            operation = choose_action(3 + type_matrix, "Choose operation: ");
             system("cls");
 
             if (operation == 1 || operation == 2) {  //operations +, -
@@ -262,11 +265,16 @@ int main() {
 
                 switch (operation) {
                 case 1:
-                    if (type_matrix == 1)
-                        matrix_c = matrix_a + matrix_b;
-                    else tmatrix_c = tmatrix_a + tmatrix_b;
-                    system("cls");
-                    std::cout << "Matrixes was added" << std::endl;
+                    try {
+                        if (type_matrix == 1)
+                            matrix_c = matrix_a + matrix_b;
+                        else tmatrix_c = tmatrix_a + tmatrix_b;
+                        system("cls");
+                        std::cout << "Matrixes was added" << std::endl;
+                    }
+                    catch (std::exception& ex) {
+                        std::cerr << ex.what() << std::endl;
+                    }
                     break;
                 case 2:
                     std::cout << "1) A-B" << std::endl;
@@ -274,20 +282,25 @@ int main() {
                     std::cout << "3) Back" << std::endl;
                     operation = choose_action(3, "Choose operation: ");
 
-                    if (type_matrix == 1 && operation == 1)
-                        matrix_c = matrix_a - matrix_b;
-                    else if (type_matrix == 2 && operation == 1)
-                        tmatrix_c = tmatrix_a - tmatrix_b;
-                    else if (type_matrix == 1 && operation == 2)
-                        matrix_c = matrix_b - matrix_a;
-                    else if (type_matrix == 2 && operation == 2)
-                        tmatrix_c = tmatrix_b - tmatrix_a;
-                    else {
+                    try {
+                        if (type_matrix == 1 && operation == 1)
+                            matrix_c = matrix_a - matrix_b;
+                        else if (type_matrix == 2 && operation == 1)
+                            tmatrix_c = tmatrix_a - tmatrix_b;
+                        else if (type_matrix == 1 && operation == 2)
+                            matrix_c = matrix_b - matrix_a;
+                        else if (type_matrix == 2 && operation == 2)
+                            tmatrix_c = tmatrix_b - tmatrix_a;
+                        else {
+                            system("cls");
+                            break;
+                        }
                         system("cls");
-                        break;
+                        std::cout << "Matrixes was subtracted" << std::endl;
                     }
-                    system("cls");
-                    std::cout << "Matrixes was subtracted" << std::endl;
+                    catch (std::exception& ex) {
+                        std::cerr << ex.what() << std::endl;
+                    }
                     break;
                 }
                 count++;
@@ -305,15 +318,28 @@ int main() {
                         std::cout << "3) Back" << std::endl;
                         operation = choose_action(3, "Choose operation: ");
 
-                        if (operation == 1)
-                            matrix_c = matrix_a * matrix_b;
-                        else if (operation == 2)
-                            matrix_c = matrix_b * matrix_a;
+                        try {
+                            if (operation == 1)
+                                matrix_c = matrix_a * matrix_b;
+                            else if (operation == 2)
+                                matrix_c = matrix_b * matrix_a;
+                            count++;
+                        }
+                        catch (std::exception& ex) {
+                            std::cerr << ex.what() << std::endl;
+                        }
                     }
-                    else tmatrix_c = tmatrix_a * tmatrix_b;
-                    count++;
-                    system("cls");
-                    std::cout << "Matrixes was multiplied" << std::endl;
+                    else {
+                        try {
+                            tmatrix_c = tmatrix_a * tmatrix_b;
+                            count++;
+                            system("cls");
+                            std::cout << "Matrixes was multiplied" << std::endl;
+                        }
+                        catch (std::exception& ex) {
+                            std::cerr << ex.what() << std::endl;
+                        }
+                    }
                 }
                 else if (operation == 1 && count == 1) {
                     system("cls");
@@ -337,14 +363,11 @@ int main() {
                     std::cout << "Matrix was multiplied" << std::endl;
                 }
             }
-            else if (operation == 4) {
+            else if (operation == 4 && type_matrix == 1) {
                 name = choose_matrix(count);
                 if (name == 'A' && type_matrix == 1) matrix_a.transpose();
-                else if (name == 'A' && type_matrix == 2) tmatrix_a.transpose();
                 else if (name == 'B' && type_matrix == 1) matrix_b.transpose();
-                else if (name == 'B' && type_matrix == 2) tmatrix_b.transpose();
                 else if (name == 'C' && type_matrix == 1) matrix_c.transpose();
-                else if (name == 'C' && type_matrix == 2) tmatrix_c.transpose();
                 system("cls");
                 std::cout << "Matrix was transposted" << std::endl;
             }
