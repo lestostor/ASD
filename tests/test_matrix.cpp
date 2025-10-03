@@ -17,7 +17,8 @@ TEST(TestMatrixLib, test_operator_assign) {
     Matrix<int> matrix1(3, 4), matrix2;
     matrix2 = matrix1;
 
-    ASSERT_EQ(matrix2.size(), 3);
+    ASSERT_EQ(matrix2.get_lines(), 3);
+    ASSERT_EQ(matrix2.get_columns(), 4);
 }
 
 TEST(TestMatrixLib, test_operator_index) {
@@ -112,5 +113,5 @@ TEST(TestMatrixLib, test_operator_mul_by_matrix) {
 
     result = matrix1 * matrix2;
     for (int i = 0; i < 2; i++)
-        ASSERT_EQ(result[i], expected[i]);
+        EXPECT_EQ(result[i], expected[i]);
 }

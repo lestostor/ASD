@@ -5,7 +5,7 @@
 #include <initializer_list>
 
 template <class T>
-class MathVector : public TVector<T> {
+class MathVector : private TVector<T> {
 protected:
     int _start_index;
 
@@ -24,6 +24,13 @@ public:
     void erase(const T*) = delete;
     void emplace(const T&, const T&) = delete;
     void emplace(const T*, const T&) = delete;
+
+    T& at(const int index) const;
+    T& at(const int index);
+
+    inline int size() const {
+        return _size;
+    }
 
     MathVector<T> operator+(const MathVector<T>);
     MathVector<T> operator-(const MathVector<T>);
@@ -59,41 +66,55 @@ MathVector<T>::MathVector(std::initializer_list<T> vector, const int start_index
 }
 
 template <class T>
-MathVector<T>::MathVector(const MathVector<T>& other_vector) {
-    _size = other_vector._size;
-    _capacity = other_vector._size;
-    _vec = new T[_size];
-    _status = new Status[_size];
+MathVector<T>::MathVector(const MathVector<T>& other_vector) : TVector<T>(other_vector._size) {
     _start_index = other_vector._start_index;
+    this->shrink_to_fit();
 
     for (int i = 0; i < _size; i++) {
         _vec[i] = other_vector._vec[i];
-        _status[i] = other_vector._status[i];
     }
+}
+
+template <class T>
+T& MathVector<T>::at(const int index) const {
+    if (index >= _size || index < 0)
+        throw std::out_of_range("Index is out of range\n");
+    T element = T();
+    if (index >= 0 && index - _start_index < 0) return element;
+    return this->_vec[index - _start_index];
+}
+
+template <class T>
+T& MathVector<T>::at(const int index) {
+    if (index >= _size || index < 0)
+        throw std::out_of_range("Index is out of range\n");
+    T element = T();
+    if (index >= 0 && index - _start_index < 0) return element;
+    return this->_vec[index - _start_index];
 }
 
 template <class T>
 T& MathVector<T>::operator[](const int index) {
     T element = T();
     if (index >= 0 && index - _start_index < 0) return element;
-    return at(index - _start_index);
+    return this->_vec[index - _start_index];
 }
 
 template <class T>
 T& MathVector<T>::operator[](const int index) const {
     T element = T();
     if (index >= 0 && index - _start_index < 0) return element;
-    return at(index - _start_index);
+    return this->_vec[index - _start_index];
 }
 
 template <class T>
 MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) {
-    if (this->_size != other_vector._size)
+    if (_size != other_vector._size)
         throw std::invalid_argument("Vectors have different sizes");
 
     MathVector<T> result(_size, _start_index);
     for (int i = 0; i < _size; i++) {
-        result._vec[i] = this->_vec[i] + other_vector._vec[i];
+        result._vec[i] = _vec[i] + other_vector._vec[i];
     }
 
     return result;
@@ -101,12 +122,12 @@ MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) {
 
 template <class T>
 MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) {
-    if (this->_size != other_vector._size)
+    if (_size != other_vector._size)
         throw std::invalid_argument("Vectors have different sizes");
 
     MathVector<T> result(_size, _start_index);
     for (int i = 0; i < _size; i++) {
-        result._vec[i] = this->_vec[i] - other_vector._vec[i];
+        result._vec[i] = _vec[i] - other_vector._vec[i];
     }
 
     return result;
@@ -123,12 +144,12 @@ MathVector<T> MathVector<T>::operator*(const T& number) {
 
 template <class T>
 T MathVector<T>::operator*(const MathVector<T> other_vector) {
-    if (this->_size != other_vector._size)
+    if (_size != other_vector._size)
         throw std::invalid_argument("Vectors have different sizes");
 
     T result = T();
     for (int i = 0; i < _size; i++)
-        result += this->_vec[i] * other_vector._vec[i];
+        result += _vec[i] * other_vector._vec[i];
 
     return result;
 }

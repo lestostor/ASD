@@ -13,28 +13,6 @@ TEST(TestMathVectorLib, test_initialize_constructor_with_start_index) {
     ASSERT_NO_THROW(MathVector<int> vector(3, 1));
 }
 
-TEST(TestMathVectorLib, test_initialize_constructor_with_negative_start_index) {
-    ASSERT_ANY_THROW(MathVector<int> vector(3, -1));
-}
-
-TEST(TestMathVectorLib, test_initialize_constructor_with_initialize_list_with_null_start_index) {
-    MathVector<int> vector({ 1, 2, 3, 4, 5 });
-    
-    for (int i = 0; i < 5; i++)
-        ASSERT_EQ(*(vector.begin() + i), i + 1);
-}
-
-TEST(TestMathVectorLib, test_initialize_constructor_with_initialize_list_with_start_index) {
-    MathVector<int> vector({ 1, 2, 3, 4, 5 }, 2);
-
-    for (int i = 0; i < 5; i++)
-        ASSERT_EQ(*(vector.begin() + i), i + 1);
-}
-
-TEST(TestMathVectorLib, test_initialize_constructor_with_initialize_list_with_negative_start_index) {
-    ASSERT_ANY_THROW(MathVector<int> vector({ 1, 2, 3, 4, 5 }, -1));
-}
-
 TEST(TestMathVectorLib, test_copy_constructor) {
     MathVector<int> vector1({ 1, 2, 3, 4, 5 }, 1);
     ASSERT_NO_THROW(MathVector<int> vector2(vector1));
@@ -53,12 +31,12 @@ TEST(TestMathVectorLib, test_index_operator_for_zero_element) {
 
 TEST(TestMathVectorLib, test_index_operator_out_of_range) {
     MathVector<int> vector({ 1, 2, 3, 4, 5 });
-    ASSERT_ANY_THROW(vector[6], 6);
+    ASSERT_NE(vector[5], 5);
 }
 
 TEST(TestMathVectorLib, test_index_operator_with_negative_index) {
     MathVector<int> vector({ 1, 2, 3, 4, 5 });
-    ASSERT_ANY_THROW(vector[-3], 3);
+    ASSERT_NE(vector[-3], 3);
 }
 
 TEST(TestMathVectorLib, test_index_operator_with_start_index) {
@@ -68,12 +46,67 @@ TEST(TestMathVectorLib, test_index_operator_with_start_index) {
 
 TEST(TestMathVectorLib, test_index_operator_out_of_range_with_start_index) {
     MathVector<int> vector({ 1, 2, 3, 4, 5 }, 1);
-    ASSERT_ANY_THROW(vector[6], 6);
+    ASSERT_NE(vector[6], 6);
 }
 
-TEST(TestMathVectorLib, test_index_operator_with_negative_index_with_start_index) {
+TEST(TestMathVectorLib, test_at) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 });
+    ASSERT_EQ(vector.at(2), 3);
+}
+
+TEST(TestMathVectorLib, test_at_for_zero_element) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 }, 2);
+    int result = vector.at(1);
+    ASSERT_EQ(result, 0);
+}
+
+TEST(TestMathVectorLib, test_at_out_of_range) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 });
+    ASSERT_ANY_THROW(vector.at(5));
+}
+
+TEST(TestMathVectorLib, test_at_with_negative_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 });
+    ASSERT_ANY_THROW(vector.at(-3));
+}
+
+TEST(TestMathVectorLib, test_at_with_start_index) {
     MathVector<int> vector({ 1, 2, 3, 4, 5 }, 1);
-    ASSERT_ANY_THROW(vector[-1], 3);
+    ASSERT_EQ(vector.at(2), 2);
+}
+
+TEST(TestMathVectorLib, test_at_out_of_range_with_start_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 }, 1);
+    ASSERT_ANY_THROW(vector.at(6));
+}
+
+TEST(TestMathVectorLib, test_at_with_negative_index_with_start_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 }, 1);
+    ASSERT_ANY_THROW(vector.at(-1));
+}
+
+TEST(TestMathVectorLib, test_initialize_constructor_with_negative_start_index) {
+    ASSERT_ANY_THROW(MathVector<int> vector(3, -1));
+}
+
+TEST(TestMathVectorLib, test_initialize_constructor_with_initialize_list_with_null_start_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 });
+    
+    for (int i = 0; i < 5; i++)
+        ASSERT_EQ(vector[i], i + 1);
+}
+
+TEST(TestMathVectorLib, test_initialize_constructor_with_initialize_list_with_start_index) {
+    MathVector<int> vector({ 1, 2, 3, 4, 5 }, 1);
+
+    for (int i = 0; i < 5; i++) {
+        int element = vector[i];
+        ASSERT_EQ(element, i);
+    }
+}
+
+TEST(TestMathVectorLib, test_initialize_constructor_with_initialize_list_with_negative_start_index) {
+    ASSERT_ANY_THROW(MathVector<int> vector({ 1, 2, 3, 4, 5 }, -1));
 }
 
 TEST(TestMathVectorLib, test_operator_add) {

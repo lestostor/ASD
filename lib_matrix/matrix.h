@@ -19,6 +19,14 @@ public:
     void transpose();
     Matrix<T> transposed() const;
 
+    inline int get_lines() const {
+        return _m;
+    }
+
+    inline int get_columns() const {
+        return _n;
+    }
+
     Matrix<T> operator +(const Matrix<T>&);
     Matrix<T> operator -(const Matrix<T>&);
     Matrix<T> operator *(const Matrix<T>&);
@@ -27,7 +35,7 @@ public:
     friend std::ostream& operator << (std::ostream& out, const Matrix<T>& matrix) {
         for (int i = 0; i < matrix._m; i++) {
             for (int j = 0; j < matrix._n; j++)
-                out << matrix._vec[i][j] << " ";
+                out << matrix[i][j] << " ";
             out << std::endl;
         }
         return out;
@@ -35,7 +43,7 @@ public:
     friend std::istream& operator >> (std::istream& in, Matrix<T>& matrix) {
         for (int i = 0; i < matrix._m; i++)
             for (int j = 0; j < matrix._n; j++)
-                in >> matrix._vec[i][j];
+                in >> matrix[i][j];
         return in;
     }
 
@@ -50,16 +58,15 @@ Matrix<T>::Matrix() : MathVector<MathVector<T>>() , _m(0), _n(0) {}
 template <class T>
 Matrix<T>::Matrix(const int m, const int n) : MathVector<MathVector<T>>(m), _m(m), _n(n) {
     for (int i = 0; i < m; i++)
-        _vec[i] = MathVector<T>(n);
+        (*this)[i] = MathVector<T>(n);
 }
 
 template <class T>
-Matrix<T>::Matrix(const Matrix<T>& other_matrix) : MathVector<MathVector<T>>(other_matrix._size) {
+Matrix<T>::Matrix(const Matrix<T>& other_matrix) : MathVector<MathVector<T>>(other_matrix._m) {
     this->_m = other_matrix._m;
     this->_n = other_matrix._n;
     for (int i = 0; i < _m; i++) {
-        this->_vec[i] = MathVector<T>(other_matrix._vec[i]);
-        this->_status[i] = Status::Busy;
+        (*this)[i] = MathVector<T>(other_matrix[i]);
     }
 }
 
@@ -68,7 +75,7 @@ void Matrix<T>::transpose() {
     Matrix<T> result(_n, _m);
     for (int i = 0; i < _n; i++) {
         for (int j = 0; j < _m; j++)
-            result[i][j] = this->_vec[j][i];
+            result[i][j] = (*this)[j][i];
     }
     *this = result;
 }
@@ -78,7 +85,7 @@ Matrix<T> Matrix<T>::transposed() const{
     Matrix<T> result(_n, _m);
     for (int i = 0; i < _n; i++) {
         for (int j = 0; j < _m; j++)
-            result[i][j] = this->_vec[j][i];
+            result[i][j] = (*this)[j][i];
     }
     return result;
 }
@@ -90,7 +97,7 @@ Matrix<T> Matrix<T>::operator +(const Matrix<T>& second) {
 
     Matrix<T> result(_m, _n);
     for (int i = 0; i < _m; i++)
-        result[i] = this->_vec[i] + second._vec[i];
+        result[i] = (*this)[i] + second[i];
 
     return result;
 }
@@ -102,7 +109,7 @@ Matrix<T> Matrix<T>::operator -(const Matrix<T>& second) {
 
     Matrix<T> result(_m, _n);
     for (int i = 0; i < _m; i++)
-        result[i] = this->_vec[i] - second._vec[i];
+        result[i] = (*this)[i] - second[i];
 
     return result;
 }
@@ -146,30 +153,23 @@ Matrix<T>& Matrix<T>::operator = (const Matrix<T>& other_matrix) {
     if (&other_matrix == this)
         return *this;
 
-    this->_size = other_matrix._size;
-    this->_capacity = other_matrix._capacity;
-    this->_vec = new MathVector<T>[this->_size];
-    this->_status = new Status[this->_size];
-    this->_start_index = other_matrix._start_index;
     this->_m = other_matrix._m;
     this->_n = other_matrix._n;
 
-    for (int i = 0; i < _m; i++) {
-        this->_vec[i] = other_matrix._vec[i];
-        this->_status[i] = Status::Busy;
-    }
+    for (int i = 0; i < _m; i++)
+        (*this)[i].MathVector<T>::operator=(other_matrix[i]);
 
     return *this;
 }
 
 template <class T>
 MathVector<T>& Matrix<T>::operator [] (const int& index) {
-    return _vec[index];
+    return MathVector<MathVector<T>>::operator[](index);
 }
 
 template <class T>
 MathVector<T>& Matrix<T>::operator[](const int& index) const {
-    return _vec[index];
+    return MathVector<MathVector<T>>::operator[](index);
 }
 
 #endif // !MATRIX_MATRIX_H
