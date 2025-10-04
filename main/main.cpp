@@ -40,24 +40,7 @@ int main() {
 
 #ifdef CHECK_CIRCLES
 #include <iostream>
-#include "circle.h"
-
-enum Type { intersect, touch, inside, not_touch };
-
-template <class T>
-Type check_circles(T first, T second) {
-    float frad = first.get_radius(), srad = second.get_radius();
-    Point fcentre(first.get_centre()), scentre(second.get_centre());
-    float distance = fcentre.distance(scentre);
-
-    if (frad + srad == distance)
-        return Type::touch;
-    else if (frad + srad < distance)
-        return Type::not_touch;
-    else if (distance < frad + srad && distance > abs(frad - srad))
-        return intersect;
-    else return inside;
-}
+#include "algorithms.h"
 
 void print_result(Type result) {
     if (result == Type::intersect)
