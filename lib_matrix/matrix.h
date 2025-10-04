@@ -48,8 +48,6 @@ public:
     }
 
     Matrix<T>& operator = (const Matrix<T>&);
-    MathVector<T>& operator [] (const int&);
-    MathVector<T>& operator [] (const int&) const;
 };
 
 template <class T>
@@ -160,16 +158,6 @@ Matrix<T>& Matrix<T>::operator = (const Matrix<T>& other_matrix) {
         (*this)[i].MathVector<T>::operator=(other_matrix[i]);
 
     return *this;
-}
-
-template <class T>
-MathVector<T>& Matrix<T>::operator [] (const int& index) {
-    return MathVector<MathVector<T>>::operator[](index);
-}
-
-template <class T>
-MathVector<T>& Matrix<T>::operator[](const int& index) const {
-    return MathVector<MathVector<T>>::operator[](index);
 }
 
 #endif // !MATRIX_MATRIX_H
