@@ -115,3 +115,78 @@ TEST(TestMatrixLib, test_operator_mul_by_matrix) {
     for (int i = 0; i < 2; i++)
         EXPECT_EQ(result[i], expected[i]);
 }
+
+TEST(TestMatrixLib, test_operator_compare_if_different_sizes) {
+    Matrix<int> matrix1(2, 3), matrix2(3, 2);
+    ASSERT_FALSE(matrix1 == matrix2);
+}
+
+TEST(TestMatrixLib, test_operator_compare_if_equal_sizes) {
+    Matrix<int> matrix1(2, 2), matrix2(2, 2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1, 2 });
+    matrix2[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 2, 1 });
+    ASSERT_FALSE(matrix1 == matrix2);
+}
+
+TEST(TestMatrixLib, test_operator_compare_if_equal) {
+    Matrix<int> matrix1(2, 2), matrix2(2, 2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1, 1 });
+    matrix2[0] = MathVector<int>({ 1, 1 });
+    matrix2[1] = MathVector<int>({ 1, 1 });
+    ASSERT_TRUE(matrix1 == matrix2);
+}
+
+TEST(TestMatrixLib, test_operator_compare_itself) {
+    Matrix<int> matrix1(2, 2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1, 1 });
+    ASSERT_TRUE(matrix1 == matrix1);
+}
+
+TEST(TestMatrixLib, test_operator_second_compare_if_different_sizes) {
+    Matrix<int> matrix1(2, 3), matrix2(3, 2);
+    ASSERT_TRUE(matrix1 != matrix2);
+}
+
+TEST(TestMatrixLib, test_operator_second_compare_if_equal_sizes) {
+    Matrix<int> matrix1(2, 2), matrix2(2, 2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1, 2 });
+    matrix2[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 2, 1 });
+    ASSERT_TRUE(matrix1 != matrix2);
+}
+
+TEST(TestMatrixLib, test_operator_second_compare_if_equal) {
+    Matrix<int> matrix1(2, 2), matrix2(2, 2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1, 1 });
+    matrix2[0] = MathVector<int>({ 1, 1 });
+    matrix2[1] = MathVector<int>({ 1, 1 });
+    ASSERT_FALSE(matrix1 != matrix2);
+}
+
+TEST(TestMatrixLib, test_operator_second_compare_itself) {
+    Matrix<int> matrix1(2, 2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1, 1 });
+    ASSERT_FALSE(matrix1 != matrix1);
+}
+
+TEST(TestMatrixLib, test_at) {
+    Matrix<int> matrix(2, 2);
+    ASSERT_EQ(matrix.at(0), MathVector<int>(2));
+}
+
+TEST(TestMatrixLib, test_at_out_of_range) {
+    Matrix<int> matrix(2, 2);
+    ASSERT_ANY_THROW(matrix.at(2));
+}
+
+TEST(TestMatrixLib, test_at_with_negative_index) {
+    Matrix<int> matrix(2, 2);
+    ASSERT_ANY_THROW(matrix.at(-2));
+}

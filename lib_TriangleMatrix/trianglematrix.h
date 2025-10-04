@@ -35,8 +35,8 @@ public:
     }
 
     TriangleMatrix<T>& operator = (const TriangleMatrix<T>&);
-    MathVector<T>& operator [] (const int&);
-    MathVector<T>& operator [] (const int&) const;
+    bool operator==(const TriangleMatrix<T>&);
+    bool operator!=(const TriangleMatrix<T>&);
 };
 
 template <class T>
@@ -121,13 +121,21 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator = (const TriangleMatrix<T>& other
 }
 
 template <class T>
-MathVector<T>& TriangleMatrix<T>::operator [] (const int& index) {
-    return MathVector<MathVector<T>>::operator[](index);
+bool TriangleMatrix<T>::operator==(const TriangleMatrix<T>& other_matrix) {
+    if (&other_matrix == this)
+        return true;
+    if (this->_n != other_matrix._n)
+        return false;
+    for (int i = 0; i < _n; i++) {
+        if ((*this)[i] != other_matrix[i])
+            return false;
+    }
+    return true;
 }
 
 template <class T>
-MathVector<T>& TriangleMatrix<T>::operator [] (const int& index) const {
-    return MathVector<MathVector<T>>::operator[](index);
+bool TriangleMatrix<T>::operator!=(const TriangleMatrix<T>& other_matrix) {
+    return !((*this) == other_matrix);
 }
 
 #endif // !TRIANGLEMATRIX_TRIANGLEMATRIX_H

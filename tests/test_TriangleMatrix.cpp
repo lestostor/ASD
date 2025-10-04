@@ -100,3 +100,78 @@ TEST(TestTriangleMatrixLib, test_operator_mul_by_triangle_matrix) {
         for (int j = i; j < 3; j++)
             ASSERT_EQ(result[i][j], expected[i][j]);
 }
+
+TEST(TestTriangleMatrixLib, test_operator_compare_if_different_sizes) {
+    TriangleMatrix<int> matrix1(3), matrix2(2);
+    ASSERT_FALSE(matrix1 == matrix2);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_compare_if_equal_sizes) {
+    TriangleMatrix<int> matrix1(2), matrix2(2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 2 });
+    matrix2[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1 });
+    ASSERT_FALSE(matrix1 == matrix2);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_compare_if_equal) {
+    TriangleMatrix<int> matrix1(2), matrix2(2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1 });
+    matrix2[0] = MathVector<int>({ 1, 1 });
+    matrix2[1] = MathVector<int>({ 1 });
+    ASSERT_TRUE(matrix1 == matrix2);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_compare_itself) {
+    TriangleMatrix<int> matrix(2);
+    matrix[0] = MathVector<int>({ 1, 1 });
+    matrix[1] = MathVector<int>({ 1 });
+    ASSERT_TRUE(matrix == matrix);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_second_compare_if_different_sizes) {
+    TriangleMatrix<int> matrix1(3), matrix2(2);
+    ASSERT_TRUE(matrix1 != matrix2);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_second_compare_if_equal_sizes) {
+    TriangleMatrix<int> matrix1(2), matrix2(2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 2 });
+    matrix2[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1 });
+    ASSERT_TRUE(matrix1 != matrix2);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_second_compare_if_equal) {
+    TriangleMatrix<int> matrix1( 2), matrix2(2);
+    matrix1[0] = MathVector<int>({ 1, 1 });
+    matrix1[1] = MathVector<int>({ 1 });
+    matrix2[0] = MathVector<int>({ 1, 1 });
+    matrix2[1] = MathVector<int>({ 1 });
+    ASSERT_FALSE(matrix1 != matrix2);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_second_compare_itself) {
+    TriangleMatrix<int> matrix(2);
+    matrix[0] = MathVector<int>({ 1, 1 });
+    matrix[1] = MathVector<int>({ 1 });
+    ASSERT_FALSE(matrix != matrix);
+}
+
+TEST(TestTriangleMatrixLib, test_at) {
+    TriangleMatrix<int> matrix(2);
+    ASSERT_EQ(matrix.at(1), MathVector<int>(1));
+}
+
+TEST(TestTriangleMatrixLib, test_at_out_of_range) {
+    TriangleMatrix<int> matrix(2);
+    ASSERT_ANY_THROW(matrix.at(2));
+}
+
+TEST(TestTriangleMatrixLib, test_at_with_negative_index) {
+    TriangleMatrix<int> matrix(2);
+    ASSERT_ANY_THROW(matrix.at(-2));
+}

@@ -32,12 +32,13 @@ public:
         return _size;
     }
 
-    MathVector<T> operator+(const MathVector<T>);
-    MathVector<T> operator-(const MathVector<T>);
-    MathVector<T> operator*(const T&);
-    T operator*(const MathVector<T>);
+    MathVector<T> operator+(const MathVector<T>) const;
+    MathVector<T> operator-(const MathVector<T>) const;
+    MathVector<T> operator*(const T&) const;
+    T operator*(const MathVector<T>) const;
     MathVector<T> operator=(const MathVector<T>);
     bool operator==(const MathVector<T>);
+    bool operator!=(const MathVector<T>);
     friend bool operator==(const MathVector<T>& first, const MathVector<T>& second) {
         return first.TVector<T>::operator==(second);
     }
@@ -108,7 +109,7 @@ T& MathVector<T>::operator[](const int index) const {
 }
 
 template <class T>
-MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) {
+MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) const {
     if (_size != other_vector._size)
         throw std::invalid_argument("Vectors have different sizes");
 
@@ -121,7 +122,7 @@ MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) {
 }
 
 template <class T>
-MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) {
+MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) const {
     if (_size != other_vector._size)
         throw std::invalid_argument("Vectors have different sizes");
 
@@ -134,7 +135,7 @@ MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) {
 }
 
 template <class T>
-MathVector<T> MathVector<T>::operator*(const T& number) {
+MathVector<T> MathVector<T>::operator*(const T& number) const {
     MathVector<T> result(_size, _start_index);
     for (int i = 0; i < _size; i++)
         result._vec[i] = _vec[i] * number;
@@ -143,7 +144,7 @@ MathVector<T> MathVector<T>::operator*(const T& number) {
 }
 
 template <class T>
-T MathVector<T>::operator*(const MathVector<T> other_vector) {
+T MathVector<T>::operator*(const MathVector<T> other_vector) const {
     if (_size != other_vector._size)
         throw std::invalid_argument("Vectors have different sizes");
 
@@ -179,6 +180,11 @@ MathVector<T> MathVector<T>::operator=(const MathVector<T> other_vector) {
 template <class T>
 bool MathVector<T>::operator==(const MathVector<T> other_vector) {
     return this->TVector::operator==(other_vector);
+}
+
+template <class T>
+bool MathVector<T>::operator!=(const MathVector<T> other_vector) {
+    return !((*this) == other_vector);
 }
 
 #endif // !MATHVECTOR_MATHVECTOR_H
