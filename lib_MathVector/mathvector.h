@@ -29,7 +29,7 @@ public:
     T& at(const int index);
 
     inline int size() const {
-        return _size;
+        return _size + _start_index;
     }
 
     MathVector<T> operator+(const MathVector<T>) const;
@@ -110,7 +110,7 @@ T& MathVector<T>::operator[](const int index) const {
 
 template <class T>
 MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) const {
-    if (_size != other_vector._size)
+    if (_size + _start_index != other_vector._size + other_vector._start_index)
         throw std::invalid_argument("Vectors have different sizes");
 
     MathVector<T> result(_size, _start_index);
@@ -123,7 +123,7 @@ MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) const {
 
 template <class T>
 MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) const {
-    if (_size != other_vector._size)
+    if (_size + _start_index != other_vector._size + other_vector._start_index)
         throw std::invalid_argument("Vectors have different sizes");
 
     MathVector<T> result(_size, _start_index);
@@ -145,12 +145,12 @@ MathVector<T> MathVector<T>::operator*(const T& number) const {
 
 template <class T>
 T MathVector<T>::operator*(const MathVector<T> other_vector) const {
-    if (_size != other_vector._size)
+    if (_size + _start_index != other_vector._size + other_vector._start_index)
         throw std::invalid_argument("Vectors have different sizes");
 
     T result = T();
-    for (int i = 0; i < _size; i++)
-        result += _vec[i] * other_vector._vec[i];
+    for (int i = _start_index; i < _size + _start_index; i++)
+        result += (*this)[i] * other_vector[i];
 
     return result;
 }

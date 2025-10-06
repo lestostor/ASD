@@ -18,6 +18,7 @@ public:
     TriangleMatrix<T> operator +(const TriangleMatrix<T>&);
     TriangleMatrix<T> operator -(const TriangleMatrix<T>&);
     TriangleMatrix<T> operator *(const TriangleMatrix<T>&);
+    MathVector<T> operator * (const MathVector<T>&);
     TriangleMatrix<T> operator * (const T&);
     friend std::ostream& operator << (std::ostream& out, const TriangleMatrix<T>& matrix) {
         for (int i = 0; i < matrix._n; i++) {
@@ -93,6 +94,18 @@ TriangleMatrix<T> TriangleMatrix<T>::operator *(const TriangleMatrix<T>& second)
                 sum += (*this)[i][j] * second[i][j];
             result[i][j] = sum;
         }
+    }
+
+    return result;
+}
+
+template <class T>
+MathVector<T> TriangleMatrix<T>::operator * (const MathVector<T>& vector) {
+    if (vector.size() != _n)
+        throw std::logic_error("Wrong sizes");
+    MathVector<T> result(_n);
+    for (int i = 0; i < _n; i++) {
+        result[i] = (*this)[i] * vector;
     }
 
     return result;

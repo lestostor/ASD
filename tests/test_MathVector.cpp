@@ -124,6 +124,11 @@ TEST(TestMathVectorLib, test_operator_add_if_different_sizes) {
     ASSERT_ANY_THROW(vector1 + vector2);
 }
 
+TEST(TestMathVectorLib, test_operator_add_if_different_start_index) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6}, 2);
+    ASSERT_ANY_THROW(vector1 + vector2);
+}
+
 TEST(TestMathVectorLib, test_operator_sub) {
     MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6 });
     MathVector<int> result;
@@ -136,6 +141,11 @@ TEST(TestMathVectorLib, test_operator_sub) {
 
 TEST(TestMathVectorLib, test_operator_sub_if_different_sizes) {
     MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6, 7 });
+    ASSERT_ANY_THROW(vector1 - vector2);
+}
+
+TEST(TestMathVectorLib, test_operator_sub_if_different_start_index) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6 }, 2);
     ASSERT_ANY_THROW(vector1 - vector2);
 }
 
@@ -159,6 +169,11 @@ TEST(TestMathVectorLib, test_operator_mul_by_vector) {
 
 TEST(TestMathVectorLib, test_operator_mul_if_different_sizes) {
     MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6, 7 });
+    ASSERT_ANY_THROW(vector1 * vector2);
+}
+
+TEST(TestMathVectorLib, test_operator_mul_if_different_start_index) {
+    MathVector<int> vector1({ 1, 2, 3 }), vector2({ 4, 5, 6 }, 2);
     ASSERT_ANY_THROW(vector1 * vector2);
 }
 

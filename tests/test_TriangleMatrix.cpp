@@ -83,6 +83,32 @@ TEST(TestTriangleMatrixLib, test_operator_mul_by_number) {
             ASSERT_EQ(result[i][j], 6);
 }
 
+TEST(TestTriangleMatrixLib, test_operator_mul_by_vector) {
+    TriangleMatrix<int> matrix(3);
+    MathVector<int> vector({ 1, 2, 3 }), result, expected({ 12,10,6 });
+
+    for (int i = 0; i < 3; i++)
+        for (int j = i; j < 3; j++) {
+            matrix[i][j] = 2;
+        }
+
+    result = matrix * vector;
+    for (int i = 0; i < 3; i++)
+        ASSERT_EQ(result[i], expected[i]);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_mul_by_vector_if_different_sizes) {
+    TriangleMatrix<int> matrix(3);
+    MathVector<int> vector({ 1, 2, 3 , 4});
+    ASSERT_ANY_THROW(matrix * vector);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_mul_by_vector_if_different_sizes_with_start_index) {
+    TriangleMatrix<int> matrix(3);
+    MathVector<int> vector({ 1, 2, 3 }, 1);
+    ASSERT_ANY_THROW(matrix * vector);
+}
+
 TEST(TestTriangleMatrixLib, test_operator_mul_by_triangle_matrix) {
     TriangleMatrix<int> matrix1(3), matrix2(3), result, expected(3);
 
