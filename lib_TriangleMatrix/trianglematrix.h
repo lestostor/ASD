@@ -9,17 +9,21 @@ class TriangleMatrix : public MathVector<MathVector<T>> {
 public:
     TriangleMatrix();
     TriangleMatrix(const int);
+    TriangleMatrix(const MathVector<MathVector<T>>&);
     TriangleMatrix(const TriangleMatrix&);
 
     inline int size() const {
         return _n;
     }
 
-    TriangleMatrix<T> operator +(const TriangleMatrix<T>&);
-    TriangleMatrix<T> operator -(const TriangleMatrix<T>&);
-    TriangleMatrix<T> operator *(const TriangleMatrix<T>&);
-    MathVector<T> operator * (const MathVector<T>&);
-    TriangleMatrix<T> operator * (const T&);
+    TriangleMatrix<T> operator +(const TriangleMatrix<T>&) const;
+    TriangleMatrix<T>& operator +=(const TriangleMatrix<T>&);
+    TriangleMatrix<T> operator -(const TriangleMatrix<T>&) const;
+    TriangleMatrix<T>& operator -=(const TriangleMatrix<T>&);
+    TriangleMatrix<T> operator *(const TriangleMatrix<T>&) const;
+    MathVector<T> operator * (const MathVector<T>&) const;
+    TriangleMatrix<T> operator * (const T&) const;
+    TriangleMatrix<T>& operator *=(const T&);
     friend std::ostream& operator << (std::ostream& out, const TriangleMatrix<T>& matrix) {
         for (int i = 0; i < matrix._n; i++) {
             for (int j = 0; j < matrix._n; j++)
@@ -50,28 +54,38 @@ TriangleMatrix<T>::TriangleMatrix(const int size) : MathVector<MathVector<T>>(si
 }
 
 template <class T>
+TriangleMatrix<T>::TriangleMatrix(const MathVector<MathVector<T>>& other) : MathVector<MathVector<T>>(other.size()) {
+    this->_n = other.size();
+    for (int i = 0; i < _n; i++) {
+        (*this)[i] = MathVector<T>(other[i]);
+    }
+}
+
+template <class T>
 TriangleMatrix<T>::TriangleMatrix(const TriangleMatrix<T>& other_matrix) : MathVector<MathVector<T>>(other_matrix._n), _n(other_matrix._n) {
     for (int i = 0; i < _n; i++)
         (*this)[i] = MathVector<T>(other_matrix[i]);
 }
 
 template <class T>
-TriangleMatrix<T> TriangleMatrix<T>::operator +(const TriangleMatrix<T>& second) {
-    if (this->_n != second._n)
-        throw std::logic_error("Matrixes have different sizes");
-
-    TriangleMatrix<T> result(this->_n);
-    for (int i = 0; i < _n; i++)
-        result[i] = (*this)[i] + second[i];
+TriangleMatrix<T> TriangleMatrix<T>::operator +(const TriangleMatrix<T>& second) const {
+    TriangleMatrix<T> result(*this);
+    result += second;
 
     return result;
 }
 
 template <class T>
-TriangleMatrix<T> TriangleMatrix<T>::operator -(const TriangleMatrix<T>& second) {
+TriangleMatrix<T>& TriangleMatrix<T>::operator +=(const TriangleMatrix<T>& second) {
     if (this->_n != second._n)
         throw std::logic_error("Matrixes have different sizes");
 
+    *this = (*this).MathVector<MathVector<T>>::operator+(second);
+    return *this;
+}
+
+template <class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator -(const TriangleMatrix<T>& second) const {
     TriangleMatrix<T> result(this->_n);
     for (int i = 0; i < _n; i++)
         result[i] = (*this)[i] - second[i];
@@ -80,7 +94,16 @@ TriangleMatrix<T> TriangleMatrix<T>::operator -(const TriangleMatrix<T>& second)
 }
 
 template <class T>
-TriangleMatrix<T> TriangleMatrix<T>::operator *(const TriangleMatrix<T>& second) {
+TriangleMatrix<T>& TriangleMatrix<T>::operator -=(const TriangleMatrix<T>& second) {
+    if (this->_n != second._n)
+        throw std::logic_error("Matrixes have different sizes");
+
+    *this = (*this).MathVector<MathVector<T>>::operator-(second);
+    return *this;
+}
+
+template <class T>
+TriangleMatrix<T> TriangleMatrix<T>::operator *(const TriangleMatrix<T>& second) const {
     if (this->_n != second._n)
         throw std::logic_error("Matrixes have different sizes");
     
@@ -100,7 +123,7 @@ TriangleMatrix<T> TriangleMatrix<T>::operator *(const TriangleMatrix<T>& second)
 }
 
 template <class T>
-MathVector<T> TriangleMatrix<T>::operator * (const MathVector<T>& vector) {
+MathVector<T> TriangleMatrix<T>::operator * (const MathVector<T>& vector) const {
     if (vector.size() != _n)
         throw std::logic_error("Wrong sizes");
     MathVector<T> result(_n);
@@ -112,12 +135,19 @@ MathVector<T> TriangleMatrix<T>::operator * (const MathVector<T>& vector) {
 }
 
 template <class T>
-TriangleMatrix<T> TriangleMatrix<T>::operator *(const T& value) {
-    TriangleMatrix<T> result(_n);
-    for (int i = 0; i < _n; i++)
-        result[i] = (*this)[i] * value;
+TriangleMatrix<T> TriangleMatrix<T>::operator *(const T& value) const {
+    TriangleMatrix<T> result(*this);
+    result *= value;
 
     return result;
+}
+
+template <class T>
+TriangleMatrix<T>& TriangleMatrix<T>::operator *=(const T& value) {
+    for (int i = 0; i < _n; i++)
+        (*this)[i] *= value;
+
+    return *this;
 }
 
 template <class T>
@@ -127,8 +157,7 @@ TriangleMatrix<T>& TriangleMatrix<T>::operator = (const TriangleMatrix<T>& other
 
     this->_n = other_matrix._n;
 
-    for (int i = 0; i < _n; i++)
-        (*this)[i].MathVector<T>::operator=(other_matrix[i]);
+    (*this).MathVector<MathVector<T>>::operator=(other_matrix);
 
     return *this;
 }
@@ -139,11 +168,8 @@ bool TriangleMatrix<T>::operator==(const TriangleMatrix<T>& other_matrix) {
         return true;
     if (this->_n != other_matrix._n)
         return false;
-    for (int i = 0; i < _n; i++) {
-        if ((*this)[i] != other_matrix[i])
-            return false;
-    }
-    return true;
+
+    return (*this).MathVector<MathVector<T>>::operator==(other_matrix);
 }
 
 template <class T>

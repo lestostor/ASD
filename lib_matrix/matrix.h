@@ -29,10 +29,13 @@ public:
     }
 
     Matrix<T> operator +(const Matrix<T>&) const;
+    Matrix<T>& operator +=(const Matrix<T>&);
     Matrix<T> operator -(const Matrix<T>&) const;
+    Matrix<T>& operator -=(const Matrix<T>&);
     Matrix<T> operator *(const Matrix<T>&) const;
     MathVector<T> operator*(const MathVector<T>&) const;
     Matrix<T> operator *(const T&) const;
+    Matrix<T>& operator *=(const T&);
     friend std::ostream& operator << (std::ostream& out, const Matrix<T>& matrix) {
         for (int i = 0; i < matrix._m; i++) {
             for (int j = 0; j < matrix._n; j++)
@@ -102,26 +105,36 @@ Matrix<T> Matrix<T>::transposed() const{
 
 template <class T>
 Matrix<T> Matrix<T>::operator +(const Matrix<T>& second) const {
+    Matrix<T> result(*this);
+    result += second;
+
+    return result;
+}
+
+template <class T>
+Matrix<T>& Matrix<T>::operator +=(const Matrix<T>& second) {
     if (this->_m != second._m || this->_n != second._n)
         throw std::logic_error("Matrixes have different sizes");
 
-    //Matrix<T> result(_m, _n);
-    //for (int i = 0; i < _m; i++)
-    //    result[i] = (*this)[i] + second[i];
-
-    return this->MathVector<MathVector<T>>::operator+(second);
+    *this = (*this).MathVector<MathVector<T>>::operator+(second);
+    return *this;
 }
 
 template <class T>
 Matrix<T> Matrix<T>::operator -(const Matrix<T>& second) const {
+    Matrix<T> result(*this);
+    result -= second;
+
+    return result;
+}
+
+template <class T>
+Matrix<T>& Matrix<T>::operator -=(const Matrix<T>& second) {
     if (this->_m != second._m || this->_n != second._n)
         throw std::logic_error("Matrixes have different sizes");
 
-    Matrix<T> result(_m, _n);
-    for (int i = 0; i < _m; i++)
-        result[i] = (*this)[i] - second[i];
-
-    return result;
+    *this = (*this).MathVector<MathVector<T>>::operator-(second);
+    return *this;
 }
 
 template <class T>
@@ -142,20 +155,27 @@ MathVector<T> Matrix<T>::operator*(const MathVector<T>& vector) const {
     if (vector.size() != _n)
         throw std::logic_error("Wrong sizes");
     MathVector<T> result(_m);
-    for (int i = 0; i < _m; i++) {
+    for (int i = 0; i < _m; i++)
         result[i] = (*this)[i] * vector;
-    }
 
     return result;
 }
 
 template <class T>
 Matrix<T> Matrix<T>::operator *(const T& value) const {
-    Matrix<T> result(_m, _n);
-    for (int i = 0; i < _m; i++)
-        result[i] = (*this)[i] * value;
+    Matrix<T> result(*this);
+    result *= value;
 
     return result;
+}
+
+template <class T>
+Matrix<T>& Matrix<T>::operator *=(const T& value) {
+    Matrix<T> result(_m, _n);
+    for (int i = 0; i < _m; i++)
+        (*this)[i] *= value;
+
+    return *this;
 }
 
 template <class T>
@@ -177,11 +197,8 @@ bool Matrix<T>::operator==(const Matrix<T>& other_matrix) {
         return true;
     if (this->_m != other_matrix._m || this->_n != other_matrix._n)
         return false;
-    for (int i = 0; i < _m; i++) {
-        if ((*this)[i] != other_matrix[i])
-            return false;
-    }
-    return true;
+
+    return (*this).MathVector<MathVector<T>>::operator==(other_matrix);
 }
 
 template <class T>

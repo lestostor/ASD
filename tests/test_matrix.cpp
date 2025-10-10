@@ -59,6 +59,20 @@ TEST(TestMatrixLib, test_operator_add_if_different_sizes) {
     ASSERT_ANY_THROW(result = matrix1 + matrix2);
 }
 
+TEST(TestMatrixLib, test_operator_add_with_assign) {
+    Matrix<int> matrix1(2, 2), matrix2(2, 2);
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++) {
+            matrix1[i][j] = 1;
+            matrix2[i][j] = 2;
+        }
+    matrix1 += matrix2;
+
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            ASSERT_EQ(matrix1[i][j], 3);
+}
+
 TEST(TestMatrixLib, test_operator_sub) {
     Matrix<int> matrix1(2, 2), matrix2(2, 2), result;
     for (int i = 0; i < 2; i++)
@@ -78,6 +92,20 @@ TEST(TestMatrixLib, test_operator_sub_if_different_sizes) {
     ASSERT_ANY_THROW(result = matrix1 - matrix2);
 }
 
+TEST(TestMatrixLib, test_operator_sub_with_assign) {
+    Matrix<int> matrix1(2, 2), matrix2(2, 2);
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++) {
+            matrix1[i][j] = 1;
+            matrix2[i][j] = 2;
+        }
+    matrix2 -= matrix1;
+
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            ASSERT_EQ(matrix2[i][j], 1);
+}
+
 TEST(TestMatrixLib, test_operator_mul_by_number) {
     Matrix<int> matrix(2, 2), result;
     for (int i = 0; i < 2; i++)
@@ -88,6 +116,18 @@ TEST(TestMatrixLib, test_operator_mul_by_number) {
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < 2; j++)
             ASSERT_EQ(result[i][j], 8);
+}
+
+TEST(TestMatrixLib, test_operator_mul_by_number_with_assign) {
+    Matrix<int> matrix(2, 2);
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            matrix[i][j] = 2;
+     matrix *= 4;
+
+    for (int i = 0; i < 2; i++)
+        for (int j = 0; j < 2; j++)
+            ASSERT_EQ(matrix[i][j], 8);
 }
 
 TEST(TestMatrixLib, test_operator_mul_by_vector) {

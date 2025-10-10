@@ -26,6 +26,21 @@ TEST(TestTriangleMatrixLib, test_operator_index) {
     ASSERT_EQ(matrix[0], MathVector<int>(2));
 }
 
+TEST(TestTriangleMatrixLib, test_operator_add_with_assign) {
+    TriangleMatrix<int> matrix1(3), matrix2(3);
+
+    for (int i = 0; i < 3; i++)
+        for (int j = i; j < 3; j++) {
+            matrix1[i][j] = 1;
+            matrix2[i][j] = 2;
+        }
+
+    matrix1 += matrix2;
+    for (int i = 0; i < 3; i++)
+        for (int j = i; j < 3; j++)
+            ASSERT_EQ(matrix1[i][j], 3);
+}
+
 TEST(TestTriangleMatrixLib, test_operator_add) {
     TriangleMatrix<int> matrix1(3), matrix2(3), result;
 
@@ -47,6 +62,20 @@ TEST(TestTriangleMatrixLib, test_operator_add_if_different_sizes) {
     ASSERT_ANY_THROW(matrix1 + matrix2);
 }
 
+TEST(TestTriangleMatrixLib, test_operator_sub_with_assign) {
+    TriangleMatrix<int> matrix1(3), matrix2(3);
+
+    for (int i = 0; i < 3; i++)
+        for (int j = i; j < 3; j++) {
+            matrix1[i][j] = 1;
+            matrix2[i][j] = 2;
+        }
+
+    matrix2 -= matrix1;
+    for (int i = 0; i < 3; i++)
+        for (int j = i; j < 3; j++)
+            ASSERT_EQ(matrix2[i][j], 1);
+}
 
 TEST(TestTriangleMatrixLib, test_operator_sub) {
     TriangleMatrix<int> matrix1(3), matrix2(3), result;
@@ -67,6 +96,19 @@ TEST(TestTriangleMatrixLib, test_operator_sub_if_different_sizes) {
     TriangleMatrix<int> matrix1(3), matrix2(2), result;
 
     ASSERT_ANY_THROW(matrix2 - matrix1);
+}
+
+TEST(TestTriangleMatrixLib, test_operator_mul_by_number_with_assign) {
+    TriangleMatrix<int> matrix(3);
+
+    for (int i = 0; i < 3; i++)
+        for (int j = i; j < 3; j++)
+            matrix[i][j] = 2;
+
+    matrix *= 3;
+    for (int i = 0; i < 3; i++)
+        for (int j = i; j < 3; j++)
+            ASSERT_EQ(matrix[i][j], 6);
 }
 
 TEST(TestTriangleMatrixLib, test_operator_mul_by_number) {

@@ -35,7 +35,9 @@ public:
     MathVector<T> operator+(const MathVector<T>) const;
     MathVector<T>& operator+=(const MathVector<T>);
     MathVector<T> operator-(const MathVector<T>) const;
+    MathVector<T>& operator-=(const MathVector<T>);
     MathVector<T> operator*(const T&) const;
+    MathVector<T>& operator*=(const T&);
     T operator*(const MathVector<T>) const;
     MathVector<T>& operator=(const MathVector<T>);
     bool operator==(const MathVector<T>);
@@ -72,9 +74,8 @@ MathVector<T>::MathVector(const MathVector<T>& other_vector) : TVector<T>(other_
     _start_index = other_vector._start_index;
     this->shrink_to_fit();
 
-    for (int i = 0; i < _size; i++) {
+    for (int i = 0; i < _size; i++)
         _vec[i] = other_vector._vec[i];
-    }
 }
 
 template <class T>
@@ -125,9 +126,9 @@ MathVector<T>& MathVector<T>::operator+=(const MathVector<T> other_vector) {
     if (_size + _start_index != other_vector._size + other_vector._start_index)
         throw std::invalid_argument("Vectors have different sizes");
 
-    for (int i = 0; i < _size; i++) {
-        this->_vec[i] += other_vector._vec[i];
-    }
+    int min_index = std::min(_start_index, other_vector._start_index);
+    for (int i = min_index; i < _size + _start_index; i++)
+        (*this)[i] += other_vector[i];
 
     return *this;
 }
@@ -137,21 +138,38 @@ MathVector<T> MathVector<T>::operator-(const MathVector<T> other_vector) const {
     if (_size + _start_index != other_vector._size + other_vector._start_index)
         throw std::invalid_argument("Vectors have different sizes");
 
-    MathVector<T> result(_size, _start_index);
-    for (int i = 0; i < _size; i++) {
-        result._vec[i] = _vec[i] - other_vector._vec[i];
-    }
+    MathVector<T> result(*this);
+    result -= other_vector;
 
     return result;
 }
 
 template <class T>
+MathVector<T>& MathVector<T>::operator-=(const MathVector<T> other_vector) {
+    if (_size + _start_index != other_vector._size + other_vector._start_index)
+        throw std::invalid_argument("Vectors have different sizes");
+
+    int min_index = std::min(_start_index, other_vector._start_index);
+    for (int i = min_index; i < _size + _start_index; i++)
+        (*this)[i] -= other_vector[i];
+
+    return *this;
+}
+
+template <class T>
 MathVector<T> MathVector<T>::operator*(const T& number) const {
-    MathVector<T> result(_size, _start_index);
-    for (int i = 0; i < _size; i++)
-        result._vec[i] = _vec[i] * number;
+    MathVector<T> result(*this);
+    result *= number;
 
     return result;
+}
+
+template <class T>
+MathVector<T>& MathVector<T>::operator*=(const T& number) {
+    for (int i = _start_index; i < _size + _start_index; i++)
+        (*this)[i] *= number;
+
+    return *this;
 }
 
 template <class T>
