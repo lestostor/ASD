@@ -33,10 +33,11 @@ public:
     }
 
     MathVector<T> operator+(const MathVector<T>) const;
+    MathVector<T>& operator+=(const MathVector<T>);
     MathVector<T> operator-(const MathVector<T>) const;
     MathVector<T> operator*(const T&) const;
     T operator*(const MathVector<T>) const;
-    MathVector<T> operator=(const MathVector<T>);
+    MathVector<T>& operator=(const MathVector<T>);
     bool operator==(const MathVector<T>);
     bool operator!=(const MathVector<T>);
     friend bool operator==(const MathVector<T>& first, const MathVector<T>& second) {
@@ -113,12 +114,22 @@ MathVector<T> MathVector<T>::operator+(const MathVector<T> other_vector) const {
     if (_size + _start_index != other_vector._size + other_vector._start_index)
         throw std::invalid_argument("Vectors have different sizes");
 
-    MathVector<T> result(_size, _start_index);
-    for (int i = 0; i < _size; i++) {
-        result._vec[i] = _vec[i] + other_vector._vec[i];
-    }
+    MathVector<T> result(*this);
+    result += other_vector;
 
     return result;
+}
+
+template <class T>
+MathVector<T>& MathVector<T>::operator+=(const MathVector<T> other_vector) {
+    if (_size + _start_index != other_vector._size + other_vector._start_index)
+        throw std::invalid_argument("Vectors have different sizes");
+
+    for (int i = 0; i < _size; i++) {
+        this->_vec[i] += other_vector._vec[i];
+    }
+
+    return *this;
 }
 
 template <class T>
@@ -149,14 +160,15 @@ T MathVector<T>::operator*(const MathVector<T> other_vector) const {
         throw std::invalid_argument("Vectors have different sizes");
 
     T result = T();
-    for (int i = _start_index; i < _size + _start_index; i++)
+    int max_index = std::max(_start_index, other_vector._start_index);
+    for (int i = max_index; i < _size; i++)
         result += (*this)[i] * other_vector[i];
 
     return result;
 }
 
 template <class T>
-MathVector<T> MathVector<T>::operator=(const MathVector<T> other_vector) {
+MathVector<T>& MathVector<T>::operator=(const MathVector<T> other_vector) {
     if (&other_vector == this)
         return *this;
 

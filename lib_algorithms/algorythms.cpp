@@ -27,3 +27,38 @@ Type check_spheres(Sphere first, Sphere second) {
         return intersect;
     else return inside;
 }
+
+int find_local_min(Matrix<int> matrix) {
+    srand(time(0));
+    int n = matrix.get_lines(), i = rand() % n, j = rand() % n, current = matrix[i][j], minimum;
+
+    while (true) {
+        minimum = min(matrix, &i, &j);
+        if (minimum != current) {
+            current = minimum;
+        }
+        else break;
+    }
+    return minimum;
+}
+
+int min(Matrix<int> matrix, int* i, int* j) {
+    int min = matrix[*i][*j];
+    if (*i - 1 >= 0 && matrix[*i - 1][*j] < min) {
+        min = matrix[*i - 1][*j];
+        (*i)--;
+    }
+    if (*j - 1 >= 0 && matrix[*i][*j - 1] < min) {
+        min = matrix[*i][*j - 1];
+        (*j)--;
+    }
+    if (*i + 1 < matrix.get_lines() && matrix[*i + 1][*j] < min) {
+        min = matrix[*i + 1][*j];
+        (*i)++;
+    }
+    if (*j + 1 < matrix.size() && matrix[*i][*j + 1] < min) {
+        min = matrix[*i][*j + 1];
+        (*j)++;
+    }
+    return min;
+}

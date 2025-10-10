@@ -48,3 +48,45 @@ TEST(TestAlgorithmsLib, test_check_spheres_if_intersect) {
     Type result = check_spheres(sphere1, sphere2);
     ASSERT_EQ(result, Type::intersect);
 }
+
+TEST(TestAlgorithmsLib, test_find_local_min_matrix_3x3) {
+    Matrix<int> matrix(3, 3);
+    matrix[0] = MathVector({ 3, 1, 2 });
+    matrix[1] = MathVector({ 5, 8, 4 });
+    matrix[2] = MathVector({ 7, 6, 9 });
+
+    bool result = false;
+    int min = find_local_min(matrix);
+    if (min == 1 || min == 6)
+        result = true;
+    ASSERT_TRUE(result);
+}
+
+TEST(TestAlgorithmsLib, test_find_local_min_matrix_4x4) {
+    Matrix<int> matrix(4, 4);
+    matrix[0] = MathVector({ 11, 15, 10, 9 });
+    matrix[1] = MathVector({ 6, 16, 3, 8 });
+    matrix[2] = MathVector({ 7, 4, 2, 13 });
+    matrix[3] = MathVector({ 14, 12, 1, 5 });
+
+    bool result = false;
+    int min = find_local_min(matrix);
+    if (min == 1 || min == 6)
+        result = true;
+    ASSERT_TRUE(result);
+}
+
+TEST(TestAlgorithmsLib, test_find_local_min_matrix_5x5) {
+    Matrix<int> matrix(5, 5);
+    matrix[0] = MathVector({ 20, 15, 4, 9, 25 });
+    matrix[1] = MathVector({ 6, 21, 3, 8, 17 });
+    matrix[2] = MathVector({ 18, 10, 19, 13, 7});
+    matrix[3] = MathVector({ 14, 12, 22, 5, 2 });
+    matrix[4] = MathVector({ 11, 16, 1, 24, 20 });
+
+    bool result = false;
+    int min = find_local_min(matrix);
+    if (min == 1 || min == 2 || min == 3 || min == 6 || min == 10 || min == 11)
+        result = true;
+    ASSERT_TRUE(result);
+}

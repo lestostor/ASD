@@ -105,7 +105,7 @@ MathVector<T> TriangleMatrix<T>::operator * (const MathVector<T>& vector) {
         throw std::logic_error("Wrong sizes");
     MathVector<T> result(_n);
     for (int i = 0; i < _n; i++) {
-        result[i] = (*this)[i] * vector;
+        result[i] = vector * (*this)[i];
     }
 
     return result;

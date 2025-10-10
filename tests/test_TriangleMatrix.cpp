@@ -94,7 +94,7 @@ TEST(TestTriangleMatrixLib, test_operator_mul_by_vector) {
 
     result = matrix * vector;
     for (int i = 0; i < 3; i++)
-        ASSERT_EQ(result[i], expected[i]);
+        EXPECT_EQ(result[i], expected[i]);
 }
 
 TEST(TestTriangleMatrixLib, test_operator_mul_by_vector_if_different_sizes) {
