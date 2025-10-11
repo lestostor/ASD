@@ -1,6 +1,5 @@
 #ifndef STACK_STACK_H
 #define STACK_STACK_H
-#include "../lib_TVector/tvector.h"
 
 template <class T>
 class Stack {
@@ -15,7 +14,7 @@ public:
 
     void push(int);
     void pop();
-    int top() const;
+    T top() const;
     inline bool is_empty() const noexcept {
         return _top == -1;
     }
@@ -65,7 +64,7 @@ void Stack<T>::pop() {
 }
 
 template <class T>
-int Stack<T>::top() const {
+T Stack<T>::top() const {
     if (is_empty())
         throw std::logic_error("The stack is empty");
 

@@ -81,3 +81,22 @@ TEST(TestStackLib, test_clear) {
     stack.clear();
     ASSERT_TRUE(stack.is_empty());
 }
+
+TEST(TestStackLib, test_push_after_pop) {
+    Stack<int> stack(5);
+    for (int i = 0; i < 3; i++)
+        stack.push(i + 1);
+    stack.pop();
+    stack.push(4);
+    ASSERT_EQ(stack.top(), 4);
+}
+
+TEST(TestStackLib, test_is_empty_after_pushes_and_pops) {
+    Stack<int> stack(5);
+    for (int i = 0; i < 4; i++)
+        stack.push(i + 1);
+    for (int i = 0; i < 4; i++)
+        stack.pop();
+    ASSERT_TRUE(stack.is_empty());
+}
+
