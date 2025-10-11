@@ -127,8 +127,12 @@ MathVector<T>& MathVector<T>::operator+=(const MathVector<T> other_vector) {
         throw std::invalid_argument("Vectors have different sizes");
 
     int min_index = std::min(_start_index, other_vector._start_index);
+    int max_size = std::max(_size, other_vector._size);
+    MathVector<T> tmp(max_size, min_index);
+
     for (int i = min_index; i < _size + _start_index; i++)
-        (*this)[i] += other_vector[i];
+        tmp[i] = (*this)[i] + other_vector[i];
+    *this = tmp;
 
     return *this;
 }
@@ -150,8 +154,12 @@ MathVector<T>& MathVector<T>::operator-=(const MathVector<T> other_vector) {
         throw std::invalid_argument("Vectors have different sizes");
 
     int min_index = std::min(_start_index, other_vector._start_index);
+    int max_size = std::max(_size, other_vector._size);
+    MathVector<T> tmp(max_size, min_index);
+
     for (int i = min_index; i < _size + _start_index; i++)
-        (*this)[i] -= other_vector[i];
+        tmp[i] = (*this)[i] - other_vector[i];
+    *this = tmp;
 
     return *this;
 }
@@ -179,7 +187,7 @@ T MathVector<T>::operator*(const MathVector<T> other_vector) const {
 
     T result = T();
     int max_index = std::max(_start_index, other_vector._start_index);
-    for (int i = max_index; i < _size; i++)
+    for (int i = max_index; i < _size + _start_index; i++)
         result += (*this)[i] * other_vector[i];
 
     return result;
