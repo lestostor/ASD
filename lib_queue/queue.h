@@ -51,8 +51,8 @@ Queue<T>::Queue(const Queue& other) {
     _head = other._head;
     _count = other._count;
     _data = new T[_size];
-    for (int i = 0; i < _size; i++)
-        _data[i] = other._data[i];
+    for (int i = _head, k = 0; k < _count; i++, k++)
+        _data[k] = other._data[i % _size];
 }
 
 template <class T>

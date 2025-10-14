@@ -107,7 +107,6 @@ TEST(TestQueueLib, test_copy_after_pushes_and_pops) {
         queue1.push(i + 1);
     queue1.pop();
     queue1.pop();
-    queue1.pop();
     queue1.push(6);
     ASSERT_NO_THROW(Queue<int> queue2(queue1));
 }
