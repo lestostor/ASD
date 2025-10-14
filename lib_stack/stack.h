@@ -11,6 +11,7 @@ public:
     Stack();
     Stack(int);
     Stack(const Stack&);
+    ~Stack();
 
     void push(int);
     void pop();
@@ -74,6 +75,11 @@ T Stack<T>::top() const {
 template <class T>
 void Stack<T>::clear() noexcept {
     _top = -1;
+}
+
+template <class T>
+Stack<T>::~Stack() {
+    delete[] _data;
 }
 
 #endif // !STACK_STACK_H

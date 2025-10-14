@@ -12,6 +12,7 @@ public:
     Queue();
     Queue(int);
     Queue(const Queue&);
+    ~Queue();
 
     void push(int value);
     void pop();
@@ -75,6 +76,11 @@ template <class T>
 void Queue<T>::clear() noexcept {
     _head = 0;
     _count = 0;
+}
+
+template <class T>
+Queue<T>::~Queue() {
+    delete[] _data;
 }
 
 #endif // !QUEUE_QUEUE_H
