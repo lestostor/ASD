@@ -100,3 +100,14 @@ TEST(TestQueueLib, test_clear) {
     queue.clear();
     ASSERT_TRUE(queue.is_empty());
 }
+
+TEST(TestQueueLib, test_copy_after_pushes_and_pops) {
+    Queue<int> queue1(5);
+    for (int i = 0; i < 5; i++)
+        queue1.push(i + 1);
+    queue1.pop();
+    queue1.pop();
+    queue1.pop();
+    queue1.push(6);
+    ASSERT_NO_THROW(Queue<int> queue2(queue1));
+}
