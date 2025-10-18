@@ -116,7 +116,7 @@ Matrix<T>& Matrix<T>::operator +=(const Matrix<T>& second) {
     if (this->_m != second._m || this->_n != second._n)
         throw std::logic_error("Matrixes have different sizes");
 
-    *this = (*this).MathVector<MathVector<T>>::operator+(second);
+    (*this).MathVector<MathVector<T>>::operator+=(second);
     return *this;
 }
 
@@ -133,7 +133,7 @@ Matrix<T>& Matrix<T>::operator -=(const Matrix<T>& second) {
     if (this->_m != second._m || this->_n != second._n)
         throw std::logic_error("Matrixes have different sizes");
 
-    *this = (*this).MathVector<MathVector<T>>::operator-(second);
+    (*this).MathVector<MathVector<T>>::operator-=(second);
     return *this;
 }
 
