@@ -1,6 +1,8 @@
 #ifndef STACK_STACK_H
 #define STACK_STACK_H
 
+#include <stdexcept>
+
 template <class T>
 class Stack {
     T* _data;

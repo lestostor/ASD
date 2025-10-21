@@ -48,3 +48,23 @@ TEST(TestAlgorithmsLib, test_check_spheres_if_intersect) {
     Type result = check_spheres(sphere1, sphere2);
     ASSERT_EQ(result, Type::intersect);
 }
+
+TEST(TestAlgorithmsLib, test_check_brackets_No1) {
+    ASSERT_TRUE(check_brackets("() ()"));
+}
+
+TEST(TestAlgorithmsLib, test_check_brackets_No2) {
+    ASSERT_TRUE(check_brackets("[(()())({})]"));
+}
+
+TEST(TestAlgorithmsLib, test_check_brackets_No3) {
+    ASSERT_FALSE(check_brackets("(()()"));
+}
+
+TEST(TestAlgorithmsLib, test_check_brackets_No4) {
+    ASSERT_FALSE(check_brackets("())(())"));
+}
+
+TEST(TestAlgorithmsLib, test_check_brackets_No5) {
+    ASSERT_FALSE(check_brackets("((()()(())}"));
+}

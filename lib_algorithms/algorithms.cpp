@@ -27,3 +27,18 @@ Type check_spheres(Sphere first, Sphere second) {
         return intersect;
     else return inside;
 }
+
+bool check_brackets(std::string str) {
+    Stack<std::string> stack(str.size());
+    
+    for (int i = 0; i < str.size(); i++) {
+        if (str[i] == '(' || str[i] == '{' || str[i] == '[')
+            stack.push(str[i]);
+        else if (str[i] == ')' || str[i] == '}' || str[i] == ']') {
+            if (stack.is_empty()) return false;
+            stack.pop();
+        }
+    }
+    if (stack.is_empty()) return true;
+    else return false;
+}
