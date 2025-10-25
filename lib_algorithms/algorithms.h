@@ -14,4 +14,6 @@ Type check_spheres(Sphere, Sphere);
 
 bool check_brackets(std::string);
 
+bool check_math_expression(std::string);
+
 #endif // !ALGORITHMS_ALGORITHMS_H

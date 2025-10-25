@@ -15,7 +15,7 @@ public:
     Stack(const Stack&);
     ~Stack();
 
-    void push(int);
+    void push(T);
     void pop();
     T top() const;
     inline bool is_empty() const noexcept {
@@ -51,7 +51,7 @@ Stack<T>::Stack(const Stack& other) {
 }
 
 template <class T>
-void Stack<T>::push(int value) {
+void Stack<T>::push(T value) {
     if (is_full())
         throw std::logic_error("The stack is full");
 

@@ -68,3 +68,39 @@ TEST(TestAlgorithmsLib, test_check_brackets_No4) {
 TEST(TestAlgorithmsLib, test_check_brackets_No5) {
     ASSERT_FALSE(check_brackets("((()()(())}"));
 }
+
+TEST(TestAlgorithmsLib, test_math_expression_No1) {
+    ASSERT_TRUE(check_math_expression("15+ 23"));
+}
+
+//TEST(TestAlgorithmsLib, test_math_expression_No2) {
+//    ASSERT_TRUE(check_math_expression("15 + 23 *4"));
+//}
+//
+//TEST(TestAlgorithmsLib, test_math_expression_No3) {
+//    ASSERT_TRUE(check_brackets("(15+ 23) * 2"));
+//}
+//
+//TEST(TestAlgorithmsLib, test_math_expression_No4) {
+//    ASSERT_TRUE(check_brackets("34 +(15+ 23) * 2"));
+//}
+//
+//TEST(TestAlgorithmsLib, test_math_expression_No5) {
+//    ASSERT_TRUE(check_brackets("x+ y"));
+//}
+//
+//TEST(TestAlgorithmsLib, test_math_expression_No6) {
+//    ASSERT_TRUE(check_brackets("2*x+ y"));
+//}
+//
+//TEST(TestAlgorithmsLib, test_math_expression_No7) {
+//    ASSERT_TRUE(check_brackets("2*x+ (y - 3*z)"));
+//}
+//
+//TEST(TestAlgorithmsLib, test_math_expression_No8) {
+//    ASSERT_TRUE(check_brackets("3 * (15 + (x + y) * (2*x - 7 * y^2))"));
+//}
+//
+//TEST(TestAlgorithmsLib, test_math_expression_No9) {
+//    ASSERT_FALSE(check_brackets("3 * (15 + (x y) * (2*x - 7 * y^2))"));
+//}

@@ -58,7 +58,7 @@ TEST(TestStackLib, test_top) {
 
 TEST(TestStackLib, test_top_if_empty) {
     Stack<int> stack(5);
-    ASSERT_ANY_THROW(stack.pop());
+    ASSERT_ANY_THROW(stack.top());
 }
 
 TEST(TestStackLib, test_pop) {

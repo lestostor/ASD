@@ -29,7 +29,7 @@ Type check_spheres(Sphere first, Sphere second) {
 }
 
 bool check_brackets(std::string str) {
-    Stack<std::string> stack(str.size());
+    Stack<char> stack(str.size());
     
     for (int i = 0; i < str.size(); i++) {
         if (str[i] == '(' || str[i] == '{' || str[i] == '[')
@@ -41,4 +41,32 @@ bool check_brackets(std::string str) {
     }
     if (stack.is_empty()) return true;
     else return false;
+}
+
+bool check_math_expression(std::string str) {
+    Stack<char> operations(str.size());
+    Stack<char> variables(2);
+    Stack<std::string> numbers(2);
+    if (!check_brackets(str)) return false;
+
+    std::string num = "";
+    for (int i = 0; i < str.size(); i++) {
+        if (str[i] >= '0' && str[i] <= '9') {
+            num += str[i];
+            if (!operations.is_empty())
+                operations.pop();
+        }
+        else if (str[i] >= 'a' && str[i] <= 'z')
+            variables.push(str[i]);
+        else if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' ||
+            str[i] == '^' || str[i] == ' ' || str[i] == '(' || str[i] == ')') {
+            if (num != "") {
+                numbers.push(num);
+                num = "";
+            }
+            if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '^')
+                operations.push(str[i]);
+        }
+    }
+    return operations.is_empty() && !variables.is_full() && !numbers.is_full();
 }
