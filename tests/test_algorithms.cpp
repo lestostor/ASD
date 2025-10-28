@@ -73,34 +73,79 @@ TEST(TestAlgorithmsLib, test_math_expression_No1) {
     ASSERT_TRUE(check_math_expression("15+ 23"));
 }
 
-//TEST(TestAlgorithmsLib, test_math_expression_No2) {
-//    ASSERT_TRUE(check_math_expression("15 + 23 *4"));
-//}
-//
-//TEST(TestAlgorithmsLib, test_math_expression_No3) {
-//    ASSERT_TRUE(check_brackets("(15+ 23) * 2"));
-//}
-//
-//TEST(TestAlgorithmsLib, test_math_expression_No4) {
-//    ASSERT_TRUE(check_brackets("34 +(15+ 23) * 2"));
-//}
-//
-//TEST(TestAlgorithmsLib, test_math_expression_No5) {
-//    ASSERT_TRUE(check_brackets("x+ y"));
-//}
-//
-//TEST(TestAlgorithmsLib, test_math_expression_No6) {
-//    ASSERT_TRUE(check_brackets("2*x+ y"));
-//}
-//
-//TEST(TestAlgorithmsLib, test_math_expression_No7) {
-//    ASSERT_TRUE(check_brackets("2*x+ (y - 3*z)"));
-//}
-//
-//TEST(TestAlgorithmsLib, test_math_expression_No8) {
-//    ASSERT_TRUE(check_brackets("3 * (15 + (x + y) * (2*x - 7 * y^2))"));
-//}
-//
-//TEST(TestAlgorithmsLib, test_math_expression_No9) {
-//    ASSERT_FALSE(check_brackets("3 * (15 + (x y) * (2*x - 7 * y^2))"));
-//}
+TEST(TestAlgorithmsLib, test_math_expression_No2) {
+    ASSERT_TRUE(check_math_expression("15 + 23 *4"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No3) {
+    ASSERT_TRUE(check_math_expression("(15+ 23) * 2"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No4) {
+    ASSERT_TRUE(check_math_expression("34 +(15+ 23) * 2"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No5) {
+    ASSERT_TRUE(check_math_expression("x+ y"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No6) {
+    ASSERT_TRUE(check_math_expression("2*x+ y"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No7) {
+    ASSERT_TRUE(check_math_expression("2*x+ (y - 3*z)"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No8) {
+    ASSERT_TRUE(check_math_expression("3 * (15 + (x + y) * (2*x - 7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No9) {
+    ASSERT_FALSE(check_math_expression("3 * (15 + (x y) * (2*x - 7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No10) {
+    ASSERT_FALSE(check_math_expression("3 * (15 + (x + y) * (2*x - 7 * y^))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No11) {
+    ASSERT_FALSE(check_math_expression("3 * (15 + (x + y) * (2*x - 7 * y^2)"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No12) {
+    ASSERT_FALSE(check_math_expression("3 * 15 + (x + y) * (2*x - 7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No13) {
+    ASSERT_FALSE(check_math_expression("3 * (15 + (x + y) * (2x - 7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No14) {
+    ASSERT_FALSE(check_math_expression(" * (15 + (x + y) * (2*x - 7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No15) {
+    ASSERT_FALSE(check_math_expression("3 * ( + (x + y) * (2*x - 7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No16) {
+    ASSERT_FALSE(check_math_expression("3 * (15 + (x + y) * (2*x  7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No17) {
+    ASSERT_FALSE(check_math_expression("3 * (15 + (x + y) * (2*x - 7 * y2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No18) {
+    ASSERT_FALSE(check_math_expression("3  (15 + (x + y) * (2*x - 7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No19) {
+    ASSERT_FALSE(check_math_expression("3 * (15 + (x +-/ y) * (2*x - 7 * y^2))"));
+}
+
+TEST(TestAlgorithmsLib, test_math_expression_No20) {
+    ASSERT_FALSE(check_math_expression("3 * (15 + (x + y) (2*x - 7 * y^2))"));
+}
+

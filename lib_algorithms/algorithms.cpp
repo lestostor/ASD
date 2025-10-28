@@ -46,27 +46,63 @@ bool check_brackets(std::string str) {
 bool check_math_expression(std::string str) {
     Stack<char> operations(str.size());
     Stack<char> variables(2);
+    Stack<char> brackets(str.size());
     Stack<std::string> numbers(2);
-    if (!check_brackets(str)) return false;
 
     std::string num = "";
     for (int i = 0; i < str.size(); i++) {
+        if (numbers.is_full() || variables.is_full() ||
+            !numbers.is_empty() && !numbers.is_full() &&
+            !variables.is_empty() && !variables.is_full())  // check if operaion was missed
+            return false;
+
         if (str[i] >= '0' && str[i] <= '9') {
             num += str[i];
-            if (!operations.is_empty())
+            if (!operations.is_empty()) {
                 operations.pop();
+                if (!variables.is_empty() && !variables.is_full())
+                    variables.pop();
+            }
         }
-        else if (str[i] >= 'a' && str[i] <= 'z')
+        else if (str[i] >= 'a' && str[i] <= 'z') {
+            if (!operations.is_empty()) {
+                operations.pop();
+                if (!variables.is_empty() && !variables.is_full())
+                    variables.pop();
+                if (!numbers.is_empty() && !numbers.is_full())
+                    numbers.pop();
+            }
             variables.push(str[i]);
-        else if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' ||
-            str[i] == '^' || str[i] == ' ' || str[i] == '(' || str[i] == ')') {
+        }
+        else if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '^') {
+            operations.push(str[i]);
+            if (!numbers.is_empty() && !numbers.is_full() && num != "")  // one number in stack
+                numbers.pop();
+
             if (num != "") {
                 numbers.push(num);
                 num = "";
             }
-            if (str[i] == '+' || str[i] == '-' || str[i] == '*' || str[i] == '/' || str[i] == '^')
-                operations.push(str[i]);
+            if (numbers.is_empty() && variables.is_empty()) return false;  // check if first argument was missed
+        }
+        else if (str[i] == '(' || str[i] == '{' || str[i] == '[') {
+            if (num != "" || operations.is_empty() && i != 0) return false;  // check if missed operation
+            brackets.push(str[i]);
+            if (!numbers.is_empty())
+                numbers.pop();
+            else if (!variables.is_empty())
+                variables.pop();
+        }
+        else if (str[i] == ')' || str[i] == '}' || str[i] == ']') {
+            if (brackets.is_empty()) return false;
+            brackets.pop();
+            if (num != "") {
+                if (!numbers.is_empty() && !numbers.is_full())
+                    numbers.pop();
+                numbers.push(num);
+                num = "";
+            }
         }
     }
-    return operations.is_empty() && !variables.is_full() && !numbers.is_full();
+    return operations.is_empty() &&brackets.is_empty();
 }
