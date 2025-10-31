@@ -205,3 +205,32 @@ TEST(TestListLib, test_pop_erase_head_by_position) {
     list.erase(size_t(0));
     ASSERT_EQ(list.head()->_value, 4);
 }
+
+TEST(TestListLib, test_iterator_in_empty_list) {
+    ASSERT_NO_THROW(List<int> list);
+}
+
+TEST(TestListLib, test_iterator_for_read) {
+    List<int> list;
+    for (int i = 0; i < 5; i++)
+        list.push_back(i + 1);
+
+    List<int>::Iterator it;
+    int i = 0;
+    for (it = list.begin(); it != list.end(); it++) {
+        ASSERT_EQ(*it, ++i);
+    }
+}
+
+TEST(TestListLib, test_iterator_for_write) {
+    List<int> list;
+    for (int i = 0; i < 5; i++)
+        list.push_back(0);
+
+    List<int>::Iterator it;
+    int i = 0;
+    for (it = list.begin(); it != list.end(); it++) {
+        *it = i++;
+        ASSERT_EQ(*it, i - 1);
+    }
+}

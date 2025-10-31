@@ -19,11 +19,47 @@ public:
     List(const List<T>&);
     ~List();
 
+    class Iterator {
+        Node<T>* _current;
+
+    public:
+        Iterator() : _current(nullptr) {}
+        Iterator(Node<T>* node) : _current(node) {}
+
+        Iterator& operator++() {  // ++it
+            _current = _current->_next;
+            return _current;
+        }
+        Iterator operator++(int) {  // it++
+            Iterator tmp(_current);
+            _current = _current->_next;
+            return tmp;
+        }
+        Iterator& operator=(const Iterator& other) {
+            this->_current = other._current;
+            return *this;
+        }
+        bool operator!=(const Iterator& other) {
+            return _current != other._current;
+        }
+        T& operator*() {
+            return _current->_value;
+        }
+    };
+
     inline Node<T>* head() const noexcept{
         return _head;
     }
     inline Node<T>* tail() const noexcept {
         return _tail;
+    }
+
+    Iterator begin() {
+        return _head;
+    }
+
+    Iterator end() {
+        return nullptr;
     }
 
     bool is_empty();

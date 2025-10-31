@@ -149,3 +149,6 @@ TEST(TestAlgorithmsLib, test_math_expression_No20) {
     ASSERT_FALSE(check_math_expression("3 * (15 + (x + y) (2*x - 7 * y^2))"));
 }
 
+TEST(TestAlgorithmsLib, test_math_expression_No21) {
+    ASSERT_TRUE(check_math_expression("3 * (15 + (x + y) * (- 7 * y^2))"));
+}

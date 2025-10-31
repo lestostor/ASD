@@ -51,9 +51,8 @@ bool check_math_expression(std::string str) {
 
     std::string num = "";
     for (int i = 0; i < str.size(); i++) {
-        if (numbers.is_full() || variables.is_full() ||
-            !numbers.is_empty() && !numbers.is_full() &&
-            !variables.is_empty() && !variables.is_full())  // check if operaion was missed
+        if ((numbers.is_full() || variables.is_full() ||
+            num != "" && !variables.is_empty() && !variables.is_full()))  // check if operaion was missed
             return false;
 
         if (str[i] >= '0' && str[i] <= '9') {
@@ -83,15 +82,19 @@ bool check_math_expression(std::string str) {
                 numbers.push(num);
                 num = "";
             }
-            if (numbers.is_empty() && variables.is_empty()) return false;  // check if first argument was missed
+            if (numbers.is_empty() && variables.is_empty() && str[i] != '-') 
+                return false;  // check if first argument was missed
+
+            if (!variables.is_empty() && !variables.is_full())  // one var in stack
+                variables.pop();
         }
         else if (str[i] == '(' || str[i] == '{' || str[i] == '[') {
             if (num != "" || operations.is_empty() && i != 0) return false;  // check if missed operation
             brackets.push(str[i]);
-            if (!numbers.is_empty())
+            if (!operations.is_empty())
+                operations.pop();
+            if (!numbers.is_empty() && !numbers.is_full())
                 numbers.pop();
-            else if (!variables.is_empty())
-                variables.pop();
         }
         else if (str[i] == ')' || str[i] == '}' || str[i] == ']') {
             if (brackets.is_empty()) return false;
