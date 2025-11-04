@@ -207,7 +207,13 @@ TEST(TestListLib, test_pop_erase_head_by_position) {
 }
 
 TEST(TestListLib, test_iterator_in_empty_list) {
-    ASSERT_NO_THROW(List<int> list);
+    List<int> list;
+    List<int>::Iterator it;
+    bool enterCycle = false;
+    for (it = list.begin(); it != list.end(); it++) {
+        enterCycle = true;
+    }
+    ASSERT_FALSE(enterCycle);
 }
 
 TEST(TestListLib, test_iterator_for_read) {

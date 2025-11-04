@@ -830,3 +830,64 @@ TEST(TestTVectorLib, test_add_element_after_shrink_to_fit) {
 
     ASSERT_EQ(expected_result, actual_result);
 }
+
+TEST(TestTVectorLib, test_iterator_in_empty_list) {
+    TVector<int> list;
+    TVector<int>::Iterator it;
+    bool enterCycle = false;
+    for (it = list.begin(); it != list.end(); it++) {
+        enterCycle = true;
+    }
+    ASSERT_FALSE(enterCycle);
+}
+
+TEST(TestTVectorLib, test_iterator_for_read) {
+    TVector<int> vec;
+    for (int i = 0; i < 5; i++)
+        vec.push_back(i + 1);
+
+    TVector<int>::Iterator it = vec.begin();
+    int i = 0;
+    for (it = vec.begin(); it != vec.end(); it++) {
+        ASSERT_EQ(*it, ++i);
+    }
+}
+
+TEST(TestTVectorLib, test_iterator_for_write) {
+    TVector<int> vec;
+    for (int i = 0; i < 5; i++)
+        vec.push_back(0);
+
+    TVector<int>::Iterator it = vec.begin();
+    for (it; it != vec.end(); it++);
+
+    int i = 5;
+    while (true) {
+        *it = i;
+        ASSERT_EQ(*it, i--);
+        if (it == vec.begin()) break;
+        --it;
+    }
+}
+
+TEST(TestTVectorLib, test_iterator_for_operator_add_and_assign) {
+    TVector<int> vec;
+    for (int i = 0; i < 5; i++)
+        vec.push_back(i + 1);
+
+    TVector<int>::Iterator it = vec.begin();
+    it += 3;
+    ASSERT_EQ(*it, 4);
+}
+
+TEST(TestTVectorLib, test_iterator_for_operator_sub_and_assign) {
+    TVector<int> vec;
+    for (int i = 0; i < 5; i++)
+        vec.push_back(i + 1);
+
+    TVector<int>::Iterator it = vec.begin();
+    for (int i = 0; i < 3; i++) it++;
+
+    it -= 3;
+    ASSERT_EQ(*it, 1);
+}

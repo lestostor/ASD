@@ -143,10 +143,16 @@ TEST(TestDoubleListLib, test_erase_by_position_in_empty_list) {
 }
 
 TEST(TestDoubleListLib, test_iterator_in_empty_list) {
-    ASSERT_NO_THROW(DoubleList<int> list);
+    DoubleList<int> list;
+    DoubleList<int>::Iterator it;
+    bool enterCycle = false;
+    for (it = list.begin(); it != list.end(); it++) {
+        enterCycle = true;
+    }
+    ASSERT_FALSE(enterCycle);
 }
 
-TEST(TestDoubleListLib, test_reverse_iterator_for_read) {
+TEST(TestDoubleListLib, test_iterator_for_read) {
     DoubleList<int> list;
     for (int i = 0; i < 5; i++)
         list.push_back(i + 1);

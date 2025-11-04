@@ -33,9 +33,6 @@ public:
             this->_current = other._current;
             return *this;
         }
-        bool operator!=(const Iterator& other) {
-            return _current != other._current;
-        }
     };
 
     Iterator begin() {

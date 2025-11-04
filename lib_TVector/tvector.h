@@ -11,6 +11,15 @@
 
 #define STEP_OF_CAPACITY 15
 
+template <class T>
+struct Node {
+    T _value;
+    Node<T>* _prev;
+    Node<T>* _next;
+
+    Node(T value, Node<T>* next = nullptr, Node<T>* prev = nullptr) : _value(value), _next(next), _prev(prev) {}
+};
+
 enum Status { Busy, Deleted, Empty };
 template <class T> class TVector;
 
@@ -28,6 +37,65 @@ public:
     TVector(std::initializer_list<T>);  //  convert list to vector
     TVector(const TVector<T>&);  //  copy
     ~TVector();  //  destructor
+
+    class Iterator {
+        T* _current;
+
+    public:
+        Iterator() : _current(nullptr) {}
+        Iterator(T* other) : _current(other) {}
+
+        Iterator& operator++() {  // ++it
+            _current++;
+            return *this;
+        }
+
+        Iterator operator++(int) {  // it++
+            Iterator tmp(_current);
+            _current++;
+            return tmp;
+        }
+
+        Iterator& operator+=(const int count) {
+            for (int i = count; i != 0; i--)
+                _current++;
+            return *this;
+        }
+
+        Iterator& operator--() {  // --it
+            _current--;
+            return *this;
+        }
+
+        Iterator operator--(int) {  // it--
+            Iterator tmp(_current);
+            _current--;
+            return tmp;
+        }
+
+        Iterator& operator-=(const int count) {
+            for (int i = count; i != 0; i--)
+                _current--;
+            return *this;
+        }
+
+        Iterator& operator=(const Iterator& other) {
+            this->_current = other._current;
+            return *this;
+        }
+
+        bool operator!=(const Iterator& other) {
+            return _current != other._current;
+        }
+
+        bool operator==(const Iterator& other) {
+            return _current == other._current;
+        }
+
+        T& operator*() {
+            return *_current;
+        }
+    };
 
     void clear();
 
