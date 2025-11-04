@@ -1,2 +1,0 @@
-create_project_lib(MathVector)
-add_depend(MathVector TVector lib_TVector)

@@ -4,13 +4,15 @@
 template <class T>
 struct Node {
     T _value;
+    Node<T>* _prev;
     Node<T>* _next;
 
-    Node(T value, Node<T>* next = nullptr) : _value(value), _next(next) {}
+    Node(T value, Node<T>* next = nullptr, Node<T>* prev = nullptr) : _value(value), _next(next), _prev(prev) {}
 };
 
 template <class T>
 class List {
+protected:
     Node<T>* _head, * _tail;
     int _count;
 
@@ -20,6 +22,7 @@ public:
     ~List();
 
     class Iterator {
+    protected:
         Node<T>* _current;
 
     public:
@@ -28,7 +31,7 @@ public:
 
         Iterator& operator++() {  // ++it
             _current = _current->_next;
-            return _current;
+            return *this;
         }
         Iterator operator++(int) {  // it++
             Iterator tmp(_current);
@@ -42,6 +45,11 @@ public:
         bool operator!=(const Iterator& other) {
             return _current != other._current;
         }
+
+        bool operator==(const Iterator& other) {
+            return _current == other._current;
+        }
+
         T& operator*() {
             return _current->_value;
         }

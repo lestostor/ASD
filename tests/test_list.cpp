@@ -230,7 +230,7 @@ TEST(TestListLib, test_iterator_for_write) {
     List<int>::Iterator it;
     int i = 0;
     for (it = list.begin(); it != list.end(); it++) {
-        *it = i++;
-        ASSERT_EQ(*it, i - 1);
+        *it = ++i;
+        ASSERT_EQ(*it, i);
     }
 }
