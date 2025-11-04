@@ -179,3 +179,15 @@ TEST(TestDoubleListLib, test_iterator_for_write) {
         --it;
     }
 }
+
+TEST(TestDoubleListLib, test_iterator_for_operator_sub_and_assign) {
+    DoubleList<int> list;
+    for (int i = 0; i < 5; i++)
+        list.push_back(i + 1);
+
+    DoubleList<int>::Iterator it = list.begin();
+    for (int i = 0; i < 3; i++) it++;
+
+    it -= 3;
+    ASSERT_EQ(*it, 1);
+}

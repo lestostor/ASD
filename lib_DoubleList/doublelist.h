@@ -24,6 +24,11 @@ public:
             _current = _current->_prev;
             return tmp;
         }
+        Iterator& operator-=(const int count) {
+            for (int i = count; i != 0; i--)
+                _current = _current->_prev;
+            return *this;
+        }
         Iterator& operator=(const Iterator& other) {
             this->_current = other._current;
             return *this;
