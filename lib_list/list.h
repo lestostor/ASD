@@ -67,7 +67,8 @@ public:
     }
 
     Iterator end() {
-        return nullptr;
+        if (_tail == nullptr) return nullptr;
+        return _tail->_next;
     }
 
     bool is_empty();

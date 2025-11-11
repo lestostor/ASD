@@ -40,7 +40,8 @@ public:
     }
 
     Iterator end() {
-        return nullptr;
+        if (_tail == nullptr) return nullptr;
+        return _tail->_next;
     }
 
     void push_front(const T&) noexcept;
