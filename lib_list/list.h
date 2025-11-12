@@ -93,11 +93,26 @@ List<T>::List() {
 
 template <class T>
 List<T>::List(const List<T>& other) {
+    if (other._count == 0) {
+        _head = nullptr;
+        _tail = nullptr;
+        _count = 0;
+        return;
+    }
     _count = 0;
     Node<T>* cur = other._head;
     while (cur != nullptr) {
         push_back(cur->_value);
         cur = cur->_next;
+        if (this->_count == other._count && cur != nullptr) {
+            Node<T>* enter = cur, *cur = other._head, *node = _head;
+            while (cur != enter) {
+                cur = cur->_next;
+                node = node->_next;
+            }
+            _tail->_next = node;
+            break;
+        }
     }
 }
 

@@ -153,7 +153,7 @@ TEST(TestAlgorithmsLib, test_math_expression_No21) {
     ASSERT_TRUE(check_math_expression("3 * (15 + (x + y) * (- 7 * y^2))"));
 }
 
-TEST(TestAlgorithmsLib, test_is_looped_1_if_looped) {
+TEST(TestAlgorithmsLib, test_is_looped_if_looped) {
     List<int> list;
     for (int i = 0; i < 5; i++)
         list.push_back(i + 1);
@@ -161,33 +161,57 @@ TEST(TestAlgorithmsLib, test_is_looped_1_if_looped) {
     Node<int>* node = list.head()->_next->_next;
     list.tail()->_next = node;
     ASSERT_TRUE(is_looped_1(list));
+    ASSERT_TRUE(is_looped_2(list));
     list.tail()->_next = nullptr;
 }
 
-TEST(TestAlgorithmsLib, test_is_looped_1_if_looped_from_begin) {
+TEST(TestAlgorithmsLib, test_is_looped_if_looped_from_begin) {
     List<int> list;
     for (int i = 0; i < 5; i++)
         list.push_back(i + 1);
 
     list.tail()->_next = list.head();
     ASSERT_TRUE(is_looped_1(list));
+    ASSERT_TRUE(is_looped_2(list));
     list.tail()->_next = nullptr;
 }
 
-TEST(TestAlgorithmsLib, test_is_looped_1_if_not_looped) {
+TEST(TestAlgorithmsLib, test_is_looped_if_not_looped) {
     List<int> list;
     for (int i = 0; i < 5; i++)
         list.push_back(i + 1);
     ASSERT_FALSE(is_looped_1(list));
+    ASSERT_FALSE(is_looped_2(list));
 }
 
-TEST(TestAlgorithmsLib, test_is_looped_1_if_one_element) {
+TEST(TestAlgorithmsLib, test_is_looped_if_one_element) {
     List<int> list;
     list.push_back(1);
     ASSERT_FALSE(is_looped_1(list));
+    ASSERT_FALSE(is_looped_2(list));
 }
 
-TEST(TestAlgorithmsLib, test_is_looped_1_if_empty) {
+TEST(TestAlgorithmsLib, test_is_looped_if_empty) {
     List<int> list;
     ASSERT_FALSE(is_looped_1(list));
+    ASSERT_FALSE(is_looped_2(list));
+}
+
+TEST(TestAlgorithmsLib, test_find_loop_if_looped) {
+    List<int> list;
+    for (int i = 0; i < 5; i++)
+        list.push_back(i + 1);
+
+    Node<int>* node = list.head()->_next->_next;
+    list.tail()->_next = node;
+
+    ASSERT_EQ(node, find_loop(list));
+    list.tail()->_next = nullptr;
+}
+
+TEST(TestAlgorithmsLib, test_find_loop_if_not_looped) {
+    List<int> list;
+    for (int i = 0; i < 5; i++)
+        list.push_back(i + 1);
+    ASSERT_EQ(nullptr, find_loop(list));
 }
