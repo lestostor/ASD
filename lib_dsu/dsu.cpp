@@ -25,7 +25,7 @@ int DSU::find(int x) const {
 
 int DSU::find_rec(int x) const {
     if (x == _parent[x]) return x;
-    return find(_parent[x]);
+    return find_rec(_parent[x]);
 }
 
 void DSU::unite(int x, int y) {
