@@ -90,3 +90,103 @@ TEST(TestAlgorithmsLib, test_find_local_min_matrix_5x5) {
         result = true;
     ASSERT_TRUE(result);
 }
+
+TEST(TestAlgorithmsLib, test_count_islands_No1) {
+    Matrix<int> matrix(3, 3);
+    matrix[0][1] = 1;
+    matrix[0][2] = 1;
+    matrix[1][0] = 1;
+    matrix[2][2] = 1;
+    // matrix:
+    // 0 1 1
+    // 1 0 0
+    // 0 0 1
+    ASSERT_EQ(count_islands(matrix), 3);
+}
+
+TEST(TestAlgorithmsLib, test_count_islands_No2) {
+    Matrix<int> matrix(3, 3);
+    matrix[0][0] = 1;
+    matrix[0][1] = 1;
+    matrix[0][2] = 1;
+    matrix[1][0] = 1;
+    matrix[2][2] = 1;
+    // matrix:
+    // 1 1 1
+    // 1 0 0
+    // 0 0 1
+    ASSERT_EQ(count_islands(matrix), 2);
+}
+
+TEST(TestAlgorithmsLib, test_count_islands_No3) {
+    Matrix<int> matrix(3, 3);
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            matrix[i][j] = 1;
+    // matrix:
+    // 1 1 1
+    // 1 1 1
+    // 1 1 1
+    ASSERT_EQ(count_islands(matrix), 1);
+}
+
+TEST(TestAlgorithmsLib, test_count_islands_No4) {
+    Matrix<int> matrix(3, 3);
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            if (i == 1 || j == 1) matrix[i][j] = 1;
+    // matrix:
+    // 0 1 0
+    // 1 1 1
+    // 0 1 0
+    ASSERT_EQ(count_islands(matrix), 1);
+}
+
+TEST(TestAlgorithmsLib, test_count_islands_No5) {
+    Matrix<int> matrix(3, 3);
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++) {
+            if (i == j) continue;
+            matrix[i][j] = 1;
+        }
+    // matrix:
+    // 0 1 1
+    // 1 0 1
+    // 1 1 0
+    ASSERT_EQ(count_islands(matrix), 2);
+}
+
+TEST(TestAlgorithmsLib, test_count_islands_No6) {
+    Matrix<int> matrix(3, 3);
+    matrix[0][0] = 1;
+    matrix[0][2] = 1;
+    matrix[1][2] = 1;
+    matrix[2][0] = 1;
+    matrix[2][1] = 1;
+    // matrix:
+    // 1 0 1
+    // 0 0 1
+    // 1 1 0
+    ASSERT_EQ(count_islands(matrix), 3);
+}
+
+TEST(TestAlgorithmsLib, test_count_islands_No7) {
+    Matrix<int> matrix(3, 3);
+    // matrix:
+    // 0 0 0
+    // 0 0 0
+    // 0 0 0
+    ASSERT_EQ(count_islands(matrix), 0);
+}
+
+TEST(TestAlgorithmsLib, test_count_islands_No8) {
+    Matrix<int> matrix(3, 3);
+    matrix[0][0] = 1;
+    matrix[1][1] = 1;
+    matrix[2][2] = 1;
+    // matrix:
+    // 1 0 0
+    // 0 1 0
+    // 0 0 1
+    ASSERT_EQ(count_islands(matrix), 3);
+}

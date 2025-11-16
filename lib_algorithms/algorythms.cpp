@@ -62,3 +62,41 @@ int min(Matrix<int> matrix, int* i, int* j) {
     }
     return min;
 }
+
+void unite_neighbours(DSU& dsu, const Matrix<int> matrix, const int line, const int col) {
+    int m = matrix.get_lines(), n = matrix.get_columns();
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (abs(i) == abs(j)) continue;
+
+            if (line + i >= 0 && line + i < m &&
+                col + j >= 0 && col + j < n &&
+                matrix[line + i][col + j] == 1)
+                dsu.unite(line * m + col % n,(line + i) * m + (col + j) % n);
+        }
+    }
+}
+
+int count_islands(Matrix<int> matrix) {
+    int m = matrix.get_lines(), n = matrix.get_columns(),
+        count = 0;
+    DSU dsu(m * n);
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (matrix[i][j] == 1) {
+                matrix[i][j] = -1;
+                unite_neighbours(dsu, matrix, i, j);
+            }
+        }
+    }
+
+    // count
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            if (matrix[i][j] == -1 && dsu.find(i * m + j % n) == i * m + j % n)
+                count++;
+        }
+    }
+    return count;
+}
