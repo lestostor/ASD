@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
 #include "stack.h"
+#include "liststack.h"
 
 TEST(TestStackLib, test_defualt_constructor) {
-    Stack<int> stack;
+    ASSERT_NO_THROW(Stack<int> stack);
 }
 
 TEST(TestStackLib, test_initialize_constructor) {
@@ -99,4 +100,92 @@ TEST(TestStackLib, test_is_empty_after_pushes_and_pops) {
         stack.pop();
     ASSERT_TRUE(stack.is_empty());
 }
+
+TEST(TestListStackLib, test_defualt_constructor) {
+    ASSERT_NO_THROW(ListStack<int> stack);
+}
+
+TEST(TestListStackLib, test_initialize_constructor) {
+    ASSERT_NO_THROW(ListStack<int> stack(5));
+}
+
+TEST(TestListStackLib, test_copy_constructor) {
+    ListStack<int> stack1(5);
+    ListStack<int> stack2(stack1);
+}
+
+TEST(TestListStackLib, test_is_empty_if_empty) {
+    ListStack<int> stack(5);
+    ASSERT_TRUE(stack.is_empty());
+}
+
+TEST(TestListStackLib, test_is_full_if_empty) {
+    ListStack<int> stack(5);
+    ASSERT_FALSE(stack.is_full());
+}
+
+TEST(TestListStackLib, test_push) {
+    ListStack<int> stack;
+    stack.push(2);
+    ASSERT_FALSE(stack.is_empty());
+}
+
+TEST(TestListStackLib, test_push_into_full_stack) {
+    ListStack<int> stack(5);
+    for (int i = 0; i < 5; i++)
+        stack.push(i + 1);
+    ASSERT_ANY_THROW(stack.push(6));
+}
+
+TEST(TestListStackLib, test_top) {
+    ListStack<int> stack(5);
+    for (int i = 0; i < 3; i++)
+        stack.push(i + 1);
+
+    ASSERT_EQ(stack.top(), 3);
+}
+
+TEST(TestListStackLib, test_pop) {
+    ListStack<int> stack(5);
+    for (int i = 0; i < 3; i++)
+        stack.push(i + 1);
+
+    stack.pop();
+    ASSERT_EQ(stack.top(), 2);
+}
+
+TEST(TestListStackLib, test_pop_from_endless_empty_stack) {
+    ListStack<int> stack;
+    ASSERT_ANY_THROW(stack.pop());
+}
+
+TEST(TestListStackLib, test_pop_from_empty_stack) {
+    ListStack<int> stack(5);
+    ASSERT_ANY_THROW(stack.pop());
+}
+
+TEST(TestListStackLib, test_clear) {
+    ListStack<int> stack;
+    for (int i = 0; i < 3; i++)
+        stack.push(i + 1);
+
+    stack.clear();
+    ASSERT_TRUE(stack.is_empty());
+}
+
+TEST(TestListStackLib, test_clear_empty_stack) {
+    ListStack<int> stack(5);
+    stack.clear();
+    ASSERT_TRUE(stack.is_empty());
+}
+
+TEST(TestListStackLib, test_copy_not_empty_stack) {
+    ListStack<int> stack1;
+    for (int i = 0; i < 3; i++)
+        stack1.push(i + 1);
+
+    ListStack<int> stack2(stack1);
+    ASSERT_EQ(stack1.top(), stack2.top());
+}
+
 

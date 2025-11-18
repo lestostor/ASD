@@ -62,6 +62,10 @@ public:
         return _tail;
     }
 
+    inline int get_size() const noexcept {
+        return _count;
+    }
+
     Iterator begin() {
         return _head;
     }
@@ -71,7 +75,7 @@ public:
         return _tail->_next;
     }
 
-    bool is_empty();
+    bool is_empty() const noexcept;
 
     void push_front(const T&) noexcept;
     void push_back(const T&) noexcept;
@@ -117,7 +121,7 @@ List<T>::List(const List<T>& other) {
 }
 
 template <class T>
-bool List<T>::is_empty() {
+bool List<T>::is_empty() const noexcept {
     return _head == nullptr;
 }
 
