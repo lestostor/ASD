@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "queue.h"
+#include "listqueue.h"
 
 TEST(TestQueueLib, test_default_constructor) {
     ASSERT_NO_THROW(Queue<int> queue);
@@ -109,4 +110,62 @@ TEST(TestQueueLib, test_copy_after_pushes_and_pops) {
     queue1.pop();
     queue1.push(6);
     ASSERT_NO_THROW(Queue<int> queue2(queue1));
+}
+
+TEST(TestListQueueLib, test_default_constructor) {
+    ASSERT_NO_THROW(ListQueue<int> queue);
+}
+
+TEST(TestListQueueLib, test_initialize_constructor) {
+    ASSERT_NO_THROW(ListQueue<int> queue(5));
+}
+
+TEST(TestListQueueLib, test_copy_constructor) {
+    ListQueue<int> queue1(5);
+    ASSERT_NO_THROW(ListQueue<int> queue2(queue1));
+}
+
+TEST(TestListQueueLib, test_is_empty_if_empty) {
+    ListQueue<int> queue(5);
+    ASSERT_TRUE(queue.is_empty());
+}
+
+TEST(TestListQueueLib, test_push) {
+    ListQueue<int> queue;
+    queue.push(1);
+    ASSERT_FALSE(queue.is_empty());
+}
+
+TEST(TestListQueueLib, test_push_into_full_queue) {
+    ListQueue<int> queue(5);
+    for (int i = 0; i < 5; i++)
+        queue.push(i + 1);
+    ASSERT_ANY_THROW(queue.push(6));
+}
+
+TEST(TestListQueueLib, test_pop) {
+    ListQueue<int> queue;
+    for (int i = 0; i < 3; i++)
+        queue.push(i + 1);
+    queue.pop();
+    ASSERT_EQ(queue.head(), 2);
+}
+
+TEST(TestListQueueLib, test_pop_from_empty_queue) {
+    ListQueue<int> queue(5);
+    ASSERT_ANY_THROW(queue.pop());
+}
+
+TEST(TestListQueueLib, test_clear) {
+    ListQueue<int> queue(5);
+    for (int i = 0; i < 3; i++)
+        queue.push(i + 1);
+    queue.clear();
+    ASSERT_TRUE(queue.is_empty());
+}
+
+TEST(TestListQueueLib, test_clear_empty__queue) {
+    ListQueue<int> queue;
+    queue.clear();
+    ASSERT_TRUE(queue.is_empty());
 }

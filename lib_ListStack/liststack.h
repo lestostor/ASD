@@ -32,7 +32,7 @@ ListStack<T>::ListStack(const ListStack<T>& other) : _data(other._data), _size(o
 
 template <class T>
 void ListStack<T>::push(T element) {
-    if (_data.get_size() == _size)
+    if (is_full())
         throw std::logic_error("Stack is full");
     _data.push_back(element);
 }
