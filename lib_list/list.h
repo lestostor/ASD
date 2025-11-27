@@ -86,6 +86,8 @@ public:
     void pop_front();
     void erase(size_t);
     void erase(Node<T>*);
+
+    List<T>& operator=(const List<T>&);
 };
 
 template <class T>
@@ -148,7 +150,7 @@ void List<T>::push_back(const T& value) noexcept {
 }
 
 template <class T>
-void List<T>::insert(Node<T>* node, const T& value) { 
+void List<T>::insert(Node<T>* node, const T& value) {
     if (node == nullptr)
         throw std::invalid_argument("Null node");
     if (is_empty())
@@ -265,6 +267,26 @@ void List<T>::erase(size_t pos) {
     if (cur == nullptr)
         throw std::invalid_argument("Wrong position");
     erase(cur);
+}
+
+template <class T>
+List<T>& List<T>::operator=(const List<T>& other) {
+    this->_count = 0;
+    Node<T>* cur = other._head;
+    while (cur != nullptr) {
+        push_back(cur->_value);
+        cur = cur->_next;
+        if (this->_count == other._count && cur != nullptr) {
+            Node<T>* enter = cur, * cur = other._head, * node = _head;
+            while (cur != enter) {
+                cur = cur->_next;
+                node = node->_next;
+            }
+            _tail->_next = node;
+            break;
+        }
+    }
+    return *this;
 }
 
 #endif // !LIST_LIST_H
