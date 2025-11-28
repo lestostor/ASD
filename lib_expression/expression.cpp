@@ -2,6 +2,11 @@
 
 // Expression
 
+Expression::Expression() {
+    _lexems = List<Lexem>();
+    _PolishRecord = List<Lexem>();
+}
+
 Expression::Expression(std::string expression) {
     _lexems = Parser::parse(expression);
     toPolish();
@@ -10,6 +15,11 @@ Expression::Expression(std::string expression) {
 Expression::Expression(const List<Lexem>& lexems) {
     _lexems = lexems;
     toPolish();
+}
+
+Expression::Expression(const Expression& other) {
+    this->_lexems = other._lexems;
+    this->_PolishRecord = other._PolishRecord;
 }
 
 void Expression::toPolish() {
@@ -153,6 +163,29 @@ void Expression::power(Stack<double>& values) {
     values.push(pow(first, second));
 }
 
+std::string Expression::toString() const {
+    List<Lexem>::Iterator it = _lexems.begin();
+    std::string str;
+
+    for (it; it != _lexems.end(); it++)
+        str += (*it)._name;
+    return str;
+}
+
+List<Lexem> Expression::get_variables() const noexcept {
+    List<Lexem>::Iterator it = _PolishRecord.begin();
+    List<Lexem> variables;
+
+    for (it; it != _PolishRecord.end(); it++) {
+        Lexem lexem = *it;
+        if (lexem._type == TypeLexem::Variable)
+            variables.push_back(lexem);
+    }
+
+    return variables;
+}
+
+
 // Parser
 
 std::string Parser::read_number(std::string str, int pos) {
@@ -193,13 +226,15 @@ std::string Parser::read_function(std::string str, int pos) {
     bool is_func = true;
     for (int i = pos; i < str.size(); i++) {
         if (is_operation(str[i]) || is_closed_bracket(str[i]) || str[i] == '|' || str[i] == '_' ||
-            is_digit(str[i]) && function != "sin" && function != "cos" && function != "tg") {
+            is_digit(str[i]) && !is_function(function)) {
             is_func = false;
             break;
         }
         if (is_opened_bracket(str[i]) || is_digit(str[i]) || str[i] == '|') break;
         if (is_letter(str[i])) {
             function += str[i];
+            if (!is_function(function) && i == str.size() - 1)
+                return "";
             continue;
         }
 
@@ -231,12 +266,8 @@ bool Parser::is_closed_bracket(char symbol) {
     return symbol == ')' || symbol == '}' || symbol == ']';
 }
 
-bool Parser::is_opened_bracket(std::string symbol) {
-    return symbol == "(" || symbol == "{" || symbol == "[";
-}
-
-bool Parser::is_closed_bracket(std::string symbol) {
-    return symbol == ")" || symbol == "}" || symbol == "]";
+bool Parser::is_function(std::string str) {
+    return str == "sin" || str == "cos" || str == "tg";
 }
 
 void Parser::pop_operation(Stack<char>& operations, Stack<std::string>& operands) {
@@ -247,22 +278,44 @@ void Parser::pop_operation(Stack<char>& operations, Stack<std::string>& operands
         operands.pop();
 }
 
-bool Parser::is_valid(std::string expression) {
+int Parser::return_priority(char operation) {
+    if (operation == '+' || operation == '-')
+        return 1;
+    else if (operation == '*' || operation == '/')
+        return 2;
+    else if (operation == '^')
+        return 4;
+}
+
+List<Lexem> Parser::parse(std::string expression) {
     Stack<char> operations(2), brackets(expression.size());
     Stack<std::string> operands(2);
     int i = 0;
 
+    List<Lexem> lexems;
     while ( i != expression.size()) {
         if (is_letter(expression[i])) {
             std::string str = read_function(expression, i);
 
-            if (str == "") str = read_variable(expression, i);
+            if (str == "sin")
+                lexems.push_back(Lexem (str, TypeLexem::Function, DBL_MAX, 5, Functions::sin));
+            else if (str == "cos")
+                lexems.push_back(Lexem(str, TypeLexem::Function, DBL_MAX, 5, Functions::cos));
+            else if (str == "tg")
+                lexems.push_back(Lexem(str, TypeLexem::Function, DBL_MAX, 5, Functions::tg));
+            else {
+                str = read_variable(expression, i);
+                lexems.push_back(Lexem(str, TypeLexem::Variable));
+            }
+
             if (!operations.is_empty()) {
                 pop_operation(operations, operands);
-                if (!operands.is_empty()) return false;
+                if (!operands.is_empty())
+                    throw std::logic_error("Operand was missed\n" + show_error(expression, i));
             }
             operands.push(str);
-            if (operands.is_full() || operations.is_full()) return false;  // missed operation
+            if (operands.is_full() || operations.is_full())
+                throw std::logic_error("Operation was missed\n" + show_error(expression, i));
 
             i += str.size();
             continue;
@@ -271,128 +324,77 @@ bool Parser::is_valid(std::string expression) {
             std::string num = read_number(expression, i);
             if (!operations.is_empty()) {
                 pop_operation(operations, operands);
-                if (!operands.is_empty()) return false;
+                if (!operands.is_empty())
+                    throw std::logic_error("Operand was missed\n" + show_error(expression, i));
             }
             operands.push(num);
-            if (operands.is_full() || operations.is_full()) return false;  // missed operation
+            if (operands.is_full() || operations.is_full())
+                throw std::logic_error("Operation was missed\n" + show_error(expression, i));
+
+            lexems.push_back(Lexem (num, TypeLexem::Constant, std::atoi(num.c_str())));
 
             i += num.size();
             continue;
         }
         else if (is_operation(expression[i])) {
-            if (operations.is_full() || operands.is_empty() && expression[i] != '-')
-                return false;  // extra operation or missed operand
+            if (operations.is_full())
+                throw std::logic_error("Extra operation\n" + show_error(expression, i));
+            if (operands.is_empty() && expression[i] != '-')
+                throw std::logic_error("Operand was missed\n" + show_error(expression, i));
+
             operations.push(expression[i]);
+
+            if (expression[i] == '-' && (lexems.is_empty() || lexems.tail()->_value._type == TypeLexem::OpenedBracket ||
+                lexems.tail()->_value._type == TypeLexem::AbsOpened))
+                lexems.push_back(Lexem("~", TypeLexem::UnOperator, DBL_MAX, 3));
+            else
+                lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::Operation, DBL_MAX, return_priority(expression[i])));
         }
         else if (is_opened_bracket(expression[i]) || expression[i] == '|' &&
             (brackets.is_empty() || !brackets.is_empty() && brackets.top() != '|')) {
-            if (operations.is_empty() && i != 0 &&
-                operands.top() != "sin" && operands.top() != "cos" && operands.top() != "tg")
-                return false;  // missed operation
-            if (!operands.is_empty() && (operands.top() == "sin" || operands.top() == "cos" || operands.top() == "tg"))
+            if (operations.is_empty() && i != 0 && !operands.is_empty() && !is_function(operands.top()))
+                throw std::logic_error("Operation was missed\n" + show_error(expression, i));
+
+            if (!operands.is_empty() && is_function(operands.top()))
                 operands.pop();
+
             brackets.push(expression[i]);
             if (!operations.is_empty())
                 pop_operation(operations, operands);
+
+            if (expression[i] != '|')
+                lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::OpenedBracket, DBL_MAX, 6));
+            else lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::AbsOpened, DBL_MAX, 6));
         }
         else if (is_closed_bracket(expression[i]) || expression[i] == '|') {
-            if (brackets.is_empty()) return false;
+            if (brackets.is_empty())
+                throw std::logic_error("Opened bracket was missed\n" + show_error(expression, i));
             brackets.pop();
+            if (expression[i] != '|')
+                lexems.push_back(Lexem (std::string(1, expression[i]), TypeLexem::ClosedBracket, DBL_MAX, 6));
+            else lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::AbsClosed, DBL_MAX, 6));
         }
 
         i++;
     }
-    return operations.is_empty() && brackets.is_empty();
+
+    if (!operations.is_empty())
+        throw std::logic_error("Operand was missed\n" + show_error(expression, i));
+    if (!brackets.is_empty())
+        throw std::logic_error("Closed bracket was missed\n" + show_error(expression, i));
+
+    return lexems;
 }
 
-List<Lexem> Parser::parse(std::string expression) {
-    if (!is_valid(expression))
-        throw std::invalid_argument("Expression isn't correct");
+std::string Parser::show_error(std::string expression, int pos) {
+    std::string error_msg = expression + "\n";
 
-    List<Lexem> lexems;
-    int i = 0;
-    bool abs_opened = false;
-
-    while (i != expression.size()) {
-        if (is_letter(expression[i])) {
-            std::string str = read_function(expression, i);
-
-            if (str == "") {
-                str = read_variable(expression, i);
-                Lexem var(str, TypeLexem::Variable);
-                lexems.push_back(var);
-            }
-            else {
-                if (str == "sin") {
-                    Lexem func(str, TypeLexem::Function, DBL_MAX, 5, Functions::sin);
-                    lexems.push_back(func);
-                }
-                else if (str == "cos") {
-                    Lexem func(str, TypeLexem::Function, DBL_MAX, 5, Functions::cos);
-                    lexems.push_back(func);
-                }
-                else if (str == "tg") {
-                    Lexem func(str, TypeLexem::Function, DBL_MAX, 5, Functions::tg);
-                    lexems.push_back(func);
-                }
-            }
-
-            i += str.size();
-            continue;
-        }
-        else if (is_digit(expression[i])) {
-            std::string num = read_number(expression, i);
-            Lexem number(num, TypeLexem::Constant, std::atoi(num.c_str()));
-            lexems.push_back(number);
-
-            i += num.size();
-            continue;
-        }
-        else if (is_operation(expression[i])) {
-            std::string str = std::string(1, expression[i]);
-            int priority;
-            if (expression[i] == '+')
-                priority = 1;
-            else if (expression[i] == '*' || expression[i] == '/')
-                priority = 2;
-            else if (expression[i] == '^')
-                priority = 4;
-            else if (expression[i] == '-' && (lexems.is_empty() ||
-                lexems.tail()->_value._type == TypeLexem::OpenedBracket || lexems.tail()->_value._type == TypeLexem::AbsOpened)) {
-                Lexem op("~", TypeLexem::UnOperator, DBL_MAX, 3);
-                lexems.push_back(op);
-                i++;
-                continue;
-            }
-            else priority = 1;
-            Lexem op(str, TypeLexem::Operation, DBL_MAX, priority);
-            lexems.push_back(op);
-        }
-        else if (is_opened_bracket(expression[i])) {
-            std::string str = std::string(1, expression[i]);
-            Lexem bracket(str, TypeLexem::OpenedBracket, DBL_MAX, 6);
-            lexems.push_back(bracket);
-        }
-        else if (is_closed_bracket(expression[i])) {
-            abs_opened = false;
-            std::string str = std::string(1, expression[i]);
-            Lexem bracket(str, TypeLexem::ClosedBracket, DBL_MAX, 6);
-            lexems.push_back(bracket);
-        }
-        else if (expression[i] == '|' && !abs_opened) {
-            abs_opened = true;
-            Lexem abs_bracket("|", TypeLexem::AbsOpened, DBL_MAX, 6);
-            lexems.push_back(abs_bracket);
-        }
-        else if (expression[i] == '|' && abs_opened) {
-            abs_opened = false;
-            Lexem abs_bracket("|", TypeLexem::AbsClosed, DBL_MAX, 6);
-            lexems.push_back(abs_bracket);
-        }
-
-        i++;
+    for (int i = 0; i <= expression.size(); i++) {
+        if (i == pos) error_msg += "^";
+        else error_msg += " ";
     }
-    return lexems;
+
+    return error_msg;
 }
 
 // Functions

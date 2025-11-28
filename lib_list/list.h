@@ -66,11 +66,11 @@ public:
         return _count;
     }
 
-    Iterator begin() {
+    Iterator begin() const noexcept {
         return _head;
     }
 
-    Iterator end() {
+    Iterator end() const {
         if (_tail == nullptr) return nullptr;
         return _tail->_next;
     }

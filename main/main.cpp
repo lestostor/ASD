@@ -1,10 +1,11 @@
 // Copyright 2024 Marina Usova
 
+#include <iostream>
 //#define EASY_EXAMPLE
-#define CHECK_CIRCLES
+//#define CHECK_CIRCLES
+#define EXPRESSION_APPLICATION
 #ifdef EASY_EXAMPLE
 
-#include <iostream>
 #include <iomanip>
 #include "../lib_easy_example/easy_example.h"
 
@@ -39,7 +40,6 @@ int main() {
 
 
 #ifdef CHECK_CIRCLES
-#include <iostream>
 #include "algorithms.h"
 
 void print_result(Type result) {
@@ -74,3 +74,125 @@ int main() {
 }
 
 #endif
+
+
+#ifdef EXPRESSION_APPLICATION
+
+#include "expression.h"
+#include "tvector.h"
+
+void print_variables(Expression expression) {
+    List<Lexem> variables = expression.get_variables();
+    List<Lexem>::Iterator it = variables.begin();
+
+    int max_lenght = 31;
+    std::string str = "";
+    for (it; it != variables.end(); it++) {
+        Lexem var = *it;
+
+        if (var._value == DBL_MAX)
+            str += var._name + " = ?";
+        else
+            str += var._name + " = " + std::to_string(var._value);
+
+        if (it != variables.tail()) str += ", ";
+    }
+
+    for (int i = str.size(); i != max_lenght; i++)
+        str += " ";
+    std::cout << str << "|" << std::endl;
+}
+
+void print_expressions(TVector<Expression> expressions) {
+
+    std::cout << "+-------------------------------------------------------------------------------+" << std::endl;
+    std::cout << "| ID | EXPRESSION                               |VARIABLES VALUES               |" << std::endl;
+    std::cout << "+-------------------------------------------------------------------------------+" << std::endl;
+    int max_lenght = 42;
+
+    for (int i = 0; i < expressions.size(); i++) {
+        std::string expr = expressions[i].toString();
+        std::cout << "| " << i + 1 << "  |" << expr;
+
+        for (int j = expr.size(); j < max_lenght; j++)
+            std::cout << " ";
+        std::cout << "|";
+
+        print_variables(expressions[i]);
+    }
+    std::cout << "+-------------------------------------------------------------------------------+" << std::endl;
+}
+
+void print_main_menu(TVector<Expression> expressions) {
+    if (!expressions.is_empty())
+        print_expressions(expressions);
+
+    std::cout << "MainMenu:" << std::endl;
+    std::cout << "1) Create expression" << std::endl;
+    std::cout << "2) Delete expression" << std::endl;
+    std::cout << "3) Set Variables" << std::endl;
+    std::cout << "4) Calculate" << std::endl;
+    std::cout << "5) Exit" << std::endl;
+}
+
+int choose_action(int count, std::string enter) {
+    int action;
+
+    while (true) {
+        std::cout << enter;
+        std::cin >> action;
+
+        if (action <= 0 || action > count)
+            std::cout << "Incorrect enter" << std::endl;
+        else return action;
+    }
+}
+
+Expression create_expression() {
+    std::string expression_str;
+
+    std::cout << "Enter expression: ";
+    std::cin.ignore();
+    std::getline(std::cin, expression_str);
+    Expression expression(expression_str);
+
+    return expression;
+}
+
+enum Window { MainMenu, CreateExpression, DeleteExpression, SetVariables, Calculate };
+
+int main() {
+    TVector<Expression> expressions;
+
+    int action, id;
+    while (true) {
+        print_main_menu(expressions);
+        action = choose_action(5, "Choose action: ");
+        system("cls");
+
+        switch (action) {
+        case 1:
+            try {
+                expressions.push_back(create_expression());
+                system("cls");
+            }
+            catch (const std::exception& ex) {
+                std::cerr << ex.what() << std::endl;
+            }
+            break;
+        case 2:
+            id = choose_action(expressions.size(), "Enter expression's id: ");
+            expressions.erase(expressions.begin() + id - 1);
+            system("cls");
+            break;
+        default:
+            return 0;
+            break;
+        }
+    }
+
+    return 0;
+}
+
+#endif // EXPRESSION_APPLICATION
+

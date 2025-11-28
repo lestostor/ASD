@@ -1,78 +1,6 @@
 #include <gtest/gtest.h>
 #include "../lib_expression/expression.h"
 
-TEST(TestExpressionLib, test_isvalid_No1) {
-    ASSERT_TRUE(Parser::is_valid("15+ 23"));
-}
-
-TEST(TestExpressionLib, test_is_valid_No2) {
-    ASSERT_TRUE(Parser::is_valid("15 + 23 *4"));
-}
-
-TEST(TestExpressionLib, test_is_valid_No3) {
-    ASSERT_TRUE(Parser::is_valid("(15+ 23) * 2"));
-}
-
-TEST(TestExpressionLib, test_is_valid_No4) {
-    ASSERT_TRUE(Parser::is_valid("34 +(15+ 23) * 2"));
-}
-
-TEST(TestExpressionLib, test_is_valid_No5) {
-    ASSERT_TRUE(Parser::is_valid("x+ y"));
-}
-
-TEST(TestExpressionLib, test_is_valid_No6) {
-    ASSERT_TRUE(Parser::is_valid("2*x+ y"));
-}
-
-TEST(TestExpressionLib, test_is_valid_No7) {
-    ASSERT_TRUE(Parser::is_valid("2*x+ (y - 3*z)"));
-}
-
-TEST(TestExpressionLib, test_is_valid_No8) {
-    ASSERT_TRUE(Parser::is_valid("3 * (15 + |az2 + y| * (2*x - 7 * y^2))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_No9) {
-    ASSERT_TRUE(Parser::is_valid("3 * (15 + (x + y) * (- 7 * y^2))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_missed_operation) {
-    ASSERT_FALSE(Parser::is_valid("3 * (15 + (x y) * (2*x - 7 * y^2))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_missed_second_operand) {
-    ASSERT_FALSE(Parser::is_valid("3 * (15 + (x + y) * (2*x - 7 * y^))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_missed_closed_bracket) {
-    ASSERT_FALSE(Parser::is_valid("3 * (15 + (x + y) * (2*x - 7 * y^2)"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_missed_opened_bracket) {
-    ASSERT_FALSE(Parser::is_valid("3 * 15 + (x + y) * (2*x - 7 * y^2))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_missed_first_operand) {
-    ASSERT_FALSE(Parser::is_valid(" * (15 + (x + y) * (2*x - 7 * y^2))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_missed_operand_after_opened_bracket) {
-    ASSERT_FALSE(Parser::is_valid("3 * ( + (x + y) * (2*x - 7 * y^2))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_missed_operation_before_opened_bracket) {
-    ASSERT_FALSE(Parser::is_valid("3  (15 + (x + y) * (2*x - 7 * y^2))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_extra_operation) {
-    ASSERT_FALSE(Parser::is_valid("3 * (15 + (x +-/ y) * (2*x - 7 * y^2))"));
-}
-
-TEST(TestExpressionLib, test_is_valid_if_missed_operation_between_brackets) {
-    ASSERT_FALSE(Parser::is_valid("3 * (15 + (x + y) (2*x - 7 * y^2))"));
-}
-
 TEST(TestExpressionLib, test_parse_No1) {
     std::string expression = "23 * 284 + 1";
     List<Lexem> lexems = Parser::parse(expression);
@@ -130,6 +58,10 @@ TEST(TestExpressionLib, test_parse_No3) {
         ASSERT_EQ((*lex_it)._name, *ex_it);
 }
 
+TEST(TestExpressionLib, test_default_constructor) {
+    ASSERT_NO_THROW(Expression expr);
+}
+
 TEST(TestExpressionLib, test_parse_wrong_expression) {
     ASSERT_ANY_THROW(List<Lexem> lexems = Parser::parse("3  x *4"));
 }
@@ -181,4 +113,9 @@ TEST(TestExpressionLib, test_calculate_expression_with_abs) {
     expr.set_variables("x_q", 5);
     expr.set_variables("a", 3);
     ASSERT_EQ(expr.calculate(), 99);
+}
+
+TEST(TestExpressionLib, test_copy_constructor) {
+    Expression expr1("3 * 12"), expr2(expr1);
+    ASSERT_EQ(expr1.calculate(), expr2.calculate());
 }

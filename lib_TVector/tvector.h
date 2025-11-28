@@ -11,15 +11,6 @@
 
 #define STEP_OF_CAPACITY 15
 
-template <class T>
-struct Node {
-    T _value;
-    Node<T>* _prev;
-    Node<T>* _next;
-
-    Node(T value, Node<T>* next = nullptr, Node<T>* prev = nullptr) : _value(value), _next(next), _prev(prev) {}
-};
-
 enum Status { Busy, Deleted, Empty };
 template <class T> class TVector;
 

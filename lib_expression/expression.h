@@ -4,6 +4,7 @@
 #include "../lib_list/list.h"
 #include "../lib_stack/stack.h"
 #include <string>
+#include <iostream>
 
 enum TypeLexem { Constant, Variable, OpenedBracket, ClosedBracket, Function, Operation, UnOperator, AbsOpened, AbsClosed };
 
@@ -31,11 +32,17 @@ class Expression {
     List<Lexem> _PolishRecord;
 
 public:
+    Expression();
     Expression(std::string);
     Expression(const List<Lexem>&);
+    Expression(const Expression&);
 
     void set_variables(std::string, double);
     double calculate();
+
+    List<Lexem> get_variables() const noexcept;
+
+    std::string toString() const;
 
 private:
     void toPolish();
@@ -49,20 +56,20 @@ private:
 
 namespace Parser {
     List<Lexem> parse(std::string);
-
-    bool is_valid(std::string);
+    std::string show_error(std::string, int);
 
     std::string read_number(std::string, int);
     std::string read_variable(std::string, int);
     std::string read_function(std::string, int);
+
+    int return_priority(char);
 
     bool is_operation(char);
     bool is_digit(char);
     bool is_letter(char);
     bool is_opened_bracket(char);
     bool is_closed_bracket(char);
-    bool is_opened_bracket(std::string);
-    bool is_closed_bracket(std::string);
+    bool is_function(std::string);
 
     void pop_operation(Stack<char>&, Stack<std::string>&);
 };

@@ -1,1 +1,4 @@
 create_executable_project(Application)
+add_depend(Application Algorithms lib_algorithms)
+add_depend(Application Expression lib_expression)
+add_depend(Application TVector lib_TVector)
