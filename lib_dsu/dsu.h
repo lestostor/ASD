@@ -10,10 +10,10 @@ public:
     DSU(size_t);
     ~DSU();
 
-    int find(int) const;
+    int find(int);
     void unite(int, int);
 private:
-    int find_rec(int) const;
+    int find_rec(int);
 };
 
 #endif // !DSU_DSU_H
