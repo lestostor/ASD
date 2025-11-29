@@ -85,7 +85,7 @@ void print_variables(Expression expression) {
     List<Lexem> variables = expression.get_variables();
     List<Lexem>::Iterator it = variables.begin();
 
-    int max_lenght = 31;
+    int max_lenght = 51;
     std::string str = "";
     for (it; it != variables.end(); it++) {
         Lexem var = *it;
@@ -98,17 +98,17 @@ void print_variables(Expression expression) {
         if (it != variables.tail()) str += ", ";
     }
 
-    for (int i = str.size(); i != max_lenght; i++)
+    for (int i = str.size(); i < max_lenght; i++)
         str += " ";
     std::cout << str << "|" << std::endl;
 }
 
 void print_expressions(TVector<Expression> expressions) {
 
-    std::cout << "+-------------------------------------------------------------------------------+" << std::endl;
-    std::cout << "| ID | EXPRESSION                               |VARIABLES VALUES               |" << std::endl;
-    std::cout << "+-------------------------------------------------------------------------------+" << std::endl;
-    int max_lenght = 42;
+    std::cout << "+-------------------------------------------------------------------------------------------------------------+" << std::endl;
+    std::cout << "| ID | EXPRESSION                                         |VARIABLES VALUES                                   |" << std::endl;
+    std::cout << "+-------------------------------------------------------------------------------------------------------------+" << std::endl;
+    int max_lenght = 52;
 
     for (int i = 0; i < expressions.size(); i++) {
         std::string expr = expressions[i].toString();
@@ -120,7 +120,7 @@ void print_expressions(TVector<Expression> expressions) {
 
         print_variables(expressions[i]);
     }
-    std::cout << "+-------------------------------------------------------------------------------+" << std::endl;
+    std::cout << "+-------------------------------------------------------------------------------------------------------------+" << std::endl;
 }
 
 void print_main_menu(TVector<Expression> expressions) {
@@ -136,8 +136,9 @@ void print_main_menu(TVector<Expression> expressions) {
 }
 
 int choose_action(int count, std::string enter) {
-    int action;
+    if (count == 1) return 1;
 
+    int action;
     while (true) {
         std::cout << enter;
         std::cin >> action;
@@ -159,7 +160,18 @@ Expression create_expression() {
     return expression;
 }
 
-enum Window { MainMenu, CreateExpression, DeleteExpression, SetVariables, Calculate };
+void set_variables_for_expression(Expression& expression) {
+    List<Lexem> variables = expression.get_variables();
+    List<Lexem>::Iterator it = variables.begin();
+
+    std::cout << "Enter variables: " << std::endl;
+    for (it; it != variables.end(); it++) {
+        double value;
+        std::cout << (*it)._name << " = ";
+        std::cin >> value;
+        expression.set_variables((*it)._name, value);
+    }
+}
 
 int main() {
     TVector<Expression> expressions;
@@ -181,9 +193,34 @@ int main() {
             }
             break;
         case 2:
-            id = choose_action(expressions.size(), "Enter expression's id: ");
-            expressions.erase(expressions.begin() + id - 1);
-            system("cls");
+            if (!expressions.is_empty()) {
+                id = choose_action(expressions.size(), "Enter expression's id: ");
+                expressions.erase(expressions.begin() + id - 1);
+                system("cls");
+            }
+            else std::cout << "No expression" << std::endl;
+            break;
+        case 3:
+            if (!expressions.is_empty()) {
+                id = choose_action(expressions.size(), "Enter expression's id: ");
+                set_variables_for_expression(expressions[id - 1]);
+                system("cls");
+            }
+            else std::cout << "No expression" << std::endl;
+            break;
+        case 4:
+            if (!expressions.is_empty()) {
+                id = choose_action(expressions.size(), "Enter expression's id: ");
+                try {
+                    system("cls");
+                    std::cout << expressions[id - 1].toString() << " = " <<
+                        expressions[id - 1].calculate() << std::endl;
+                }
+                catch (const std::exception& ex) {
+                    std::cerr << ex.what() << std::endl;
+                }
+            }
+            else std::cout << "No expression" << std::endl;
             break;
         default:
             return 0;
