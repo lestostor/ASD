@@ -15,7 +15,17 @@ Type check_spheres(Sphere, Sphere);
 
 bool check_brackets(std::string);
 
-bool check_math_expression(std::string);
+std::string read_number(std::string, int);
+std::string read_variable(std::string, int);
+
+bool is_operation(char);
+bool is_digit(char);
+bool is_letter(char);
+bool is_opened_bracket(char);
+bool is_closed_bracket(char);
+bool is_function(std::string);
+
+void read_math_expression(std::string);
 
 template <class T>
 bool is_looped_1(List<T>& list) {
@@ -67,10 +77,25 @@ bool is_looped_2(List<T>& list) {
 
 template <class T>
 Node<T>* find_loop(const List<T>& list) {
-    Node<T>* result;
-    if (list.tail() == nullptr) result =  nullptr;
-    else result = list.tail()->_next;
-    return result;
+    if (list.is_empty()) return nullptr;
+
+    Node<T>* bunny = list.head(), *turtle = list.head();
+    bool is_cycle = false;
+    while (bunny != nullptr && turtle != nullptr) {
+        bunny = bunny->_next;
+        if (bunny == nullptr) break;
+        if (!is_cycle)
+            bunny = bunny->_next;
+        turtle = turtle->_next;
+        if (bunny == turtle && !is_cycle) {
+            is_cycle = true;
+            turtle = list.head();
+        }
+        else if (bunny == turtle && is_cycle) break;
+    }
+    list.tail()->_next = nullptr;
+    if (is_cycle) return bunny;  // enter in destructor
+    return nullptr;
 }
 
 #endif // !ALGORITHMS_ALGORITHMS_H
