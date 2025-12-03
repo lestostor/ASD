@@ -36,10 +36,16 @@ void DSU::unite(int x, int y) {
     int parent_x = find(x);
     int parent_y = find(y);
 
-    if (_rank[parent_x] >= _rank[parent_y])
+    if (_rank[parent_x] >= _rank[parent_y]) {
         _parent[parent_y] = parent_x;
-    else
+        if (_rank[parent_y] > 0)
+            _rank[parent_y]--;
+    }
+    else {
         _parent[parent_x] = parent_y;
+        if (_rank[parent_x] > 0)
+            _rank[parent_x]--;
+    }
     if (_rank[parent_x] == _rank[parent_y])
         _rank[parent_x]++;
 }

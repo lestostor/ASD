@@ -157,14 +157,10 @@ TEST(TestDoubleListLib, test_iterator_for_read) {
     for (int i = 0; i < 5; i++)
         list.push_back(i + 1);
 
-    DoubleList<int>::Iterator it = list.begin();
-    for (it; it != list.tail(); it++);
-
+    DoubleList<int>::Iterator it = list.rbegin();
     int i = 5;
-    while (true) {
+    for (it; it != list.rend(); it--) {
         ASSERT_EQ(*it, i--);
-        if (it == list.begin()) break;
-        --it;
     }
 }
 

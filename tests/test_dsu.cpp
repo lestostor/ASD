@@ -34,3 +34,14 @@ TEST(TestDsuLib, test_unite_wrong_elements) {
     ASSERT_ANY_THROW(dsu.unite(-1, 4));
     ASSERT_ANY_THROW(dsu.unite(1, 5));
 }
+
+TEST(TestDsuLib, test_unite_2) {
+    DSU dsu(7);
+
+    dsu.unite(1, 2);
+    dsu.unite(3, 4);
+    dsu.unite(5, 6);
+    dsu.unite(4, 6);
+    dsu.unite(2, 6);
+    ASSERT_EQ(dsu.find(6), 1);
+}

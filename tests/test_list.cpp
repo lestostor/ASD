@@ -233,10 +233,35 @@ TEST(TestListLib, test_iterator_for_write) {
     for (int i = 0; i < 5; i++)
         list.push_back(0);
 
-    List<int>::Iterator it;
     int i = 0;
-    for (it = list.begin(); it != list.end(); it++) {
+    for (auto it = list.begin(); it != list.end(); it++) {
         *it = ++i;
-        ASSERT_EQ(*it, i);
     }
+
+    i = 0;
+    for (auto it = list.begin(); it != list.end(); it++) {
+        ASSERT_EQ(*it, ++i);
+    }
+}
+
+TEST(TestListLib, test_push_back_pop_back) {
+    List<int> list;
+    for (int i = 0; i < 5; i++)
+        list.push_back(i + 1);
+
+    list.pop_back();
+    ASSERT_EQ(list.tail()->_value, 4);
+    list.push_back(5);
+    ASSERT_EQ(list.tail()->_value, 5);
+}
+
+TEST(TestListLib, test_push_front_pop_front) {
+    List<int> list;
+    for (int i = 0; i < 5; i++)
+        list.push_front(i + 1);
+
+    list.pop_front();
+    ASSERT_EQ(list.head()->_value, 4);
+    list.push_front(5);
+    ASSERT_EQ(list.head()->_value, 5);
 }

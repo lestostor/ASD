@@ -18,11 +18,8 @@ bool check_brackets(std::string);
 bool check_math_expression(std::string);
 
 template <class T>
-bool is_looped_1(List<T> list) {
-    if (list.begin() == list.end() && !list.is_empty()) {
-        list.tail()->_next = nullptr;
-        return true;
-    }
+bool is_looped_1(List<T>& list) {
+    if (list.is_empty()) return false;
 
     List<T>::Iterator bunny = list.begin(),
         turtle = list.begin();
@@ -34,7 +31,6 @@ bool is_looped_1(List<T> list) {
         turtle++;
         if (bunny == turtle) {
             result = true;
-            list.tail()->_next = nullptr;
             break;
         }
     }
@@ -42,11 +38,7 @@ bool is_looped_1(List<T> list) {
 }
 
 template <class T>
-bool is_looped_2(List<T> list) {
-    if (list.begin() == list.end() && !list.is_empty()) {
-        list.tail()->_next = nullptr;
-        return true;
-    }
+bool is_looped_2(List<T>& list) {
     if (list.is_empty()) return false;
 
     bool result = false;
@@ -70,7 +62,6 @@ bool is_looped_2(List<T> list) {
         prev = cur;
         cur = next_node;
     }
-    list.tail()->_next = nullptr;
     return result;
 }
 

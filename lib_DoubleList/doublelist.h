@@ -44,12 +44,21 @@ public:
         return _tail->_next;
     }
 
+    Iterator rbegin() {
+        return _tail;
+    }
+
+    Iterator rend() {
+        return nullptr;
+    }
+
     void push_front(const T&) noexcept;
     void push_back(const T&) noexcept;
     void insert(size_t, const T&);
     void insert(Node<T>*, const T&);
 
     void pop_front();
+    void pop_back();
     void erase(size_t);
     void erase(Node<T>*);
 };
@@ -124,6 +133,20 @@ void DoubleList<T>::pop_front() {
     List<T>::pop_front();
     if (_head != nullptr)
         _head->_prev = nullptr;
+}
+
+template <class T>
+void DoubleList<T>::pop_back() {
+    if (is_empty())
+        throw std::logic_error("List is empty");
+
+    _count--;
+    Node<T>* old_tail = _tail;
+    _tail = _tail->_prev;
+    if (_count == 0)
+        _head = nullptr;
+    else _tail->_next = nullptr;
+    delete old_tail;
 }
 
 template <class T>

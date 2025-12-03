@@ -69,6 +69,10 @@ TEST(TestAlgorithmsLib, test_check_brackets_No5) {
     ASSERT_FALSE(check_brackets("((()()(())}"));
 }
 
+TEST(TestAlgorithmsLib, test_check_brackets_No6) {
+    ASSERT_FALSE(check_brackets("(] ()"));
+}
+
 TEST(TestAlgorithmsLib, test_math_expression_No1) {
     ASSERT_TRUE(check_math_expression("15+ 23"));
 }

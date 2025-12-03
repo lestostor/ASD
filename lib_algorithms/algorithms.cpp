@@ -32,15 +32,32 @@ bool check_brackets(std::string str) {
     Stack<char> stack(str.size());
     
     for (int i = 0; i < str.size(); i++) {
+        if (str[i] == ' ') continue;
         if (str[i] == '(' || str[i] == '{' || str[i] == '[')
             stack.push(str[i]);
         else if (str[i] == ')' || str[i] == '}' || str[i] == ']') {
             if (stack.is_empty()) return false;
+            char bracket = stack.top();
+            switch (bracket)
+            {
+            case '(':
+                if (str[i] != ')') return false;
+                break;
+            case '[':
+                if (str[i] != ']') return false;
+                break;
+            case '{':
+                if (str[i] != '}') return false;
+                break;
+            default:
+                return false;
+                break;
+            }
             stack.pop();
         }
+        else return false;
     }
-    if (stack.is_empty()) return true;
-    else return false;
+    return stack.is_empty();
 }
 
 bool check_math_expression(std::string str) {

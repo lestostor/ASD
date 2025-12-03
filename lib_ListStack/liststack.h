@@ -34,27 +34,27 @@ template <class T>
 void ListStack<T>::push(T element) {
     if (is_full())
         throw std::logic_error("Stack is full");
-    _data.push_back(element);
+    _data.push_front(element);
 }
 
 template <class T>
 void ListStack<T>::pop() {
     if (_data.is_empty())
         throw std::logic_error("Stack is empty");
-    _data.pop_back();
+    _data.pop_front();
 }
 
 template <class T>
 T ListStack<T>::top() const {
     if (_data.is_empty())
         throw std::logic_error("Stack is empty");
-    return _data.tail()->_value;
+    return _data.head()->_value;
 }
 
 template <class T>
 void ListStack<T>::clear() noexcept {
     while (!_data.is_empty())
-        _data.pop_back();
+        _data.pop_front();
 }
 
 #endif // !LISTSTACK_LISTSTACK_H
