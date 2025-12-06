@@ -293,12 +293,12 @@ List<Lexem> Parser::parse(std::string expression) {
     int i = 0;
 
     List<Lexem> lexems;
-    while ( i != expression.size()) {
+    while (i != expression.size()) {
         if (is_letter(expression[i])) {
             std::string str = read_function(expression, i);
 
             if (str == "sin")
-                lexems.push_back(Lexem (str, TypeLexem::Function, DBL_MAX, 5, Functions::sin));
+                lexems.push_back(Lexem(str, TypeLexem::Function, DBL_MAX, 5, Functions::sin));
             else if (str == "cos")
                 lexems.push_back(Lexem(str, TypeLexem::Function, DBL_MAX, 5, Functions::cos));
             else if (str == "tg")
@@ -322,16 +322,18 @@ List<Lexem> Parser::parse(std::string expression) {
         }
         else if (is_digit(expression[i])) {
             std::string num = read_number(expression, i);
+
             if (!operations.is_empty()) {
                 pop_operation(operations, operands);
                 if (!operands.is_empty())
                     throw std::logic_error("Operand was missed\n" + show_error(expression, i));
             }
             operands.push(num);
+
             if (operands.is_full() || operations.is_full())
                 throw std::logic_error("Operation was missed\n" + show_error(expression, i));
 
-            lexems.push_back(Lexem (num, TypeLexem::Constant, std::atoi(num.c_str())));
+            lexems.push_back(Lexem(num, TypeLexem::Constant, std::atoi(num.c_str())));
 
             i += num.size();
             continue;
@@ -351,7 +353,9 @@ List<Lexem> Parser::parse(std::string expression) {
                 lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::Operation, DBL_MAX, return_priority(expression[i])));
         }
         else if (is_opened_bracket(expression[i]) || expression[i] == '|' &&
-            (brackets.is_empty() || !brackets.is_empty() && brackets.top() != '|')) {
+            (i == 0|| lexems.tail()->_value._type != TypeLexem::Constant && lexems.tail()->_value._type != TypeLexem::Variable
+                && lexems.tail()->_value._type != TypeLexem::AbsClosed)) { // check if abs is opened
+
             if (operations.is_empty() && i != 0 && !operands.is_empty() && !is_function(operands.top()))
                 throw std::logic_error("Operation was missed\n" + show_error(expression, i));
 
@@ -362,17 +366,20 @@ List<Lexem> Parser::parse(std::string expression) {
             if (!operations.is_empty())
                 pop_operation(operations, operands);
 
-            if (expression[i] != '|')
-                lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::OpenedBracket, DBL_MAX, 6));
-            else lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::AbsOpened, DBL_MAX, 6));
+            if (expression[i] == '|')
+                lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::AbsOpened, DBL_MAX, 6));
+            else lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::OpenedBracket, DBL_MAX, 6));
         }
-        else if (is_closed_bracket(expression[i]) || expression[i] == '|') {
+        else if (is_closed_bracket(expression[i]) || expression[i] == '|' &&
+            (lexems.tail()->_value._type != TypeLexem::Operation && lexems.tail()->_value._type != TypeLexem::UnOperator)) {
+
             if (brackets.is_empty())
                 throw std::logic_error("Opened bracket was missed\n" + show_error(expression, i));
             brackets.pop();
-            if (expression[i] != '|')
-                lexems.push_back(Lexem (std::string(1, expression[i]), TypeLexem::ClosedBracket, DBL_MAX, 6));
-            else lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::AbsClosed, DBL_MAX, 6));
+
+            if (expression[i] == '|')
+                lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::AbsClosed, DBL_MAX, 6));
+            else lexems.push_back(Lexem(std::string(1, expression[i]), TypeLexem::ClosedBracket, DBL_MAX, 6));
         }
 
         i++;
@@ -399,10 +406,15 @@ std::string Parser::show_error(std::string expression, int pos) {
 
 // Functions
 
+double Functions::convert_to_radian(double angle) {
+    return angle * pi / 180;
+}
+
 double Functions::sin(double x) {
     int n = 0;
     double eps = 0.0001;
 
+    x = convert_to_radian(x);
     double cur = x, s = 0.0;
 
     while (fabs(cur) > eps) {
@@ -418,6 +430,7 @@ double Functions::cos(double x) {
     int n = 0;
     double eps = 0.0001;
 
+    x = convert_to_radian(x);
     double cur = 1, s = 0.0;
 
     do {

@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 
+#define pi 3.1415
+
 enum TypeLexem { Constant, Variable, OpenedBracket, ClosedBracket, Function, Operation, UnOperator, AbsOpened, AbsClosed };
 
 struct Lexem {
@@ -75,10 +77,10 @@ namespace Parser {
 };
 
 namespace Functions {
+    double convert_to_radian(double);
+
     double sin(double);
-
     double cos(double);
-
     double tg(double);
 };
 
