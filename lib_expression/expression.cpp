@@ -66,14 +66,16 @@ void Expression::toPolish() {
 
 void Expression::set_variables(std::string var, double value) {
     List<Lexem>::Iterator it = _PolishRecord.begin();
+    bool is_set = false;
 
     for (it; it != _lexems.end(); it++) {
         if ((*it)._name == var) {
             (*it)._value = value;
-            return;
+            is_set = true;
         }
     }
-    throw std::invalid_argument("Variable " + var + " wasn't found");
+    if (!is_set)
+        throw std::invalid_argument("Variable " + var + " wasn't found");
 }
 
 double Expression::calculate() {
@@ -147,6 +149,8 @@ void Expression::mul(Stack<double>& values) {
 
 void Expression::div(Stack<double>& values) {
     double second = values.top();
+    if (second == 0)
+        throw std::logic_error("Division by 0");
     values.pop();
     double first = values.top();
     values.pop();
@@ -167,18 +171,21 @@ std::string Expression::toString() const {
     List<Lexem>::Iterator it = _lexems.begin();
     std::string str;
 
-    for (it; it != _lexems.end(); it++)
-        str += (*it)._name;
+    for (it; it != _lexems.end(); it++) {
+        if ((*it)._name == "~") str += "-";
+        else str += (*it)._name;
+    }
     return str;
 }
 
-List<Lexem> Expression::get_variables() const noexcept {
+TVector<Lexem> Expression::get_variables() const noexcept {
     List<Lexem>::Iterator it = _PolishRecord.begin();
-    List<Lexem> variables;
+    TVector<Lexem> variables;
+    
 
     for (it; it != _PolishRecord.end(); it++) {
         Lexem lexem = *it;
-        if (lexem._type == TypeLexem::Variable)
+        if (lexem._type == TypeLexem::Variable && find(variables, lexem) == -1)
             variables.push_back(lexem);
     }
 
@@ -223,15 +230,15 @@ std::string Parser::read_variable(std::string str, int pos) {
 
 std::string Parser::read_function(std::string str, int pos) {
     std::string function = "";
-    bool is_func = true;
     for (int i = pos; i < str.size(); i++) {
+        if (is_function(function) && is_opened_bracket(str[i])) return function;
+
         if (is_operation(str[i]) || is_closed_bracket(str[i]) || str[i] == '|' || str[i] == '_' ||
-            is_digit(str[i]) && !is_function(function)) {
-            is_func = false;
+            is_digit(str[i]) && !is_function(function))  // is variable
             break;
-        }
-        if (is_opened_bracket(str[i]) || is_digit(str[i]) || str[i] == '|') break;
+
         if (is_letter(str[i])) {
+            if (is_function(function) && !is_opened_bracket(str[i])) break;  // opened bracket was missing
             function += str[i];
             if (!is_function(function) && i == str.size() - 1)
                 return "";
@@ -242,7 +249,8 @@ std::string Parser::read_function(std::string str, int pos) {
             throw std::invalid_argument("Unexpected symbol: " + str[i]);
     }
 
-    if (is_func) return function;
+    if (is_function(function))
+        throw std::logic_error("Opened bracket was missing\n" + show_error(str, pos + function.size()));
     return "";
 }
 
@@ -339,12 +347,12 @@ List<Lexem> Parser::parse(std::string expression) {
             continue;
         }
         else if (is_operation(expression[i])) {
-            if (operations.is_full())
-                throw std::logic_error("Extra operation\n" + show_error(expression, i));
             if (operands.is_empty() && expression[i] != '-')
                 throw std::logic_error("Operand was missed\n" + show_error(expression, i));
 
             operations.push(expression[i]);
+            if (operations.is_full())
+                throw std::logic_error("Extra operation\n" + show_error(expression, i));
 
             if (expression[i] == '-' && (lexems.is_empty() || lexems.tail()->_value._type == TypeLexem::OpenedBracket ||
                 lexems.tail()->_value._type == TypeLexem::AbsOpened))
@@ -375,6 +383,8 @@ List<Lexem> Parser::parse(std::string expression) {
 
             if (brackets.is_empty())
                 throw std::logic_error("Opened bracket was missed\n" + show_error(expression, i));
+            if (lexems.tail()->_value._type == TypeLexem::OpenedBracket)
+                throw std::logic_error("Expression inside brackets was missed\n" + show_error(expression, i));
             brackets.pop();
 
             if (expression[i] == '|')
@@ -385,6 +395,8 @@ List<Lexem> Parser::parse(std::string expression) {
         i++;
     }
 
+    if (lexems.is_empty())
+        throw std::invalid_argument("No expression");
     if (!operations.is_empty())
         throw std::logic_error("Operand was missed\n" + show_error(expression, i));
     if (!brackets.is_empty())

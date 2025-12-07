@@ -82,20 +82,19 @@ int main() {
 #include "tvector.h"
 
 void print_variables(Expression expression) {
-    List<Lexem> variables = expression.get_variables();
-    List<Lexem>::Iterator it = variables.begin();
+    TVector<Lexem> variables = expression.get_variables();
 
     int max_lenght = 51;
     std::string str = "";
-    for (it; it != variables.end(); it++) {
-        Lexem var = *it;
+    for (int i = 0; i < variables.size(); i++) {
+        Lexem var = variables[i];
 
         if (var._value == DBL_MAX)
             str += var._name + " = ?";
         else
             str += var._name + " = " + std::to_string(var._value);
 
-        if (it != variables.tail()) str += ", ";
+        if (i != variables.size() - 1) str += ", ";
     }
 
     for (int i = str.size(); i < max_lenght; i++)
@@ -161,15 +160,14 @@ Expression create_expression() {
 }
 
 void set_variables_for_expression(Expression& expression) {
-    List<Lexem> variables = expression.get_variables();
-    List<Lexem>::Iterator it = variables.begin();
+    TVector<Lexem> variables = expression.get_variables();
 
     std::cout << "Enter variables: " << std::endl;
-    for (it; it != variables.end(); it++) {
+    for (int i = 0; i < variables.size(); i++) {
         double value;
-        std::cout << (*it)._name << " = ";
+        std::cout << variables[i]._name << " = ";
         std::cin >> value;
-        expression.set_variables((*it)._name, value);
+        expression.set_variables(variables[i]._name, value);
     }
 }
 
@@ -194,6 +192,7 @@ int main() {
             break;
         case 2:
             if (!expressions.is_empty()) {
+                print_expressions(expressions);
                 id = choose_action(expressions.size(), "Enter expression's id: ");
                 expressions.erase(expressions.begin() + id - 1);
                 system("cls");
@@ -202,6 +201,7 @@ int main() {
             break;
         case 3:
             if (!expressions.is_empty()) {
+                print_expressions(expressions);
                 id = choose_action(expressions.size(), "Enter expression's id: ");
                 set_variables_for_expression(expressions[id - 1]);
                 system("cls");
@@ -210,6 +210,7 @@ int main() {
             break;
         case 4:
             if (!expressions.is_empty()) {
+                print_expressions(expressions);
                 id = choose_action(expressions.size(), "Enter expression's id: ");
                 try {
                     system("cls");

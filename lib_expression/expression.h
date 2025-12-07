@@ -3,6 +3,8 @@
 
 #include "../lib_list/list.h"
 #include "../lib_stack/stack.h"
+#include "../lib_TVector/tvector.h"
+#include <map>
 #include <string>
 #include <iostream>
 
@@ -27,6 +29,10 @@ struct Lexem {
         _priority = priority;
         _function = function;
     }
+
+    bool operator==(const Lexem& other) {
+        return _type == other._type && _name == other._name;
+    }
 };
 
 class Expression {
@@ -42,7 +48,7 @@ public:
     void set_variables(std::string, double);
     double calculate();
 
-    List<Lexem> get_variables() const noexcept;
+    TVector<Lexem> get_variables() const noexcept;
 
     std::string toString() const;
 
