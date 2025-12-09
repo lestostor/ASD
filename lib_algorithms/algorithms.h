@@ -82,6 +82,7 @@ Node<T>* find_loop(const List<T>& list) {
     Node<T>* bunny = list.head(), *turtle = list.head();
     bool is_cycle = false;
     while (bunny != nullptr && turtle != nullptr) {
+        if (bunny == turtle && is_cycle) break;
         bunny = bunny->_next;
         if (bunny == nullptr) break;
         if (!is_cycle)
@@ -91,7 +92,6 @@ Node<T>* find_loop(const List<T>& list) {
             is_cycle = true;
             turtle = list.head();
         }
-        else if (bunny == turtle && is_cycle) break;
     }
     list.tail()->_next = nullptr;
     if (is_cycle) return bunny;  // enter in destructor

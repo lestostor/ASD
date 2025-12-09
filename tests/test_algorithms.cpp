@@ -283,6 +283,8 @@ TEST(TestAlgorithmsLib, test_find_loop_if_looped) {
     list.tail()->_next = node;
 
     ASSERT_EQ(node, find_loop(list));
+    list.tail()->_next = list.head();
+    ASSERT_EQ(list.head(), find_loop(list));
     //list.tail()->_next = nullptr;
 }
 
