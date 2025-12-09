@@ -93,7 +93,7 @@ Node<T>* find_loop(const List<T>& list) {
             turtle = list.head();
         }
     }
-    list.tail()->_next = nullptr;
+    //list.tail()->_next = nullptr;
     if (is_cycle) return bunny;  // enter in destructor
     return nullptr;
 }
