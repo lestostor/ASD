@@ -97,5 +97,4 @@ Node<T>* find_loop(const List<T>& list) {
     if (is_cycle) return bunny;  // enter in destructor
     return nullptr;
 }
-
 #endif // !ALGORITHMS_ALGORITHMS_H
