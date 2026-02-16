@@ -19,3 +19,7 @@ int min(Matrix<int>, int*, int*);
 int count_islands(Matrix<int>);
 
 void unite_neighbours(DSU&, const Matrix<int>, const int, const int);
+
+Matrix<bool> create_labyrinth(int, int, int, int);
+
+void print(Matrix<bool>, int, int);

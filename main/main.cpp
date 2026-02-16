@@ -2,10 +2,11 @@
 
 //#define EASY_EXAMPLE
 //#define CHECK_CIRCLES
-#define MATRIX_APP
+//#define MATRIX_APP
+#include <iostream>
+#define LABYRINTH
 #ifdef EASY_EXAMPLE
 
-#include <iostream>
 #include <iomanip>
 #include "../lib_easy_example/easy_example.h"
 
@@ -400,3 +401,16 @@ int main() {
 }
 
 #endif // !MATRIX_APP
+
+#ifdef LABYRINTH
+#include "../lib_algorithms/algorithms.h"
+
+int main() {
+    Matrix<bool> walls = create_labyrinth(3, 5, 3, 9);
+    print(walls, 3, 5);
+
+    return 0;
+}
+
+#endif // LABYRINTH
+

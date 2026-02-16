@@ -100,3 +100,56 @@ int count_islands(Matrix<int> matrix) {
     }
     return count;
 }
+
+Matrix<bool> create_labyrinth(int m, int n, int enter, int exit) {
+    DSU labyrinth(m * n);
+    Matrix<bool> walls((2 * m + 1), (2 * n + 1));
+    srand(time(0));
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            int num = i * n + j;
+            int right_wall = rand() % 100;
+            int down_wall = rand() % 100;
+
+            if (num == enter || num == exit) {
+                if (i == 0)
+                    walls[0][2 * j + 1] = false;  // up
+                else if (j == 0)
+                    walls[2 * i + 1][2 * j - 2] = false;  // left
+                else if (j == n - 1)
+                    walls[2 * i + 1][2 * j + 2] = false;  // right
+                else walls[2 * i + 2][2 * j + 1] = false;  // down
+            }
+
+            if (right_wall >= 50 && j + 1 != n) {
+                labyrinth.unite(num, num + 1);
+                walls[2 * i + 1][2 * j + 2] = false;
+            }
+            if (down_wall >= 50 && i + 1 != m) {
+                labyrinth.unite(num, num + n);
+                walls[2 * i + 2][2 * j + 1] = false;
+            }
+        }
+    }
+
+    if (labyrinth.find(enter) != labyrinth.find(exit))
+        labyrinth.unite(enter, exit);
+
+    return walls;
+}
+
+void print(Matrix<bool> labyrinth, int m, int n) {
+    for (int i = 0; i < 2 * m + 1; i++) {
+        for (int j = 0; j < 2 * n + 1; j++) {
+            if (i % 2 == 0 && j % 2 == 0)
+                std::cout << "+";
+            else if (labyrinth[i][j] && i % 2 == 0 && j % 2 != 0)
+                std::cout << "-";
+            else if (labyrinth[i][j] && i % 2 != 0 && j % 2 == 0)
+                std::cout << "|";
+            else std::cout << " ";
+        }
+        std::cout << std::endl;
+    }
+}
