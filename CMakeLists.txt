@@ -30,6 +30,7 @@ add_subdirectory(lib_ListQueue)
 add_subdirectory(lib_Expression)  
 add_subdirectory(lib_Monom)  
 add_subdirectory(lib_Polynom)  
+add_subdirectory(lib_SkipList)  
 add_subdirectory(main)                # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)        # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)

@@ -3,7 +3,8 @@
 #include <iostream>
 //#define EASY_EXAMPLE
 //#define CHECK_CIRCLES
-#define EXPRESSION_APPLICATION
+//#define EXPRESSION_APPLICATION
+#define SKIPLIST
 #ifdef EASY_EXAMPLE
 
 #include <iomanip>
@@ -233,4 +234,22 @@ int main() {
 }
 
 #endif // EXPRESSION_APPLICATION
+
+#ifdef SKIPLIST
+
+#include "skiplist.h"
+#include "polynom.h"
+
+int main() {
+    SkipList<int, int> list(6);
+    list.insert(4, 1);
+    list.insert(7, 15);
+    list.insert(24, 4);
+    list.insert(2, 8);
+    list.insert(1, 9);
+
+    list.print();
+}
+
+#endif // SKIPLIST
 

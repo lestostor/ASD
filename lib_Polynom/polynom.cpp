@@ -254,7 +254,7 @@ void Polynom::parse(std::string polynom) {
 
         monom = read_monom(polynom, i);
         i += monom.size();
-        _polynom.push_back(Monom(operation + monom));
+        *this += Monom(operation + monom);
     }
 }
 

@@ -47,7 +47,7 @@ public:
         return in;
     }
 
-    friend std::ostream& operator<<(std::ostream& out, Polynom& polynom) {
+    friend std::ostream& operator<<(std::ostream& out, const Polynom& polynom) {
         out << polynom._name << " = ";
 
         for (auto it = polynom._polynom.begin(); it != polynom._polynom.end(); it++) {
@@ -57,6 +57,17 @@ public:
         }
 
         return out;
+    }
+
+    friend std::string to_string(const Polynom& polynom) {
+        std::string str = "";
+        for (auto it = polynom._polynom.begin(); it != polynom._polynom.end(); it++) {
+            if ((*it).coeff() > 0 && it != polynom._polynom.begin())
+                str += "+";
+            str += to_string(*it);
+        }
+
+        return str;
     }
 
     double calculate(std::initializer_list<int> values = { 0, 0, 0 }) const;

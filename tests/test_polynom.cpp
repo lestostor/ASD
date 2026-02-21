@@ -12,7 +12,7 @@ TEST(TestPolynomLib, test_convert_constructor) {
 TEST(TestPolynomLib, test_constructor_from_string) {
     ASSERT_NO_THROW(Polynom pol1("p1", "x^2 + z"));
     ASSERT_NO_THROW(Polynom pol2("p2", "3y^3 - 4x^2"));
-    ASSERT_NO_THROW(Polynom pol3("p3", "-10xy^2z^3 + 5.2z - 4"));
+    ASSERT_NO_THROW(Polynom pol3("p3", "5.2z -10xy^2z^3 - 4"));
 }
 
 TEST(TestPolynomLib, test_add_operator) {
