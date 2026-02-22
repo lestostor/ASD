@@ -239,6 +239,10 @@ void List<T>::erase(Node<T>* node) {
         throw std::logic_error("List is empty");
 
     _count--;
+    if (_count == 0) {
+        pop_front();
+        return;
+    }
     Node<T>* del = node->_next, *new_node = del->_next;
     node->_next = new_node;
     if (del == _tail)
