@@ -1,0 +1,3 @@
+create_project_lib(SortedVecTable)
+add_depend(SortedVecTable TVector lib_TVector)
+add_depend(SortedVecTable ITable lib_ITable)
