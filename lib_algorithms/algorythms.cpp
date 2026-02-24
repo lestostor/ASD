@@ -113,13 +113,14 @@ Matrix<bool> create_labyrinth(int m, int n, int enter, int exit) {
             int down_wall = rand() % 100;
 
             if (num == enter || num == exit) {
-                if (i == 0)
+                if (i == 0 && 2 * j + 1 < walls.get_columns())
                     walls[0][2 * j + 1] = false;  // up
-                else if (j == 0)
-                    walls[2 * i + 1][2 * j - 2] = false;  // left
-                else if (j == n - 1)
+                else if (j == 0 && 2 * i + 1 < walls.get_lines())
+                    walls[2 * i + 1][0] = false;  // left
+                else if (j == n - 1 && 2 * i + 1 < walls.get_lines() && 2 * j + 2 < walls.get_columns())
                     walls[2 * i + 1][2 * j + 2] = false;  // right
-                else walls[2 * i + 2][2 * j + 1] = false;  // down
+                else if (2 * i + 2 < walls.get_lines() && 2 * j + 1 < walls.get_columns())
+                    walls[walls.get_lines() - 1][2 * j + 1] = false;  // down
             }
 
             if (right_wall >= 50 && j + 1 != n) {
@@ -133,8 +134,32 @@ Matrix<bool> create_labyrinth(int m, int n, int enter, int exit) {
         }
     }
 
-    if (labyrinth.find(enter) != labyrinth.find(exit))
-        labyrinth.unite(enter, exit);
+    int curr = enter;
+    while (labyrinth.find(curr) != labyrinth.find(exit)) {
+        int enter_i = curr / n, enter_j = curr % n,
+            exit_i = exit / n, exit_j = exit % n;
+
+        if (enter_i < exit_i) {
+            labyrinth.unite(curr, curr + n);
+            walls[2 * enter_i + 2][2 * enter_j + 1] = false;
+            curr += n;
+        }
+        else if (enter_i > exit_i) {
+            labyrinth.unite(curr, curr - n);
+            walls[2 * enter_i][2 * enter_j + 1] = false;
+            curr -= n;
+        }
+        else if (enter_j < exit_j) {
+            labyrinth.unite(curr, curr + 1);
+            walls[2 * enter_i + 1][2 * enter_j + 2] = false;
+            curr += 1;
+        }
+        else if (enter_j > exit_j) {
+            labyrinth.unite(curr, curr - 1);
+            walls[2 * enter_i + 1][2 * enter_j] = false;
+            curr -= 1;
+        }
+    }
 
     return walls;
 }

@@ -188,11 +188,6 @@ template <class T>
 void TVector<T>::push_back(const T& value) {
     _vec = reset_memory(_size + 1);
     _size++;
-    if (_size == 1) {
-        _capacity = STEP_OF_CAPACITY;
-        _vec = new T[1];
-        _status = new Status[1];
-    }
     _vec[_size - 1] = value;
     _status[_size - 1] = Status::Busy;
 }

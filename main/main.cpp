@@ -406,8 +406,8 @@ int main() {
 #include "../lib_algorithms/algorithms.h"
 
 int main() {
-    Matrix<bool> walls = create_labyrinth(3, 5, 3, 9);
-    print(walls, 3, 5);
+    Matrix<bool> walls = create_labyrinth(6, 5, 10, 19);
+    print(walls, 6, 5);
 
     return 0;
 }
