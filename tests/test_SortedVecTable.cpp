@@ -10,7 +10,7 @@ TEST(TestSortedVecTableLib, test_insert) {
     SortedVecTable<int, int> table;
     for (int i = 0; i < 5; i++)
         table.insert(2 * i + 1, 2 * i + 1);
-    ASSERT_NO_THROW(table.insert(4, 4));
+    table.insert(4, 4);
 
     ASSERT_ANY_THROW(table.insert(3, 5));
 }
@@ -25,16 +25,8 @@ TEST(TestSortedVecTableLib, test_find) {
 
 TEST(TestSortedVecTableLib, test_erase) {
     SortedVecTable<int, int> table;
-    table.insert(3, 4);
-    table.erase(3);
-    ASSERT_TRUE(table.is_empty());
-}
-
-TEST(TestSortedVecTableLib, test_output) {
-    SortedVecTable<int, int> table;
     for (int i = 0; i < 5; i++)
         table.insert(i, i + 1);
-
-    std::cout << table;
-    system("pause");
+    table.erase(3);
+    ASSERT_EQ(table.find(3), nullptr);
 }

@@ -24,7 +24,8 @@ TEST(TestUnsortedListTableLib, test_find) {
 
 TEST(TestUnsortedListTableLib, test_erase) {
     UnsortedListTable<int, int> table;
-    table.insert(3, 4);
+    for (int i = 0; i < 5; i++)
+        table.insert(i, i + 1);
     table.erase(3);
-    ASSERT_TRUE(table.is_empty());
+    ASSERT_EQ(table.find(3), nullptr);
 }

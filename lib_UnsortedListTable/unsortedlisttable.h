@@ -72,7 +72,7 @@ void UnsortedListTable<TKey, TValue>::erase(const TKey& key) {
     Node<std::pair<TKey, TValue>>* node = _rows.head();
 
     while (node != nullptr) {
-        if (node->_value.first == key) {
+        if (node->_next != nullptr && node->_next->_value.first == key) {
             _rows.erase(node);
             return;
         }
@@ -87,7 +87,7 @@ template <class TKey, class TValue>
 TValue* UnsortedListTable<TKey, TValue>::find(const TKey& key) const noexcept {
     for (auto it = _rows.begin(); it != _rows.end(); it++) {
         if ((*it).first == key)
-            return new TValue((*it).second);
+            return &((*it).second);
     }
     return nullptr;
 }

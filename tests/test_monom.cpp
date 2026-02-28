@@ -2,18 +2,20 @@
 #include "../lib_Monom/monom.h"
 
 TEST(TestMonomLib, test_initialize_constructor) {
-    ASSERT_NO_THROW(Monom monom1);
-    ASSERT_NO_THROW(Monom monom2(3.2, { 1, 0, 3 }));
+    Monom monom1, monom2(3.4, { 0, 1, 3 });
+    ASSERT_EQ(monom1.to_string(), "0.000000");
+    ASSERT_EQ(monom2.to_string(), "3.400000yz^3");
 }
 
 TEST(TestMonomLib, test_constructor_from_string) {
-    ASSERT_NO_THROW(Monom monom1("5x^2yz^3"));
+    Monom monom1("5x^2yz^3");
+    ASSERT_EQ(monom1.to_string(), "5.000000x^2yz^3");
     ASSERT_ANY_THROW(Monom monom2("u^3"));
 }
 
 TEST(TestMonomLib, test_copy_constructor) {
-    Monom monom1(-3, { 2, 5, 3 });
-    ASSERT_NO_THROW(Monom monom2(monom1));
+    Monom monom1(-3, { 2, 5, 3 }), monom2(monom1);
+    ASSERT_EQ(monom1.to_string(), monom2.to_string());
 }
 
 TEST(TestMonomLib, test_compare_operators) {
@@ -31,13 +33,16 @@ TEST(TestMonomLib, test_compare_operators) {
 
 TEST(TestMonomLib, test_assign_operator) {
     Monom monom1(3, { 2, 3, 0 }), monom2(5, { 2, 3, 0 });
-    ASSERT_NO_THROW(monom1 = monom2);
-    ASSERT_NO_THROW(monom1 = monom1);
+    monom1 = monom2;
+    ASSERT_EQ(monom1.to_string(), monom2.to_string());
+
+    monom1 = monom1;
+    ASSERT_EQ(monom1.to_string(), monom2.to_string());
 }
 
 TEST(TestMonomLib, test_add_operator) {
     Monom monom1(3, { 2, 3, 0 }), monom2(5, { 2, 3, 0 });
-    ASSERT_NO_THROW(monom1 + monom2);
+    ASSERT_EQ((monom1 + monom2).to_string(), "8.000000x^2y^3");
 
     Monom monom3(3, { 1, 1, 1 });
     ASSERT_ANY_THROW(monom1 + monom3);
@@ -45,27 +50,27 @@ TEST(TestMonomLib, test_add_operator) {
 
 TEST(TestMonomLib, test_sub_operator) {
     Monom monom1(3, { 2, 3, 0 }), monom2(5, { 2, 3, 0 });
-    ASSERT_NO_THROW(monom1 - monom2);
+    ASSERT_EQ((monom1 - monom2).to_string(), "-2.000000x^2y^3");
 
     Monom monom3(3, { 1, 1, 1 });
     ASSERT_ANY_THROW(monom1 - monom3);
-    ASSERT_NO_THROW(monom1 = -monom2);
+    monom1 = -monom2;
+    ASSERT_EQ(monom1.to_string(), "-5.000000x^2y^3");
 }
 
 TEST(TestMonomLib, test_mul_operator) {
-    Monom monom1(3, { 2, 3, 0 }), monom2(-5, { 1, 0, 4 });  // -5xz^4 * 3x^2y^3 = -15x^3y^3z^4
-    ASSERT_NO_THROW(monom1 * monom2);
-    ASSERT_NO_THROW(monom1 * 3);
+    Monom monom1(3, { 2, 3, 0 }), monom2(-5, { 1, 0, 4 });
+    ASSERT_EQ((monom1 * monom2).to_string(), "-15.000000x^3y^3z^4");
+    ASSERT_EQ((monom1 * 3).to_string(), "9.000000x^2y^3");
 }
 
 TEST(TestMonomLib, test_div_operator) {
-    Monom monom1(8, { 2, 3, 1 }), monom2(4, { 1, 0, 1 });  // 8x^2y^3z / 4xz = 2xy^3
-    Monom res = monom1 / monom2;
-    ASSERT_NO_THROW(monom1 / monom2);
-    ASSERT_NO_THROW(monom1 / 2);
+    Monom monom1(8, { 2, 3, 1 }), monom2(4, { 1, 0, 1 });
+    ASSERT_EQ((monom1 / monom2).to_string(), "2.000000xy^3");
+    ASSERT_EQ((monom1 / 2).to_string(), "4.000000x^2y^3z");
 }
 
 TEST(TestMonomLib, test_calculate) {
     Monom monom(-2, { 1, 2, 1 });
-    ASSERT_EQ(monom.calculate({2, 2, 4}), -64.0);  // -2xy^2z (2, 2, 4) = -64
+    ASSERT_EQ(monom.calculate({2, 2, 4}), -64);
 }

@@ -48,36 +48,11 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& out, const Monom& monom) {
-        if (abs(monom._coeff) != 1.0) out << monom._coeff;
-        else if (monom._coeff == -1) out << "-";
-
-        std::string vars = "xyz";
-        for (int i = 0, j = 0; i < VARS_COUNT; i++, j++) {
-            if (monom._powers[i] > 1)
-                out << vars[j] << "^" << monom._powers[i];
-            else if (monom._powers[i] == 1)
-                out << vars[j];
-        }
-
+        out << monom.to_string();
         return out;
     }
 
-    friend std::string to_string(const Monom& monom) {
-        std::string str = "";
-
-        if (abs(monom._coeff) != 1.0) str += std::to_string(monom._coeff);  // сделать до двух знаков после запятой
-        else if (monom._coeff == -1) str = "-";
-
-        std::string vars = "xyz";
-        for (int i = 0, j = 0; i < VARS_COUNT; i++, j++) {
-            if (monom._powers[i] > 1)
-                str += std::string(1, vars[j]) + "^" + std::to_string(monom._powers[i]);
-            else if (monom._powers[i] == 1)
-                str += vars[j];
-        }
-
-        return str;
-    }
+    std::string to_string() const noexcept;
 
 private:
     void parse(std::string);

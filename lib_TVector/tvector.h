@@ -270,7 +270,13 @@ void TVector<T>::push_front(const T& value) {
 template <class T>
 void TVector<T>::insert(const T* pos, const T& value) {
     int right_pos = count_right_pos(pos);
-    if (_size + 1 >= _capacity)
+
+    if (is_empty()) {
+        push_back(value);
+        return;
+    }
+
+    if (_size + 1>= _capacity)
         _vec = reset_memory(_size + 1);
     int i = _size + count_deleted();
     for (i; i > right_pos; i--) {
@@ -278,11 +284,6 @@ void TVector<T>::insert(const T* pos, const T& value) {
         _status[i] = Status::Busy;
     }
     _size++;
-    if (_size == 1) {
-        _capacity = STEP_OF_CAPACITY;
-        _vec = new T[1];
-        _status = new Status[1];
-    }
     _vec[i] = value;
     _status[i] = Status::Busy;
 }
@@ -458,11 +459,13 @@ T* TVector<T>::reset_memory(size_t new_size) {
     reserve(new_capacity);
     T* new_vec = new T[new_capacity];
 
-    for (int i = 0, j = 0; j < _size; i++)
-        if (_status[i] == Status::Busy) {
-            new_vec[j] = _vec[i];
-            j++;
-        }
+    if (!is_empty()) {
+        for (int i = 0, j = 0; j < _size; i++)
+            if (_status[i] == Status::Busy) {
+                new_vec[j] = _vec[i];
+                j++;
+            }
+    }
     delete[] _status;
     _status = new Status[new_capacity];
     for (int i = 0; i < new_capacity; i++) {

@@ -166,6 +166,23 @@ double Monom::calculate(std::initializer_list<int> values) const {
     return res;
 }
 
+std::string Monom::to_string() const noexcept {
+    std::string str = "";
+
+    if (abs(_coeff) != 1.0) str += std::to_string(_coeff);
+    else if (_coeff == -1) str = "-";
+
+    std::string vars = "xyz";
+    for (int i = 0, j = 0; i < VARS_COUNT; i++, j++) {
+        if (_powers[i] > 1)
+            str += std::string(1, vars[j]) + "^" + std::to_string(_powers[i]);
+        else if (_powers[i] == 1)
+            str += vars[j];
+    }
+
+    return str;
+}
+
 void Monom::parse(std::string str) {
     int i = 0, j = 0;
     std::string num;

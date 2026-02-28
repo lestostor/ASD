@@ -66,9 +66,10 @@ Polynom Polynom::operator-(const Polynom& other) const noexcept {
             ++it1;
             ++it2;
         }
+
+        if (monom.coeff() != 0)
+            res._polynom.push_back(monom);
     }
-    if (monom.coeff() != 0)
-        res._polynom.push_back(monom);
 
     return res;
 }
@@ -103,8 +104,8 @@ Polynom Polynom::operator-(const Monom& monom) const noexcept {
     if (curr != nullptr && curr->_value == monom)
         curr->_value -= monom;
     else if (prev == nullptr)
-        res._polynom.push_front(monom);
-    else res._polynom.insert(prev, monom);
+        res._polynom.push_front(-monom);
+    else res._polynom.insert(prev, -monom);
 
     return res;
 }
@@ -199,7 +200,9 @@ Polynom& Polynom::operator-=(const Monom& other) {
 }
 
 Polynom& Polynom::operator*=(const Polynom& other) noexcept {
+    std::string name_copy = this->_name;
     *this = *this * other;
+    this->_name = name_copy;
     return *this;
 }
 
@@ -221,6 +224,18 @@ Polynom& Polynom::operator/=(const Monom& monom) noexcept {
 Polynom& Polynom::operator/=(const double num) noexcept {
     *this = *this / num;
     return *this;
+}
+
+std::string Polynom::to_string() const noexcept {
+    std::string str = _name + " = ";
+
+    for (auto it = _polynom.begin(); it != _polynom.end(); it++) {
+        if ((*it).coeff() > 0 && it != _polynom.begin())
+            str += "+";
+        str += (*it).to_string();
+    }
+
+    return str;
 }
 
 double Polynom::calculate(std::initializer_list<int> values) const {

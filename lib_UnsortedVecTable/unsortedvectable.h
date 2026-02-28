@@ -69,9 +69,9 @@ void UnsortedVecTable<TKey, TValue>::insert(const TKey& key, const TValue& value
 
 template <class TKey, class TValue>
 void UnsortedVecTable<TKey, TValue>::erase(const TKey& key) {
-    for (int i = 0; i < _rows.size(); i++) {
-        if (_rows[i].first == key) {
-            _rows.erase(_rows.begin() + i);
+    for (auto it = _rows.begin(); it != _rows.end(); it++) {
+        if ((*it).first == key) {
+            _rows.erase(it);
             return;
         }
     }
@@ -83,7 +83,7 @@ template <class TKey, class TValue>
 TValue* UnsortedVecTable<TKey, TValue>::find(const TKey& key) const noexcept {
     for (auto it = _rows.begin(); it != _rows.end(); it++) {
         if ((*it).first == key)
-            return new TValue((*it).second);
+            return &((*it).second);
     }
     return nullptr;
 }

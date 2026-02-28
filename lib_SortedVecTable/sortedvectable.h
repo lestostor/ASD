@@ -53,6 +53,9 @@ public:
 
         return out;
     };
+
+private:
+    int binary_search(const TKey&) const noexcept;
 };
 
 template <class TKey, class TValue>
@@ -60,60 +63,44 @@ SortedVecTable<TKey, TValue>::SortedVecTable() : _rows() {}
 
 template <class TKey, class TValue>
 void SortedVecTable<TKey, TValue>::insert(const TKey& key, const TValue& value) {
-    if (find(key) != nullptr)
+    if (find(key) != nullptr && !_rows.is_empty())
         throw std::invalid_argument("This key already exist");
 
+    int pos = binary_search(key);
     std::pair<TKey, TValue> row = std::pair<TKey, TValue>(key, value);
-    if (_rows.is_empty()) {
-        _rows.push_back(row);
-        return;
-    }
-
-    int l = 0, r = _rows.size() - 1, i;
-
-    while (l <= r) {
-        if (l == r ) {
-            _rows.insert(_rows.begin() + l + 1, row);
-            return;
-        }
-        i = (l + r) / 2;
-
-        if (_rows[i].first > key) r = i - 1;
-        else l = i + 1;
-    }
+    _rows.insert(_rows.begin() + pos + 1, row);
 }
 
 template <class TKey, class TValue>
 void SortedVecTable<TKey, TValue>::erase(const TKey& key) {
-    int l = 0, r = _rows.size() - 1, i;
+    int pos = binary_search(key);
 
-    while (l <= r) {
-        i = (l + r) / 2;
-
-        if (_rows[i].first == key) {
-            _rows.erase(_rows.begin() + i);
-            return;
-        }
-        else if (_rows[i].first > key) r = i - 1;
-        else l = i + 1;
-    }
-
-    throw std::logic_error("This key wasn't found");
+    if (pos == -1)
+        throw std::logic_error("This key wasn't found");
+    _rows.erase(_rows.begin() + pos);
 }
 
 template <class TKey, class TValue>
 TValue* SortedVecTable<TKey, TValue>::find(const TKey& key) const noexcept {
-    int l = 0, r = _rows.size() - 1, i;
+    int pos = binary_search(key);
+    if (_rows[pos].first == key)
+        return &(_rows[pos].second);
+    return nullptr;
+}
+
+template <class TKey, class TValue>
+int SortedVecTable<TKey, TValue>::binary_search(const TKey& key) const noexcept {
+    int l = 0, r = _rows.size() - 1, i = -1;
 
     while (l <= r) {
         i = (l + r) / 2;
 
         if (_rows[i].first == key)
-            return new TValue(_rows[i].second);
+            break;
         else if (_rows[i].first > key) r = i - 1;
         else l = i + 1;
     }
-    return nullptr;
+    return i;
 }
 
 #endif // !SORTEDVECTABLE_SORTEDVECTABLE_H
