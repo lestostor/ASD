@@ -29,4 +29,6 @@ TEST(TestSortedVecTableLib, test_erase) {
         table.insert(i, i + 1);
     table.erase(3);
     ASSERT_EQ(table.find(3), nullptr);
+
+    ASSERT_ANY_THROW(table.erase(3));
 }

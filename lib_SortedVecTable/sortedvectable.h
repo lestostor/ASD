@@ -75,7 +75,7 @@ template <class TKey, class TValue>
 void SortedVecTable<TKey, TValue>::erase(const TKey& key) {
     int pos = binary_search(key);
 
-    if (pos == -1)
+    if (pos == -1 || _rows[pos].first != key)
         throw std::logic_error("This key wasn't found");
     _rows.erase(_rows.begin() + pos);
 }
