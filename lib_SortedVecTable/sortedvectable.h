@@ -63,10 +63,10 @@ SortedVecTable<TKey, TValue>::SortedVecTable() : _rows() {}
 
 template <class TKey, class TValue>
 void SortedVecTable<TKey, TValue>::insert(const TKey& key, const TValue& value) {
-    if (find(key) != nullptr && !_rows.is_empty())
+    int pos = binary_search(key);
+    if (pos != -1 && _rows[pos].first == key)
         throw std::invalid_argument("This key already exist");
 
-    int pos = binary_search(key);
     std::pair<TKey, TValue> row = std::pair<TKey, TValue>(key, value);
     _rows.insert(_rows.begin() + pos + 1, row);
 }
