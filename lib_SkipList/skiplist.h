@@ -120,14 +120,14 @@ List<SkipNode<TKey, TValue>*> SkipList<TKey, TValue>::find_nearest(const TKey& k
 template <class TKey, class TValue>
 size_t SkipList<TKey, TValue>::flip_coin() const noexcept {
     int times = 1;
-    int coin = 1 + rand() % 100;
+    int coin;
 
-    while (coin > 50) {
+    do {
         times++;
         coin = 1 + rand() % 100;
         if (_max_level != -1 && times == _max_level)
             break;
-    }
+    } while (coin > 50);
 
     return times;
 }
