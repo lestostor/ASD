@@ -28,4 +28,7 @@ TEST(TestUnsortedVecTableLib, test_erase) {
         table.insert(i, i + 1);
     table.erase(3);
     ASSERT_EQ(table.find(3), nullptr);
+
+    table.insert(3, 4);
+    ASSERT_EQ(*table.find(3), 4);
 }

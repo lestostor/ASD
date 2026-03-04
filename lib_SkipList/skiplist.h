@@ -7,6 +7,7 @@
 #include <ctime>
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
 
 template <class TKey, class TValue>
 struct SkipNode {
@@ -44,11 +45,11 @@ public:
 
     void insert(const TKey&, const TValue&);
     void print() const noexcept;
-protected:
+private:
     size_t flip_coin() const noexcept;
     List<SkipNode<TKey, TValue>*> find_nearest(const TKey&) const;
     void add_levels(size_t);
-    void update_nodes(size_t);
+    std::string to_string(const std::pair<TKey, TValue>&) const noexcept;
 };
 
 template <class TKey, class TValue>
@@ -82,13 +83,35 @@ void SkipList<TKey, TValue>::insert(const TKey& key, const TValue& value) {
 template <class TKey, class TValue>
 void SkipList<TKey, TValue>::print() const noexcept {
     int i = 0;
+    List<std::string> elements;
+
     for (auto it = _heads.begin(); it != _heads.end(); it++, i++) {
         SkipNode<TKey, TValue>* curr = (*it)->_next[i];
         std::cout << "Level " << i << ": ";
 
         while (curr != nullptr) {
-            std::cout << "[" << curr->_data.first << ": " << curr->_data.second << "] -> ";
-            curr = curr->_next[i];
+            std::string data = to_string(curr->_data);
+
+            if (i == 0) {
+                elements.push_back(data);
+                std::cout << "[" << data << "]->";
+                curr = curr->_next[i];
+            }
+            else {
+                for (auto el_it = elements.begin(); el_it != elements.end(); el_it++) {
+                    data = to_string(curr->_data);
+
+                    if ((*el_it) == data) {
+                        std::cout << "[" << data << "]->";
+                        curr = curr->_next[i];
+                    }
+                    else {
+                        for (int j = 0; j < (*el_it).size() + 2; j++)
+                            std::cout << "-";
+                        std::cout << "->";
+                    }
+                }
+            }
         }
         std::cout << "[NULL]" << std::endl;
     }
@@ -134,9 +157,6 @@ size_t SkipList<TKey, TValue>::flip_coin() const noexcept {
 
 template <class TKey, class TValue>
 void SkipList<TKey, TValue>::add_levels(size_t new_max_level) {
-    if (!_heads.is_empty())
-        update_nodes(new_max_level);
-
     for (int i = _levels; i < new_max_level; i++) {
         SkipNode<TKey, TValue>* node = new SkipNode<TKey, TValue>(new_max_level);
         _heads.push_back(node);
@@ -146,20 +166,13 @@ void SkipList<TKey, TValue>::add_levels(size_t new_max_level) {
 }
 
 template <class TKey, class TValue>
-void SkipList<TKey, TValue>::update_nodes(size_t new_max_level) {
-    for (auto it = _heads.begin(); it != _heads.end(); it++) {
-        SkipNode<TKey, TValue>* curr = *it;
+std::string SkipList<TKey, TValue>::to_string(const std::pair<TKey, TValue>& pair) const noexcept{
+    if (&pair == NULL) return "";
+    std::ostringstream key_out, value_out;
+    key_out << pair.first;
+    value_out << pair.second;
 
-        while (curr != nullptr) {
-            SkipNode<TKey, TValue>* copy = new SkipNode<TKey, TValue>(curr->_data.first, curr->_data.second, new_max_level);
-
-            for (size_t i = 0; i < curr->_size; i++) {
-                copy->_next[i] = curr->_next[i];
-            }
-            curr->_next = copy->_next;
-            curr = *(curr->_next);
-        }
-    }
+    return key_out.str() + ": " + value_out.str();
 }
 
 #endif // !SKIPLIST_SKIPLIST_H

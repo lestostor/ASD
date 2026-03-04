@@ -68,7 +68,7 @@ void SortedVecTable<TKey, TValue>::insert(const TKey& key, const TValue& value) 
         throw std::invalid_argument("This key already exist");
 
     std::pair<TKey, TValue> row = std::pair<TKey, TValue>(key, value);
-    _rows.insert(_rows.begin() + pos + 1, row);
+    _rows.insert(_rows.begin() + pos, row);
 }
 
 template <class TKey, class TValue>
@@ -96,11 +96,11 @@ int SortedVecTable<TKey, TValue>::binary_search(const TKey& key) const noexcept 
         i = (l + r) / 2;
 
         if (_rows[i].first == key)
-            break;
+            return i;
         else if (_rows[i].first > key) r = i - 1;
         else l = i + 1;
     }
-    return i;
+    return l;
 }
 
 #endif // !SORTEDVECTABLE_SORTEDVECTABLE_H
