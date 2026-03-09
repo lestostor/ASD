@@ -44,24 +44,6 @@ TEST(TestTVectorLib, test_get_data) {
         ASSERT_EQ(expected_result[i], actual_result[i]);
 }
 
-TEST(TestTVectorLib, test_get_iterator_begin) {
-    TVector<int> vec({ 1, 2, 3, 4, 5 });
-    int mass[5] = { 1, 2, 3, 4, 5 };
-    int* expected_result = std::begin(mass);
-    int* actual_result = vec.begin();
-
-    ASSERT_EQ(*expected_result, *actual_result);
-}
-
-TEST(TestTVectorLib, test_get_iterator_end) {
-    TVector<int> vec({ 1, 2, 3, 4, 5 });
-    int mass[5] = { 1, 2, 3, 4, 5 };
-    int* expected_result = std::end(mass) - 1;
-    int* actual_result = vec.end() - 1;
-
-    ASSERT_EQ(*expected_result, *actual_result);
-}
-
 TEST(TestTVectorLib, test_get_front) {
     TVector<int> vec({ 1, 2, 3, 4, 5 });
     int expected_result = 1;
@@ -107,7 +89,7 @@ TEST(TestTVectorLib, test_push_back_without_reset_memory) {
     TVector<int> vec({ 1, 2, 3, 4, 5 });
     int expected_result = 6;
     vec.push_back(6);
-    int actual_result = *(vec.end() - 1);
+    int actual_result = vec.back();
 
     ASSERT_EQ(expected_result, actual_result);
 }
@@ -116,7 +98,7 @@ TEST(TestTVectorLib, test_push_back_with_reset_memory) {
     TVector<int> vec({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 });
     int expected_result = 15;
     vec.push_back(15);
-    int actual_result = *(vec.end() - 1);
+    int actual_result = vec.back();
 
     ASSERT_EQ(expected_result, actual_result);
 }
@@ -143,7 +125,7 @@ TEST(TestTVectorLib, test_pop_back_without_reset_memory) {
     TVector<int> vec({ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 });
     int expected_result = 14;
     vec.pop_back();
-    int actual_result = *(vec.end() - 1);
+    int actual_result = vec.back();
 
     ASSERT_EQ(expected_result, actual_result);
 }
@@ -180,7 +162,7 @@ TEST(TestTVectorLib, test_push_back_after_pop_front) {
     int expected_result = 5;
     vec.pop_front();
     vec.push_back(5);
-    int actual_result = *(vec.end() - 1);
+    int actual_result = vec.back();
 
     ASSERT_EQ(expected_result, actual_result);
 }
@@ -190,7 +172,7 @@ TEST(TestTVectorLib, test_push_front_after_pop_back) {
     int expected_result = 5;
     vec.pop_front();
     vec.push_back(5);
-    int actual_result = *(vec.end() - 1);
+    int actual_result = vec.back();
 
     ASSERT_EQ(expected_result, actual_result);
 }
@@ -832,10 +814,10 @@ TEST(TestTVectorLib, test_add_element_after_shrink_to_fit) {
 }
 
 TEST(TestTVectorLib, test_iterator_in_empty_list) {
-    TVector<int> list;
+    TVector<int> vec;
     TVector<int>::Iterator it;
     bool enterCycle = false;
-    for (it = list.begin(); it != list.end(); it++) {
+    for (it = vec.begin(); it != vec.end(); it++) {
         enterCycle = true;
     }
     ASSERT_FALSE(enterCycle);
@@ -890,4 +872,15 @@ TEST(TestTVectorLib, test_iterator_for_operator_sub_and_assign) {
 
     it -= 3;
     ASSERT_EQ(*it, 1);
+}
+
+TEST(TestTVectorLib, test_rbegin_and_rend_for_read) {
+    TVector<int> vec;
+    for (int i = 0; i < 5; i++)
+        vec.push_back(i + 1);
+
+    int i = 5;
+    for (auto it = vec.rbegin(); it != vec.rend(); it--) {
+        ASSERT_EQ(*it, i--);
+    }
 }

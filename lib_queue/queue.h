@@ -14,7 +14,7 @@ public:
     Queue(const Queue&);
     ~Queue();
 
-    void push(int value);
+    void push(const T& value);
     void pop();
     inline T tail() const {
         return _data[(_head + _count) % _size - 1];
@@ -55,7 +55,7 @@ Queue<T>::Queue(const Queue& other) {
 }
 
 template <class T>
-void Queue<T>::push(int value) {
+void Queue<T>::push(const T& value) {
     if (is_full())
         throw std::logic_error("The queue is full");
     int tail = (_head + _count) % _size;

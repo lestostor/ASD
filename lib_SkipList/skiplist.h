@@ -1,14 +1,13 @@
 #ifndef SKIPLIST_SKIPLIST_H
 #define SKIPLIST_SKIPLIST_H
 
-#include "../lib_list/list.h"
+#include "../lib_TVector/tvector.h"
 #include <utility>
 #include <cstdlib>
 #include <ctime>
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
-
 template <class TKey, class TValue>
 struct SkipNode {
     std::pair<TKey, TValue> _data;
@@ -38,7 +37,7 @@ template <class TKey, class TValue>
 class SkipList {
     int _max_level;
     size_t _levels = 0;
-    List<SkipNode<TKey, TValue>*> _heads;
+    TVector<SkipNode<TKey, TValue>*> _heads;
 
 public:
     SkipList(int max_level = -1);
@@ -47,7 +46,7 @@ public:
     void print() const noexcept;
 private:
     size_t flip_coin() const noexcept;
-    List<SkipNode<TKey, TValue>*> find_nearest(const TKey&) const;
+    TVector<SkipNode<TKey, TValue>*> find_nearest(const TKey&) const;
     void add_levels(size_t);
     std::string to_string(const std::pair<TKey, TValue>&) const noexcept;
 };
@@ -70,62 +69,60 @@ void SkipList<TKey, TValue>::insert(const TKey& key, const TValue& value) {
         add_levels(level);
     else _levels = std::max(level, _levels);
 
-    List<SkipNode<TKey, TValue>*> updates = find_nearest(key);
+    TVector<SkipNode<TKey, TValue>*> updates = find_nearest(key);
     SkipNode<TKey, TValue>* new_node = new SkipNode<TKey, TValue>(key, value, level);
 
-    auto it = updates.begin();
-    for (size_t i = 0; i < level; i++, it++) {
-        new_node->_next[i] = (*it)->_next[i];
-        (*it)->_next[i] = new_node;
+    for (int i = 0; i < level; i++) {
+        new_node->_next[i] = updates[i]->_next[i];
+        updates[i]->_next[i] = new_node;
     }
 }
 
 template <class TKey, class TValue>
 void SkipList<TKey, TValue>::print() const noexcept {
     int i = 0;
-    List<std::string> elements;
+    std::vector<std::string> elements;
+    SkipNode<TKey, TValue>* curr = _heads.back()->_next[0];
+    while (curr) {
+        std::string data = to_string(curr->_data);
+        elements.push_back(data);
+        curr = curr->_next[0];
+    }
 
     for (auto it = _heads.begin(); it != _heads.end(); it++, i++) {
-        SkipNode<TKey, TValue>* curr = (*it)->_next[i];
+        int level = _heads.size() - i - 1;
+        SkipNode<TKey, TValue>* curr = (*it)->_next[level];
         std::cout << "Level " << i << ": ";
 
-        while (curr != nullptr) {
+        do {
             std::string data = to_string(curr->_data);
 
-            if (i == 0) {
-                elements.push_back(data);
-                std::cout << "[" << data << "]->";
-                curr = curr->_next[i];
-            }
-            else {
-                for (auto el_it = elements.begin(); el_it != elements.end(); el_it++) {
-                    data = to_string(curr->_data);
+            for (auto el_it = elements.begin(); el_it != elements.end(); el_it++) {
+                data = to_string(curr->_data);
 
-                    if ((*el_it) == data) {
-                        std::cout << "[" << data << "]->";
-                        curr = curr->_next[i];
-                    }
-                    else {
-                        for (int j = 0; j < (*el_it).size() + 2; j++)
-                            std::cout << "-";
-                        std::cout << "->";
-                    }
+                if ((*el_it) == data) {
+                    std::cout << "[" << data << "]-";
+                    curr = curr->_next[level];
+                }
+                else {
+                    for (int j = 0; j < (*el_it).size() + 3; j++)
+                        std::cout << "-";
                 }
             }
-        }
+        } while (curr != nullptr);
         std::cout << "[NULL]" << std::endl;
     }
 }
 
 template <class TKey, class TValue>
-List<SkipNode<TKey, TValue>*> SkipList<TKey, TValue>::find_nearest(const TKey& key) const {
+TVector<SkipNode<TKey, TValue>*> SkipList<TKey, TValue>::find_nearest(const TKey& key) const {
 
-    List<SkipNode<TKey, TValue>*> updates;
+    TVector<SkipNode<TKey, TValue>*> updates;
 
-    auto it = _heads.begin();
+    auto it = _heads.rbegin();
     SkipNode<TKey, TValue>* curr;
 
-    for (int i = 0; i < _levels; i++, it++) {
+    for (int i = 0; i < _levels; i++, it--) {
         curr = *it;
 
         while (curr->_next[i] != nullptr && curr->_next[i]->_data.first < key)

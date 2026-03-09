@@ -47,6 +47,14 @@ public:
             return tmp;
         }
 
+        Iterator operator+(const int count) const {
+            return _current + count;
+        }
+
+        Iterator operator-(const int count) const {
+            return _current - count;
+        }
+
         Iterator& operator+=(const int count) {
             for (int i = count; i != 0; i--)
                 _current++;
@@ -93,7 +101,7 @@ public:
     //  add element
     void push_back(const T&);
     void push_front(const T&);
-    void insert(const T*, const T&);
+    void insert(const Iterator&, const T&);
 
     //  friends
     template <class T>
@@ -112,11 +120,11 @@ public:
     // delete element
     void pop_back();
     void pop_front();
-    void erase(const T*);
+    void erase(const Iterator&);
 
     //  emplace
     void emplace(const T&, const T&);  //  by value
-    void emplace(const T*, const T&);  //  by index
+    void emplace(const Iterator&, const T&);  //  by index
 
     TVector<T> assign(const TVector&);
 
@@ -147,20 +155,28 @@ public:
         return _vec;
     }
 
-    inline T* begin() const noexcept {
+    inline Iterator begin() const noexcept {
         return _vec;
     }
 
-    inline T* end() const noexcept {
+    inline Iterator end() const noexcept {
         return _vec + _size;
     }
 
+    inline Iterator rbegin() const noexcept {
+        return _vec + _size - 1;
+    }
+
+    inline Iterator rend() const noexcept {
+        return _vec - 1;
+    }
+
     inline T& front() const noexcept {
-        return *(begin());
+        return _vec[0];
     }
 
     inline T& back() const noexcept {
-        return *(end() - 1);
+        return _vec[_size - 1];
     }
 
     inline bool is_empty() const noexcept {
@@ -176,7 +192,7 @@ private:
     T* reset_memory(size_t);
     T* reset_memory_for_deleted(size_t);
     int count_deleted() const;
-    int count_right_pos(const T*) const;
+    int count_right_pos(const Iterator&) const;
     inline bool is_full() const noexcept {
         return !is_empty();
     }
@@ -268,7 +284,7 @@ void TVector<T>::push_front(const T& value) {
 }
 
 template <class T>
-void TVector<T>::insert(const T* pos, const T& value) {
+void TVector<T>::insert(const Iterator& pos, const T& value) {
     int right_pos = count_right_pos(pos);
 
     if (is_empty()) {
@@ -307,7 +323,7 @@ void TVector<T>::pop_front() {
 }
 
 template <class T>
-void TVector<T>::erase(const T* pos) {
+void TVector<T>::erase(const Iterator& pos) {
     int right_pos = count_right_pos(pos);
     _status[right_pos] = Status::Deleted;
     _size--;
@@ -324,7 +340,7 @@ void TVector<T>::emplace(const T& value, const T& new_value) {
 }
 
 template <class T>
-void TVector<T>::emplace(const T* pos, const T& new_value) {
+void TVector<T>::emplace(const Iterator& pos, const T& new_value) {
     int right_pos = count_right_pos(pos);
     if (right_pos >= _size)
         throw std::logic_error("Index is out of range\n");
@@ -563,8 +579,8 @@ int TVector<T>::count_deleted() const {
 }
 
 template <class T>
-int TVector<T>::count_right_pos(const T* pos) const {
-    T* correct = this->begin();
+int TVector<T>::count_right_pos(const Iterator& pos) const {
+    Iterator correct = this->begin();
     int i;
     for (i = 0; i < _size; i++) {
         if (_status[i] != Status::Deleted) correct++;
