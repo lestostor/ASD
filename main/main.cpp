@@ -241,7 +241,7 @@ int main() {
 #include "polynom.h"
 
 int main() {
-    SkipList<int, int> list(5);
+    SkipList<int, int> list;
     list.insert(4, 1);
     list.insert(7, 15);
     list.insert(24, 4);

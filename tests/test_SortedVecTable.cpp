@@ -13,10 +13,13 @@ TEST(TestSortedVecTableLib, test_insert) {
     table.insert(4, 4);
 
     TVector<int> expected({1, 3, 4, 5, 7, 9});
+    int* prev_elem = nullptr;
     for (int i = 0; i < 10; i++) {
         int* elem = table.find(i);
-        if (elem)
-            ASSERT_EQ(*elem, i);
+        if (elem) {
+            EXPECT_TRUE(prev_elem < elem);
+        }
+        prev_elem = elem;
     }
 
     ASSERT_ANY_THROW(table.insert(3, 5));

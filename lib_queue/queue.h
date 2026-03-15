@@ -22,6 +22,9 @@ public:
     inline T head() const {
         return _data[_head];
     }
+    inline int size() const noexcept {
+        return _count;
+    }
     inline bool is_empty() const noexcept {
         return _count == 0;
     }

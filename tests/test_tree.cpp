@@ -20,10 +20,34 @@ TEST(TestTreeLib, test_insesrt_and_find) {
 }
 
 TEST(TestTreeLib, test_erase) {
-    Tree<int, int> tree(new Node<int, int>(1, 1));
-    for (int i = 2; i < 5; i++)
+    Tree<int, int> tree;
+    for (int i = 0; i < 5; i++)
         tree.insert(i, i);
-    
-    tree.erase(3);
-    ASSERT_EQ(tree.find(3), nullptr);
+
+    tree.erase(1);
+    ASSERT_EQ(tree.find(1), nullptr);
+
+    ASSERT_ANY_THROW(tree.erase(1));
+
+    // insert after erase
+    tree.insert(1, 1);
+    ASSERT_EQ(*tree.find(1), 1);
 }
+
+TEST(TestTreeLib, test_clear) {
+    Tree<int, int> tree;
+    for (int i = 0; i < 5; i++)
+        tree.insert(i, i);
+
+    tree.clear();
+    ASSERT_TRUE(tree.is_empty());
+}
+
+//TEST(TestTreeLib, test_print) {
+//    Tree<int, int> tree;
+//    for (int i = 0; i < 7; i++)
+//        tree.insert(i, i);
+//
+//    tree.print_tree();
+//    system("pause");
+//}

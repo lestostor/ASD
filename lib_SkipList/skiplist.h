@@ -139,7 +139,7 @@ TVector<SkipNode<TKey, TValue>*> SkipList<TKey, TValue>::find_nearest(const TKey
 
 template <class TKey, class TValue>
 size_t SkipList<TKey, TValue>::flip_coin() const noexcept {
-    int times = 1;
+    int times = 0;
     int coin;
 
     do {
@@ -156,7 +156,7 @@ template <class TKey, class TValue>
 void SkipList<TKey, TValue>::add_levels(size_t new_max_level) {
     for (int i = _levels; i < new_max_level; i++) {
         SkipNode<TKey, TValue>* node = new SkipNode<TKey, TValue>(new_max_level);
-        _heads.push_back(node);
+        _heads.push_front(node);
     }
 
     _levels = new_max_level;
