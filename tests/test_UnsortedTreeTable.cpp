@@ -32,3 +32,12 @@ TEST(TestUnsortedTreeTableVec, test_erase) {
     table.insert(3, 3);
     ASSERT_EQ(*table.find(3), 3);
 }
+
+TEST(TestUnsortedTreeTableVec, test_output) {
+    UnsortedTreeTable<int, int> table;
+    for (int i = 0; i < 5; i++)
+        table.insert(i, i);
+
+    std::cout << table;
+    system("pause");
+}

@@ -28,6 +28,8 @@ public:
     inline bool is_empty() const noexcept { return _root == nullptr; }
     void clear() noexcept;
 
+    inline Node<TKey, TValue>* root() const noexcept { return _root; }
+
     void print_w() const noexcept;
     void print_lcr() const noexcept;
     void print_lrc() const noexcept;
@@ -97,12 +99,10 @@ void Tree<TKey, TValue>::erase(const TKey& key) {
 
     if (last_parent->_right) {
         last = last_parent->_right;
-        delete last_parent->_right;
         last_parent->_right = nullptr;
     }
     else if (last_parent->_left) {
         last = last_parent->_left;
-        delete last_parent->_left;
         last_parent->_left = nullptr;
     }
 
@@ -141,7 +141,7 @@ void Tree<TKey, TValue>::print_w() const noexcept {
 
     while (!q.is_empty()) {
         Node<TKey, TValue>* curr = q.head();
-        std::cout << curr->_data.second << " ";  // либо перегрузить вывод в ноде
+        std::cout << curr->_data.second << " ";
         q.pop();
 
         if (curr->_left)

@@ -32,6 +32,8 @@ TEST(TestTreeLib, test_erase) {
     // insert after erase
     tree.insert(1, 1);
     ASSERT_EQ(*tree.find(1), 1);
+
+    tree.erase(0);
 }
 
 TEST(TestTreeLib, test_clear) {
