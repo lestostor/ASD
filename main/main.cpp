@@ -4,7 +4,8 @@
 //#define EASY_EXAMPLE
 //#define CHECK_CIRCLES
 //#define EXPRESSION_APPLICATION
-#define SKIPLIST
+//#define SKIPLIST
+#define SEARCH_TREE_SORT
 #ifdef EASY_EXAMPLE
 
 #include <iomanip>
@@ -254,4 +255,22 @@ int main() {
 }
 
 #endif // SKIPLIST
+
+#ifdef SEARCH_TREE_SORT
+
+#include "bstree.h"
+#include "tvector.h"
+
+int main() {
+    TVector<int> vec({ 73, 0, 6, -1, 3, 8, 42, 12, 20 });
+    BSTree<int, int> tree;
+    for (int i = 0; i < vec.size(); i++)
+        tree.insert(vec[i], vec[i]);
+
+    tree.print();
+    return 0;
+}
+
+#endif // SEARCH_TREE_SORT
+
 

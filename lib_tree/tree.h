@@ -97,10 +97,12 @@ void Tree<TKey, TValue>::erase(const TKey& key) {
 
     if (last_parent->_right) {
         last = last_parent->_right;
+        delete last_parent->_right;
         last_parent->_right = nullptr;
     }
     else if (last_parent->_left) {
         last = last_parent->_left;
+        delete last_parent->_left;
         last_parent->_left = nullptr;
     }
 
