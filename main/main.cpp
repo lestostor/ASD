@@ -262,7 +262,7 @@ int main() {
 #include "tvector.h"
 
 int main() {
-    TVector<int> vec({ 73, 0, 6, -1, 3, 8, 42, 12, 20 });
+    TVector<int> vec({9, 18, 5, 20, 16, 8, 7, 3, 11});
     BSTree<int, int> tree;
     for (int i = 0; i < vec.size(); i++)
         tree.insert(vec[i], vec[i]);

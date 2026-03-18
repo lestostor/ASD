@@ -94,7 +94,7 @@ template <class TKey, class TValue>
 void Tree<TKey, TValue>::erase(const TKey& key) {
     Node<TKey, TValue>* deleted = find_rec(key, _root);
     if (!deleted)
-        throw std::invalid_argument("This key wasn;t found");
+        throw std::invalid_argument("This key wasn't found");
     Node<TKey, TValue>* last_parent = find_last_parent(), *last = nullptr;
 
     if (last_parent->_right) {
@@ -106,7 +106,8 @@ void Tree<TKey, TValue>::erase(const TKey& key) {
         last_parent->_left = nullptr;
     }
 
-    deleted->_data = std::pair(last->_data.first, last->_data.second);
+    deleted->_data = last->_data;
+    delete last;
 }
 
 template <class TKey, class TValue>

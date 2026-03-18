@@ -30,6 +30,8 @@ public:
 private:
     Node<TKey, TValue>* find_parent(const TKey&) const noexcept;
     void print_rec(Node<TKey, TValue>*) const noexcept;
+    void delete_node(Node<TKey, TValue>*&) noexcept;
+    Node<TKey, TValue>* find_max_left(Node<TKey, TValue>*) const noexcept;
 };
 
 template <class TKey, class TValue>
@@ -64,12 +66,13 @@ TValue* BSTree<TKey, TValue>::find(const TKey& key) const noexcept {
 
     if (!parent)
         return nullptr;
-    if (parent->_left&& parent->_left->_data.first = key)
+    if (parent->_left && parent->_left->_data.first == key)
         return &parent->_left->_data.second;
-    if (parent->_right&& parent->_right->_data.first = key)
+    if (parent->_right && parent->_right->_data.first == key)
         return &parent->_right->_data.second;
     if (parent == _root)
         return &_root->_data.second;
+
     return nullptr;
 }
 
@@ -92,25 +95,19 @@ void BSTree<TKey, TValue>::insert(const TKey& key, const TValue& value) {
     throw std::invalid_argument("This key already exists");
 }
 
-//template <class TKey, class TValue>
-//void BSTree<TKey, TValue>::erase(const TKey& key) {
-//    Node<TKey, TValue>* parent = find_parent(key);
-//    // нужна вспомогательная переменная
-//    if (parent->_data.first < key && parent->_right) {
-//        if (!parent->_right->_left && !parent->_right->_left) {  // лист (ничего дальше нет)
-//            delete parent->_right;
-//            parent->_right = nullptr;
-//            return;
-//        }
-//        if (!parent->_right->_left) {
-//            Node<TKey, TValue>* node = parent->_right;
-//            parent->_right = parent->_right->_right;
-//            delete node;
-//        }
-//        // то же самое с другой стороной
-//    }
-//    // если есть оба звена, то перецепляем либо максимальный слева, либо минимальный справа (find_max_left, find_min_right)
-//}
+template <class TKey, class TValue>
+void BSTree<TKey, TValue>::erase(const TKey& key) {
+    Node<TKey, TValue>* parent = find_parent(key);
+
+    if (parent->_right && parent->_right->_data.first == key)
+        delete_node(parent->_right);
+    else if (parent->_left && parent->_left->_data.first == key)
+        delete_node(parent->_left);
+    else if (parent == _root)
+        delete_node(_root);
+    else
+        throw std::invalid_argument("This key wasn't found");
+}
 
 template <class TKey, class TValue>
 void BSTree<TKey, TValue>::print() const noexcept {
@@ -151,6 +148,49 @@ void BSTree<TKey, TValue>::print_rec(Node<TKey, TValue>* node) const noexcept {
     print_rec(node->_left);
     std::cout << node->_data.second << " ";
     print_rec(node->_right);
+}
+
+template <class TKey, class TValue>
+void BSTree<TKey, TValue>::delete_node(Node<TKey, TValue>*& node) noexcept {
+    if (!node->_left && !node->_right) {
+        delete node;
+        node = nullptr;
+    }
+    else if (!node->_left) {
+        Node<TKey, TValue>* deleted = node;
+        node = node->_right;
+        delete deleted;
+    }
+    else if (!node->_right) {
+        Node<TKey, TValue>* deleted = node;
+        node = node->_left;
+        delete deleted;
+    }
+    else {
+        Node<TKey, TValue>* max_left = find_max_left(node), *parent = find_parent(max_left->_data.first);
+        node->_data = max_left->_data;
+        if (parent->_left == max_left) {
+            delete max_left;
+            parent->_left = nullptr;
+        }
+        else {
+            delete max_left;
+            parent->_right = nullptr;
+        }
+    }
+}
+
+template <class TKey, class TValue>
+Node<TKey, TValue>* BSTree<TKey, TValue>::find_max_left(Node<TKey, TValue>* node) const noexcept {
+    Node<TKey, TValue>* curr = node->_left, *max = curr;
+
+    while (curr) {
+        if (curr->_data.first > max->_data.first)
+            max = curr;
+        curr = curr->_right;
+    }
+
+    return max;
 }
 
 #endif // !BSTREE_BSTREE_H
