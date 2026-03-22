@@ -1,0 +1,3 @@
+create_project_lib(SortedTreeTable)
+add_depend(SortedTreeTable ITable lib_ITable)
+add_depend(SortedTreeTable BSTree lib_BSTree)

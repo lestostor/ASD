@@ -22,6 +22,8 @@ public:
     BSTree(Node<TKey, TValue>* root = nullptr);
     ~BSTree();
 
+    inline Node<TKey, TValue>* root() const noexcept { return _root; }
+
     inline bool is_empty() const noexcept { return _root == nullptr; }
     TValue* find(const TKey&) const noexcept;
     void insert(const TKey&, const TValue&);
@@ -70,7 +72,7 @@ TValue* BSTree<TKey, TValue>::find(const TKey& key) const noexcept {
         return &parent->_left->_data.second;
     if (parent->_right && parent->_right->_data.first == key)
         return &parent->_right->_data.second;
-    if (parent == _root)
+    if (parent == _root && parent->_data.first == key)
         return &_root->_data.second;
 
     return nullptr;
