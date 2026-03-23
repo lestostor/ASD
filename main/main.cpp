@@ -5,7 +5,8 @@
 //#define CHECK_CIRCLES
 //#define EXPRESSION_APPLICATION
 //#define SKIPLIST
-#define SEARCH_TREE_SORT
+//#define SEARCH_TREE_SORT
+#define HEAP_SORT
 #ifdef EASY_EXAMPLE
 
 #include <iomanip>
@@ -273,4 +274,25 @@ int main() {
 
 #endif // SEARCH_TREE_SORT
 
+#ifdef HEAP_SORT
+#include "heap.h"
+
+int main() {
+    Heap<int> heap;
+    heap.push(5);
+    heap.push(7);
+    heap.push(82);
+    heap.push(4);
+    heap.push(43);
+    heap.push(2);
+    heap.push(-6);
+    heap.push(20);
+
+    for (int i = 0; i < 8; i++)
+        std::cout << heap.pop() << " ";
+
+    return 0;
+}
+
+#endif // HEAP_SORT
 
