@@ -6,7 +6,9 @@
 //#define EXPRESSION_APPLICATION
 //#define SKIPLIST
 //#define SEARCH_TREE_SORT
-#define HEAP_SORT
+//#define HEAP_SORT
+//#define PRIORITY_QUEUE
+#define DICT_UNION
 #ifdef EASY_EXAMPLE
 
 #include <iomanip>
@@ -295,4 +297,62 @@ int main() {
 }
 
 #endif // HEAP_SORT
+
+#ifdef PRIORITY_QUEUE
+#define elem 7
+
+#include "priorityqueue.h"
+#include <cstdlib>
+#include <ctime>
+
+int main() {
+    PriotityQueue<int> queue;
+    srand(time(0));
+
+    for (int i = 0; i < 10; i++) {
+        int priority = 1 + rand() % 5;
+        int value = 1 + rand() % 100;
+
+        std::cout << "added " << priority << ": " << value << std::endl;
+        queue.push(priority, value, i + 1);
+    }
+    
+    for (int i = 0; i < elem; i++)
+        std::cout << queue.pop() << std::endl;
+
+    return 0;
+}
+#endif // PRIORITY_QUEUE
+
+#ifdef DICT_UNION
+
+#include "hashtable.h"
+
+int main() {
+    HashTable<int> table(30);
+
+    TVector<std::pair<std::string, int>> dict1(3), dict2(3);
+    dict1[0] = std::pair<std::string, int>("table", 1349);
+    dict1[1] = std::pair<std::string, int>("hash", 1985);
+    dict1[2] = std::pair<std::string, int>("list", 4372);
+
+    dict2[0] = std::pair<std::string, int>("massive", 4312);
+    dict2[1] = std::pair<std::string, int>("list", 4372);
+    dict2[2] = std::pair<std::string, int>("hash", 4317);
+
+    for (int i = 0; i < 3; i++) {
+        table.insert(dict1[i].first, dict1[i].second);
+    }
+    for (int i = 0; i < 3; i++) {
+        try {
+            table.insert(dict2[i].first, dict2[i].second);
+        } catch(...) {}
+    }
+
+    std::cout << table;
+    return 0;
+}
+
+#endif // DICT_UNION
+
 

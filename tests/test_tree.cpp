@@ -21,8 +21,9 @@ TEST(TestTreeLib, test_insesrt_and_find) {
 
 TEST(TestTreeLib, test_erase) {
     Tree<int, int> tree;
-    for (int i = 0; i < 5; i++)
-        tree.insert(i, i);
+    int mass[10] = { 2, 5, 12, -4, 22, 6, 1, 0, 3, 34 };
+    for (int i = 0; i < 10; i++)
+        tree.insert(mass[i], mass[i]);
 
     tree.erase(1);
     ASSERT_EQ(tree.find(1), nullptr);
