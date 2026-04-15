@@ -46,7 +46,7 @@ public:
 
     inline bool is_empty() const noexcept { return _count == 0; }
     inline bool is_full() const noexcept { return _count == _size; }
-    TValue* find(const std::string&) const noexcept { return nullptr; }
+    TValue* find(const std::string&) const noexcept;
     void insert(const std::string&, const TValue&);
     void erase(const std::string&);
 
@@ -87,6 +87,22 @@ size_t HashTable<TValue>::hh(size_t hash) const noexcept {
 }
 
 template <class TValue>
+TValue* HashTable<TValue>::find(const std::string& key) const noexcept {
+    size_t hash = h(key);
+    size_t first_hash = hash;
+
+    while (true) {
+        if (_rows[hash]._state == busy && _rows[hash]._key == key)
+            return &_rows[hash]._value;
+
+        hash = hh(hash);
+
+        if (first_hash == hash)
+            return nullptr;
+    }
+}
+
+template <class TValue>
 void HashTable<TValue>::insert(const std::string& key, const TValue& value) {
     if (is_full())
         throw std::logic_error("Table is full");
@@ -121,10 +137,10 @@ void HashTable<TValue>::erase(const std::string& key) {
             return;
         }
 
+        hash = hh(hash);
+
         if (first_hash == hash)
             break;
-
-        hash = hh(hash);
     }
 
     throw std::invalid_argument("This key wasn't found");
