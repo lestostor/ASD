@@ -28,6 +28,7 @@ public:
     TValue* find(const TKey&) const noexcept;
     void insert(const TKey&, const TValue&);
     void erase(const TKey&);
+    void clear() noexcept;
     void print() const noexcept;
 private:
     Node<TKey, TValue>* find_parent(const TKey&) const noexcept;
@@ -41,25 +42,7 @@ BSTree<TKey, TValue>::BSTree(Node<TKey, TValue>* root) : _root(root) {}
 
 template <class TKey, class TValue>
 BSTree<TKey, TValue>::~BSTree() {
-    if (is_empty()) return;
-
-    Queue<Node<TKey, TValue>*> q;
-    q.push(_root);
-    Node<TKey, TValue>* curr = nullptr;
-
-    while (!q.is_empty()) {
-        curr = q.head();
-        Node<TKey, TValue>* deleted = curr;
-        q.pop();
-        if (curr->_left)
-            q.push(curr->_left);
-        if (curr->_right)
-            q.push(curr->_right);
-
-        delete deleted;
-    }
-
-    _root = nullptr;
+    clear();
 }
 
 template <class TKey, class TValue>
@@ -101,18 +84,41 @@ template <class TKey, class TValue>
 void BSTree<TKey, TValue>::erase(const TKey& key) {
     Node<TKey, TValue>* parent = find_parent(key);
 
-    if (parent->_right && parent->_right->_data.first == key)
+    if (parent && parent->_right && parent->_right->_data.first == key)
         delete_node(parent->_right);
-    else if (parent->_left && parent->_left->_data.first == key)
+    else if (parent && parent->_left && parent->_left->_data.first == key)
         delete_node(parent->_left);
-    else if (parent == _root)
+    else if (parent && parent == _root)
         delete_node(_root);
     else
         throw std::invalid_argument("This key wasn't found");
 }
 
 template <class TKey, class TValue>
-void BSTree<TKey, TValue>::print() const noexcept {
+void BSTree<TKey, TValue>::clear() noexcept {
+    if (is_empty()) return;
+
+    Queue<Node<TKey, TValue>*> q;
+    q.push(_root);
+    Node<TKey, TValue>* curr = nullptr;
+
+    while (!q.is_empty()) {
+        curr = q.head();
+        Node<TKey, TValue>* deleted = curr;
+        q.pop();
+        if (curr->_left)
+            q.push(curr->_left);
+        if (curr->_right)
+            q.push(curr->_right);
+
+        delete deleted;
+    }
+
+    _root = nullptr;
+}
+
+template <class TKey, class TValue>
+void BSTree<TKey, TValue>:: print() const noexcept {
     print_rec(_root);
 }
 
@@ -140,7 +146,6 @@ Node<TKey, TValue>* BSTree<TKey, TValue>::find_parent(const TKey& key) const noe
             curr = curr->_right;
         }
     }
-
 }
 
 template <class TKey, class TValue>
