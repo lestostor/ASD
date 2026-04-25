@@ -2,15 +2,18 @@
 #define LISTGRAPH_LISTGRAPH_H
 
 #include "../lib_list/list.h"
+#include "../lib_PriorityQueue/priorityqueue.h"
 #include <iostream>
 #include <vector>
+#include <limits>
 
 template <class T>
 struct Vertex {
     T _value;
+    int _ind;
     List<std::pair<Vertex<T>*, size_t>> _edges;
 
-    Vertex(const T& val) : _value(val), _edges() {}
+    Vertex(const T& val, int ind) : _value(val), _ind(ind), _edges() {}
 };
 
 template <class T>
@@ -27,9 +30,44 @@ public:
     void delete_edge(const T&, const T&);
     void delete_vertex(const T&);
 
+    friend std::vector<Vertex<T>*> find_min_way(ListGraph& graph, const T& x, const T& y) {
+        std::vector<bool> vertecies(graph._graph.size());
+        std::vector<int> d(graph._graph.size(), INT_MAX);
+        std::vector<int> prev(graph._graph.size(), -1);
+        PriotityQueue<int> min_lenghts;
+        int order = 1;
+
+        Vertex<T>* start = graph.find_vertex(x);
+        Vertex<T>* end = graph.find_vertex(y);
+        d[start->_ind] = 0;
+        min_lenghts.push(0, start->_ind, order++);  // ind, lenght
+
+        while (!min_lenghts.is_empty()){
+            int curr = min_lenghts.pop().get_value();
+    
+            Vertex<T>* vertex = graph._graph[curr];
+            vertecies[curr] = true;
+    
+            for (auto it = vertex->_edges.begin(); it != vertex->_edges.end(); it++, order++) {
+                int ind = (*it).first->_ind, lenght = (*it).second;
+                if (vertecies[ind])
+                    continue;
+
+                if (d[curr] + lenght < d[ind]) {
+                    d[ind] = d[curr] + lenght;
+                    prev[ind] = curr;
+                    min_lenghts.push(d[ind], ind, order);
+                }
+            }
+        }
+    
+        return graph.find_way(prev, start->_ind, end->_ind);
+    }
+
 private:
     Vertex<T>* find_vertex(const T&) noexcept;
     bool is_edge_exist(Vertex<T>*, Vertex<T>*) noexcept;
+    std::vector<Vertex<T>*> find_way(const std::vector<T>&, int, int) const noexcept;
 };
 
 template <class T>
@@ -58,11 +96,11 @@ void ListGraph<T>::add_edge(const T& data1, const T& data2, size_t weight) {
         throw std::invalid_argument("There must be at least one vertex");
 
     if (!vertex1) {
-        vertex1 = new Vertex<T>(data1);
+        vertex1 = new Vertex<T>(data1, _graph.size());
         _graph.push_back(vertex1);
     }
     if (!vertex2) {
-        vertex2 = new Vertex<T>(data2);
+        vertex2 = new Vertex<T>(data2, _graph.size());
         _graph.push_back(vertex2);
     }
 
@@ -91,5 +129,21 @@ bool ListGraph<T>::is_edge_exist(Vertex<T>* vertex1, Vertex<T>* vertex2) noexcep
 
     return false;
 }
+
+template <class T>
+std::vector<Vertex<T>*> ListGraph<T>::find_way(const std::vector<T>& prev, int start, int end) const noexcept {
+    std::vector<Vertex<T>*> way;
+    int i = end;
+
+    while (i != -1) {
+        way.insert(way.begin(), _graph[i]);
+        i = prev[i];
+    }
+
+
+
+    return way;
+}
+
 
 #endif // !LISTGRAPH_LISTGRAPH_H

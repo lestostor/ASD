@@ -111,15 +111,7 @@ TValue* AVLTree<TKey, TValue>::find(const TKey& key) {
 
 template <class TKey, class TValue>
 void AVLTree<TKey, TValue>::erase(const TKey& key) {
-    // удалить, как из BSTree
-
-    // начиная с фактически удалённого элемента:
-    // 1) пересчитываем высоты
-    // 2) пересчитываем баланс
-    // 2.1) восстанавливаем баланс, если он был нарушен
-    // 2.2) если что-то изменилось-> 1)
-
-    AVLNode<TKey, TValue>* node = bstree_erase(key);  // возвращается родитель фактически удалённого элемента (не ключ)
+    AVLNode<TKey, TValue>* node = bstree_erase(key);
 
     while (node) {
         int balance = calc_balance(node);

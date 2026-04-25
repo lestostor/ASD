@@ -58,6 +58,7 @@ public:
 
     void push(const int, const TValue&, const int);
     PriorityPair<TValue> pop();
+    bool is_empty() const noexcept { return _data.is_empty(); }
 };
 
 template <class TValue>

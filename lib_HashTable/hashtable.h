@@ -6,6 +6,8 @@
 #include <algorithm>
 
 #define SIZE 100
+#define KEY_WIDTH 10
+#define VALUE_WIDTH 50
 
 enum status { busy, empty, deleted };
 
@@ -51,13 +53,38 @@ public:
     void erase(const std::string&);
 
     friend std::ostream& operator<<(std::ostream& out, const HashTable& table) {
-        int i = 0, k = 0;
-        while (k < table._count) {
-            if (table._rows[i]._state == busy) {
-                out << table._rows[i]._key << ": " << table._rows[i]._value << std::endl;
-                k++;
-            }
-            i++;
+        // head
+        std::cout << "+----------+";
+        for (int i = 0; i < VALUE_WIDTH; i++) std::cout << "-";
+
+        std::cout << "+" << std::endl << "| Key      | Value";
+        for (int i = 0; i < VALUE_WIDTH - 6; i++) std::cout << " ";
+        std::cout << "|" << std::endl;
+
+        std::cout << "+----------+";
+        for (int i = 0; i < VALUE_WIDTH; i++) std::cout << "-";
+        std::cout << "+" << std::endl;
+
+        for (int i = 0; i < table._rows.size(); i++) {
+            if (table._rows[i]._state != busy)
+                continue;
+
+            std::ostringstream key_out, value_out;
+            key_out << table._rows[i]._key;
+            value_out << table._rows[i]._value;
+            std::string key = key_out.str(), value = value_out.str();
+
+            // row
+            std::cout << "| " << key;
+            for (int i = 0; i < KEY_WIDTH - key.size() - 1; i++) std::cout << " ";
+            std::cout << "| " << value;
+            for (int i = 0; i < VALUE_WIDTH - value.size() - 1; i++) std::cout << " ";
+            std::cout << "|" << std::endl;
+
+            // border
+            std::cout << "+----------+";
+            for (int i = 0; i < VALUE_WIDTH; i++) std::cout << "-";
+            std::cout << "+" << std::endl;
         }
 
         return out;

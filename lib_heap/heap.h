@@ -12,6 +12,7 @@ public:
 
     void push(const T&);
     T pop();
+    bool is_empty() const noexcept { return _data.is_empty(); }
 
     inline int get_left(const int i) const noexcept { return 2 * i + 1; }
     inline int get_right(const int i) const noexcept { return 2 * i + 2; }
