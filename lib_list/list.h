@@ -86,6 +86,7 @@ public:
     void pop_front();
     void erase(size_t);
     void erase(Node<T>*);
+    void clear() noexcept;
 
     List<T>& operator=(const List<T>&);
 };
@@ -224,11 +225,7 @@ void List<T>::pop_front() {
 
 template <class T>
 List<T>::~List() {
-    while (_head != nullptr) {
-        Node<T>* node = _head;
-        _head = _head->_next;
-        delete node;
-    }
+    clear();
 }
 
 template <class T>
@@ -271,6 +268,19 @@ void List<T>::erase(size_t pos) {
     if (cur == nullptr)
         throw std::invalid_argument("Wrong position");
     erase(cur);
+}
+
+template <class T>
+void List<T>::clear() noexcept {
+    while (_head != nullptr) {
+        Node<T>* node = _head;
+        _head = _head->_next;
+        delete node;
+    }
+
+    _head = nullptr;
+    _tail = nullptr;
+    _count = 0;
 }
 
 template <class T>

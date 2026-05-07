@@ -140,10 +140,58 @@ std::vector<Vertex<T>*> ListGraph<T>::find_way(const std::vector<T>& prev, int s
         i = prev[i];
     }
 
-
-
     return way;
 }
 
+template <class T>
+void ListGraph<T>::delete_edge(const T& first, const T& second) {
+    Vertex<T>* vert1 = find_vertex(first), * vert2 = find_vertex(second);
+
+    int i = 0;
+
+    if (!is_edge_exist(vert1, vert2))
+        throw std::invalid_argument("This edge doesn't exist");
+
+    for (auto it = vert1->_edges.begin(); it != vert1->_edges.end(); it++, i++) {
+        if ((*it).first == vert2) {
+            vert1->_edges.erase(i);
+            break;
+        }
+    }
+
+    if (_is_oriented)
+        return;
+
+    i = 0;
+    for (auto it = vert2->_edges.begin(); it != vert2->_edges.end(); it++, i++) {
+        if ((*it).first == vert1) {
+            vert2->_edges.erase(i);
+            return;
+        }
+    }
+}
+
+template <class T>
+void ListGraph<T>::delete_vertex(const T& vertex) {
+    Vertex<T>* vert = find_vertex(vertex);
+    if (!vert)
+        throw std::invalid_argument("This vertex doesn't exist");
+
+    for (int i = 0; i < _graph.size(); i++) {
+        if (i == vert->_ind) {
+            vert->_edges.clear();
+            continue;
+        }
+
+        int j = 0;
+        for (auto it = _graph[i]->_edges.begin(); it != _graph[i]->_edges.end(); it++, j++) {
+            if ((*it).first == vert) {
+                _graph[i]->_edges.erase(j);
+                break;
+            }
+        }
+    }
+
+}
 
 #endif // !LISTGRAPH_LISTGRAPH_H

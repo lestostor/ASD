@@ -8,7 +8,8 @@
 //#define SEARCH_TREE_SORT
 //#define HEAP_SORT
 //#define PRIORITY_QUEUE
-#define DICT_UNION
+//#define DICT_UNION
+#define LABYRINTH
 #ifdef EASY_EXAMPLE
 
 #include <iomanip>
@@ -355,4 +356,15 @@ int main() {
 
 #endif // DICT_UNION
 
+#ifdef LABYRINTH
+
+#include "algorithms.h"
+
+int main() {
+    Matrix<bool> labyrinth = create_labyrinth(10, 10, 7, 99);
+
+    print_way(labyrinth, 7, 99);
+}
+
+#endif // LABYRINTH
 

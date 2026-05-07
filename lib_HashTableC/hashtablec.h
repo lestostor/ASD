@@ -107,11 +107,15 @@ void HashTableC<TValue>::insert(const std::string& key, const TValue& value) {
 
 template <class TValue>
 void HashTableC<TValue>::erase(const std::string& key) {
-    if (!find(key))
-        throw std::invalid_argument("This wasn't found");
+    Node<HashCData<TValue>>* node = find_prev_node(key);
+    if (!node)
+        throw std::invalid_argument("This key wasn't found");
 
     size_t hash = h(key);
-    _rows[hash].erase(find_prev_node(key));
+    if (node->_value._key == key)
+        _rows[hash].pop_front();
+    else
+        _rows[hash].erase(node);
 }
 
 template <class TValue>

@@ -4,7 +4,10 @@
 #include "../lib_circle/circle.h"
 #include "../lib_sphere/sphere.h"
 #include "../lib_stack/stack.h"
-#include "../lib_list/list.h"
+//#include "../lib_list/list.h"
+#include "../lib_matrix/matrix.h"
+#include "../lib_dsu/dsu.h"
+#include "../lib_ListGraph/listgraph.h"
 #include <string>
 
 enum Type { intersect, touch, inside, not_touch };
@@ -97,4 +100,11 @@ Node<T>* find_loop(const List<T>& list) {
     if (is_cycle) return bunny;  // enter in destructor
     return nullptr;
 }
+
+Matrix<bool> create_labyrinth(int, int, int, int);
+
+void print(Matrix<bool>&, std::vector<Vertex<int>*>);
+
+void print_way(Matrix<bool>&, int, int);
+
 #endif // !ALGORITHMS_ALGORITHMS_H

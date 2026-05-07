@@ -115,16 +115,18 @@ void AVLTree<TKey, TValue>::erase(const TKey& key) {
 
     while (node) {
         int balance = calc_balance(node);
+        int old_height = node->_height;
 
         if (abs(balance) > 1)
             recover_balance(node);
 
-        int old_height = node->_height;
         recalc_height(node);
         if (old_height == node->_height)
             break;
 
         node = node->_parent;
+        if (node->_parent)
+            node = node->_parent;
     }
 }
 

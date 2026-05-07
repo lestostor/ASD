@@ -81,9 +81,13 @@ TEST(TestHashTableCLib, test_erase) {
     table.insert("three", 3);
     table.insert("oen", 1);
 
-    table.erase("oen");
+    table.erase("one");
 
-    ASSERT_EQ(table.find("oen"), nullptr);
+    ASSERT_EQ(table.find("one"), nullptr);
+    ASSERT_EQ(*table.find("oen"), 1);
+    ASSERT_ANY_THROW(table.erase("one"));
 
-    ASSERT_ANY_THROW(table.erase("oen"));
+    table.insert("one", 1);
+    table.erase("one");
+    ASSERT_EQ(table.find("one"), nullptr);
 }

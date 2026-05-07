@@ -78,3 +78,47 @@ TEST(TestListGraphLib, test_find_min_way) {
     ASSERT_EQ(way[1]->_value, 2);
     ASSERT_EQ(way[2]->_value, 1);
 }
+
+TEST(TestListGraphLib, test_delete_edge) {
+    std::vector<std::pair<int, int>> edges;
+    edges.push_back(std::pair<int, int>(0, 3));
+    edges.push_back(std::pair<int, int>(0, 5));
+    edges.push_back(std::pair<int, int>(0, 2));
+    edges.push_back(std::pair<int, int>(1, 2));
+    edges.push_back(std::pair<int, int>(2, 3));
+    edges.push_back(std::pair<int, int>(3, 5));
+
+    ListGraph<int> graph1(edges);
+    graph1.delete_edge(0, 5);
+    ASSERT_NO_THROW(graph1.add_edge(0, 5));
+    ASSERT_ANY_THROW(graph1.delete_edge(1, 3));
+
+    ListGraph<int> graph2(edges, true);
+    graph2.add_edge(5, 0);
+    graph2.delete_edge(0, 5);
+    ASSERT_NO_THROW(graph2.add_edge(0, 5));
+
+    ASSERT_ANY_THROW(graph2.delete_edge(2, 1));  // wrong direction
+}
+
+TEST(TestListGraphLib, test_delete_vertex) {
+    std::vector<std::pair<int, int>> edges;
+    edges.push_back(std::pair<int, int>(0, 3));
+    edges.push_back(std::pair<int, int>(0, 5));
+    edges.push_back(std::pair<int, int>(0, 2));
+    edges.push_back(std::pair<int, int>(1, 2));
+    edges.push_back(std::pair<int, int>(2, 3));
+    edges.push_back(std::pair<int, int>(3, 5));
+
+    ListGraph<int> graph1(edges);
+    graph1.delete_vertex(0);
+    ASSERT_NO_THROW(graph1.add_edge(0, 3));
+    ASSERT_NO_THROW(graph1.add_edge(0, 2));
+    ASSERT_NO_THROW(graph1.add_edge(0, 5));
+
+    ListGraph<int> graph2(edges, true);
+    graph2.delete_vertex(3);
+    ASSERT_NO_THROW(graph2.add_edge(0, 3));
+    ASSERT_NO_THROW(graph2.add_edge(2, 3));
+    ASSERT_NO_THROW(graph2.add_edge(3, 5));
+}
