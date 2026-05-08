@@ -1,0 +1,2 @@
+create_project_lib(MatrixGraph)
+add_depend(MatrixGraph TriangleMatrix lib_TriangleMatrix)

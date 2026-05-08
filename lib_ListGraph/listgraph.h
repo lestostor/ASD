@@ -147,6 +147,9 @@ template <class T>
 void ListGraph<T>::delete_edge(const T& first, const T& second) {
     Vertex<T>* vert1 = find_vertex(first), * vert2 = find_vertex(second);
 
+    if (!vert1 || !vert2)
+        throw std::invalid_argument("Vertex doesn't exists");
+
     int i = 0;
 
     if (!is_edge_exist(vert1, vert2))
