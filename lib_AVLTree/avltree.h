@@ -23,8 +23,10 @@ public:
     AVLTree(AVLNode<TKey, TValue>* root = nullptr);
     ~AVLTree();
 
+    inline AVLNode<TKey, TValue>* root() const noexcept { return _root; }
+
     void insert(const TKey&, const TValue&);
-    TValue* find(const TKey&);
+    TValue* find(const TKey&) const noexcept;
     void erase(const TKey&);
     void clear() noexcept;
     inline bool is_empty() const noexcept { return _root == nullptr; }
@@ -94,7 +96,7 @@ void AVLTree<TKey, TValue>::insert(const TKey& key, const TValue& value) {
 }
 
 template <class TKey, class TValue>
-TValue* AVLTree<TKey, TValue>::find(const TKey& key) {
+TValue* AVLTree<TKey, TValue>::find(const TKey& key) const noexcept {
     AVLNode<TKey, TValue>* parent = find_parent(key);
 
     if (!parent)
