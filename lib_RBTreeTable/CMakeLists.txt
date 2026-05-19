@@ -1,0 +1,3 @@
+create_project_lib(RBTreeTable)
+add_depend(RBTreeTable RBTree lib_RBTree)
+add_depend(UnsortedListTable ITable lib_ITable)
