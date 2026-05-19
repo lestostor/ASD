@@ -127,7 +127,7 @@ void AVLTree<TKey, TValue>::erase(const TKey& key) {
             break;
 
         node = node->_parent;
-        if (node->_parent)
+        if (node && node->_parent)
             node = node->_parent;
     }
 }

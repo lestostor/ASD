@@ -31,13 +31,13 @@ TEST(TestAVLTreeTableLib, test_erase) {
     ASSERT_ANY_THROW(table.erase(12));
 }
 
-TEST(TestAVLTreeTableLib, test_output) {
-    AVLTreeTable<int, int> table;
-
-    int elements[5] = { 4, 10, -71, 36, 12 };
-    for (int i = 0; i < 5; i++)
-        table.insert(elements[i], elements[i]);
-
-    std::cout << table;
-    system("pause");
-}
+//TEST(TestAVLTreeTableLib, test_output) {
+//    AVLTreeTable<int, int> table;
+//
+//    int elements[5] = { 4, 10, -71, 36, 12 };
+//    for (int i = 0; i < 5; i++)
+//        table.insert(elements[i], elements[i]);
+//
+//    std::cout << table;
+//    system("pause");
+//}

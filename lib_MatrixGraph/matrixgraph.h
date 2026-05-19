@@ -117,15 +117,14 @@ void MatrixGraph<T>::delete_vertex(const T& vertex) {
     if (ind == -1)
         throw std::invalid_argument("Vertex doesn't exists");
 
+    int null;
+    if (_is_weighted)
+        null = INT_MAX;
+    else null = 0;
+
     for (int i = 0; i < _graph[ind].size(); i++) {
-        if (_is_weighted) {
-            _graph[ind][i] = INT_MAX;
-            _graph[i][ind] = INT_MAX;
-        }
-        else {
-            _graph[ind][i] = 0;
-            _graph[i][ind] = 0;
-        }
+        _graph[ind][i] = null;
+        _graph[i][ind] = null;
     }
 }
 
